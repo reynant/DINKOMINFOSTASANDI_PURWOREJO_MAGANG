@@ -1,0 +1,3 @@
+# Diskominfostandi
+# Dinkominfostasandi_Purworejo_Magang
+# DINKOMINFOSTASANDI_PURWOREJO_MAGANG

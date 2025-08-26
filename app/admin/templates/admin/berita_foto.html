@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"/>
+  <style>.scrollbar-hidden::-webkit-scrollbar{display:none}</style>
+</head>
+<body>
+
+  {% include "admin/sidebar.html" %}
+
+  <div class="container mt-4">
+    <h3>Dashboard</h3>
+
+    <div class="card mt-3">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Album Berita Foto</h5>
+        <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">
+          Tambahkan Data
+        </a>
+      </div>
+
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex align-items-center">
+            Show
+            <select class="form-select form-select-sm mx-2" style="width:auto">
+              <option>10</option><option>25</option><option>50</option><option>100</option>
+            </select>
+            entries
+          </div>
+          <div><input type="search" class="form-control form-control-sm" placeholder="Search..."/></div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-sm">
+            <thead class="table-light">
+                <tr>
+                  <th>No</th>
+                  <th>Cover</th>
+                  <th>Judul Berita Foto</th>
+                  <th>Url</th>
+                  <th>Aktif</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if berita_foto %}
+                  {% for album in berita_foto %}
+                  <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>
+                      {% if album.cover %}
+                        <img src="{{ url_for('static', filename='uploads/' + album.cover) if not album.cover.startswith('http') else album.cover }}" 
+                             class="table-img" 
+                             alt="{{ album.judul_berita_foto }}">
+                      {% else %}
+                        <div class="text-muted">No Image</div>
+                      {% endif %}
+                    </td>
+                    <td>{{ album.judul_berita_foto }}</td>
+                    <td>
+                      <a href="{{ album.url }}" target="_blank" class="text-primary">
+                        {{ album.url|truncate(20) }}
+                      </a>
+                    </td>
+                    <td>{{ album.aktif }}</td>
+                    <td>
+                      <button class="btn btn-warning btn-sm me-1" 
+                              data-bs-toggle="modal" 
+                              data-bs-target="#modalEdit"
+                              data-id="{{ album.id }}"
+                              data-cover="{{ album.cover }}"
+                              data-judul-berita-foto="{{ album.judul_berita_foto }}"
+                              data-url="{{ album.url }}"
+                              data-aktif="{{ album.aktif }}"
+                              onclick="setEditData(this)">
+                        Edit
+                      </button>
+                      <form action="{{ url_for('admin.hapus_berita_foto', id=album.id) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Hapus data ini?')">
+                          Hapus
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                {% else %}
+                  <tr>
+                    <td colspan="6" class="text-center">Tidak ada data</td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        <!-- Footer langsung di bawah tabel dalam card -->
+        <footer class="mt-4 text-center text-sm text-gray-500">
+          <p>
+            Copyright © 2014-2025
+            <a href="#" class="text-blue-700 font-semibold">
+              Dinas Komunikasi, Informatika, Statistik dan Persandian Kabupaten Purworejo
+            </a>.
+            All rights reserved. Version 3.0.0
+          </p>
+        </footer>
+
+      </div>
+    </div>
+  </div>
+
+    <!-- Modal Tambah -->
+    <div class="modal fade" id="modalTambah" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Tambah Album Berita Foto</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <form method="POST" action="{{ url_for('admin.tambah_berita_foto') }}" enctype="multipart/form-data">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Cover</label>
+                <input type="file" name="cover" class="form-control" required accept="image/*">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Judul Berita Foto</label>
+                <input type="text" name="judul_berita_foto" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Url</label>
+                <input type="text" name="url" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Aktif</label>
+                <select name="aktif" class="form-select">
+                  <option value="Y">Y</option>
+                  <option value="N">N</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Edit -->
+    <div class="modal fade" id="modalEdit" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Album Berita Foto</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <form id="formEdit" method="POST" enctype="multipart/form-data">
+            <div class="modal-body">
+              <input type="hidden" name="id" id="editId">
+              <div class="mb-3">
+                <label class="form-label">Cover Saat Ini</label>
+                <div id="currentCoverContainer" class="mb-2"></div>
+                <label class="form-label">Ganti Cover (opsional)</label>
+                <input type="file" name="cover" class="form-control" accept="image/*">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Judul Berita Foto</label>
+                <input type="text" name="judul_berita_foto" id="editJudulBeritaFoto" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Url</label>
+                <input type="text" name="url" id="editUrl" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Aktif</label>
+                <select name="aktif" id="editAktif" class="form-select">
+                  <option value="Y">Y</option>
+                  <option value="N">N</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Fungsi untuk mengisi data edit
+      function setEditData(button) {
+        const id = button.getAttribute('data-id');
+        const cover = button.getAttribute('data-cover');
+        const judulBeritaFoto = button.getAttribute('data-judul-berita-foto');
+        const url = button.getAttribute('data-url');
+        const aktif = button.getAttribute('data-aktif');
+        
+        document.getElementById('editId').value = id;
+        document.getElementById('editJudulBeritaFoto').value = judulBeritaFoto;
+        document.getElementById('editUrl').value = url;
+        document.getElementById('editAktif').value = aktif;
+        
+        // Tampilkan cover saat ini
+        const coverContainer = document.getElementById('currentCoverContainer');
+        if (cover) {
+          const coverUrl = cover.startsWith('http') ? cover : "{{ url_for('static', filename='uploads/') }}" + cover;
+          coverContainer.innerHTML = `
+            <img src="${coverUrl}" class="table-img" alt="Current Cover">
+            <div class="form-text">Cover saat ini</div>
+          `;
+        } else {
+          coverContainer.innerHTML = '<div class="text-muted">Tidak ada cover</div>';
+        }
+        
+        // Set action form
+        document.getElementById('formEdit').action = "{{ url_for('admin.edit_berita_foto', id=0) }}".replace('0', id);
+      }
+
+      // Fungsi filter tabel
+      function filterTable() {
+        const input = document.querySelector('input[type="search"]');
+        const filter = input.value.toLowerCase();
+        const table = document.querySelector('table');
+        const rows = table.querySelectorAll('tbody tr');
+        
+        rows.forEach(row => {
+          const judul = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+          
+          if (judul.includes(filter)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

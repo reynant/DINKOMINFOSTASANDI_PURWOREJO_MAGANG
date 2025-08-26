@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Admin - Jajak Pendapat</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"/>
+  <style>.scrollbar-hidden::-webkit-scrollbar{display:none}</style>
+</head>
+<body>
+
+  {% include "admin/sidebar.html" %}
+
+  <div class="container mt-4">
+    <h3>Dashboard</h3>
+
+    <div class="card mt-3">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Polling / Jajak Pendapat</h5>
+        <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">
+          Tambahkan Data
+        </a>
+      </div>
+
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex align-items-center">
+            Show
+            <select class="form-select form-select-sm mx-2" style="width:auto">
+              <option>10</option><option>25</option><option>50</option><option>100</option>
+            </select>
+            entries
+          </div>
+          <div><input type="search" class="form-control form-control-sm" placeholder="Search..."/></div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-sm">
+            <thead class="table-light">
+              <tr>
+                <th>No</th>
+                <th>Pilihan</th>
+                <th>Status</th>
+                <th>Rating</th>
+                <th>Aktif</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in polling %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ row.pilihan }}</td>
+                <td>{{ row.status }}</td>
+                <td>{{ row.rating }}</td>
+                <td>{{ row.aktif }}</td>
+                <td class="text-nowrap">
+                  <!-- Edit -->
+                  <button type="button"
+                          class="btn btn-warning btn-sm"
+                          data-id="{{ row.id }}"
+                          data-pilihan="{{ row.pilihan|e }}"
+                          data-status="{{ row.status|e }}"
+                          data-rating="{{ row.rating }}"
+                          data-aktif="{{ row.aktif }}"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalEdit"
+                          onclick="setEditData(this)">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <!-- Hapus -->
+                  <a href="{{ url_for('admin.hapus_polling', id=row.id) }}"
+                     class="btn btn-danger btn-sm"
+                     onclick="return confirm('Yakin ingin menghapus data ini?')">
+                    <i class="bi bi-trash"></i>
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <footer class="mt-4 text-center text-sm text-gray-500">
+          <p>
+            Copyright © 2014-2025
+            <a href="#" class="text-blue-700 font-semibold">
+              Dinas Komunikasi, Informatika, Statistik dan Persandian Kabupaten Purworejo
+            </a>.
+            All rights reserved. Version 3.0.0
+          </p>
+        </footer>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Tambah -->
+  <div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form method="POST" action="{{ url_for('admin.tambah_polling') }}">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Tambah Polling</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Pilihan</label>
+              <input type="text" name="pilihan" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Status</label>
+              <input type="text" name="status" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Rating</label>
+              <input type="number" name="rating" class="form-control" value="0" min="0">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Aktif</label>
+              <select name="aktif" class="form-select">
+                <option value="Y">Y</option>
+                <option value="N" selected>N</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Simpan</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Edit -->
+  <div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="form-edit" method="POST">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Polling</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="edit-id">
+            <div class="mb-3">
+              <label class="form-label">Pilihan</label>
+              <input type="text" id="edit-pilihan" name="pilihan" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Status</label>
+              <input type="text" id="edit-status" name="status" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Rating</label>
+              <input type="number" id="edit-rating" name="rating" class="form-control" min="0">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Aktif</label>
+              <select id="edit-aktif" name="aktif" class="form-select">
+                <option value="Y">Y</option>
+                <option value="N">N</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function setEditData(btn) {
+      const id     = btn.getAttribute('data-id');
+      const pilihan = btn.getAttribute('data-pilihan');
+      const status  = btn.getAttribute('data-status');
+      const rating  = btn.getAttribute('data-rating') || 0;
+      const aktif   = btn.getAttribute('data-aktif') || 'N';
+
+      document.getElementById('edit-id').value        = id;
+      document.getElementById('edit-pilihan').value   = pilihan;
+      document.getElementById('edit-status').value    = status;
+      document.getElementById('edit-rating').value    = rating;
+      document.getElementById('edit-aktif').value     = aktif;
+
+      document.getElementById('form-edit').action = "/admin/edit_polling/" + id;
+    }
+  </script>
+
+</body>
+</html>

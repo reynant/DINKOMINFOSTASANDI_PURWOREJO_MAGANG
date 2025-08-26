@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    .scrollbar-hidden::-webkit-scrollbar {
+      display: none;
+    }
+    .menu-item { display: flex; flex-direction: column; margin-bottom: 0.5rem; }
+    .menu-item-handle { display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; border-radius: 0.25rem; padding: 0.5rem; }
+    .drag-handle { cursor: grab; margin-right: 0.5rem; }
+    .menu-item-content { display: flex; align-items: center; gap: 0.5rem; }
+    .collapse-toggle { cursor: pointer; margin-right: 0.5rem; }
+    .menu-item-title { font-weight: 500; margin: 0 0.5rem 0 0.5rem; }
+    .menu-item-actions { display: flex; gap: 0.25rem; align-items: center; }
+    .status-indicator.status-published { width: 12px; height: 12px; background: #10b981; border-radius: 50%; display: inline-block; margin-right: 0.5rem; }
+    .status-indicator.status-draft { width: 12px; height: 12px; background: #f59e42; border-radius: 50%; display: inline-block; margin-right: 0.5rem; }
+    .action-btn { background: none; border: none; cursor: pointer; color: #212529; }
+    .menu-list { list-style: none; padding-left: 0; }
+    .nested-menu { margin-left: 1.5rem; }
+    .json-output { background: #f3f4f6; border-radius: 0.5rem; padding: 1rem; font-family: monospace; overflow-x: auto; }
+    .empty-state { text-align: center; color: #999; margin-top: 2rem; }
+    .dashboard-container { max-width: 1200px; margin: 2rem auto; }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <div class="d-flex">
+      <!-- Sidebar -->
+  <aside class="w-150 bg-gray-900 text-white flex-shrink-0">
+    <div class="p-6 flex items-center gap-3">
+      <img src="https://via.placeholder.com/40" class="rounded-full" alt="logo">
+      <div>
+        <div class="font-bold text-lg">ADMIN</div>
+        <div class="text-green-400 text-sm">Online</div>
+      </div>
+    </div>
+    <nav class="mt-4 text-sm">
+      <ul class="space-y-2">
+        <li>
+          <a href="#" class="flex items-center px-4 py-2 bg-blue-700 rounded">
+            <span class="mr-2">📊</span> Dashboard
+            <span class="ml-auto text-xs bg-red-500 text-white rounded px-2">Welcome</span>
+          </a>
+        </li>
+          <!-- Menu Utama -->
+          <li>
+            <button
+              onclick="toggleSubmenu('menuUtamaSub', 'icon-menuUtamaSub')"
+              class="w-full flex items-center px-4 py-2 hover:bg-gray-700 rounded"
+            >
+              Menu Utama
+              <svg class="ml-auto w-4 h-4 transition-transform" id="icon-menuUtamaSub" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <ul id="menuUtamaSub" class="pl-8 text-gray-300 space-y-1 hidden">
+              <li><a href="identitas_website.html" class="block py-1 hover:underline">Identitas Website</a></li>
+              <li><a href="menu_website.html" class="block py-1 hover:underline">Menu Website</a></li>
+              <li><a href="halaman_baru.html" class="block py-1 hover:underline">Halaman Baru</a></li>
+            </ul>
+          </li>
+          <!-- Modul Berita -->
+          <li>
+            <button onclick="toggleSubmenu('beritaSubmenu', 'icon-berita')" class="w-full text-left flex items-center px-4 py-2 hover:bg-gray-700 rounded focus:outline-none">
+              Modul Berita
+              <svg id="icon-berita" class="ml-auto w-4 h-4 transition-transform" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            <ul id="beritaSubmenu" class="pl-8 space-y-1 text-sm hidden">
+              <li><a href="berita.html" class="block py-1 hover:underline">Berita</a></li>
+              <li><a href="kategori_berita.html" class="block py-1 hover:underline">Kategori</a></li>
+              <li><a href="tag_berita.html" class="block py-1 hover:underline">Tag</a></li>
+              <li><a href="komentar_berita.html" class="block py-1 hover:underline">Komentar</a></li>
+              <li><a href="sensor_komentar.html" class="block py-1 hover:underline">Sensor Komentar</a></li>
+              <li><a href="berita_foto.html" class="block py-1 hover:underline">Berita Foto</a></li>
+              <li><a href="galeri_berita_foto.html" class="block py-1 hover:underline">Galeri Berita Foto</a></li>
+            </ul>
+          </li>
+          <!-- Modul Video -->
+          <li>
+            <button onclick="toggleSubmenu('ModulVideoSub', 'icon-ModulVideoSub')" class="w-full flex items-center px-4 py-2 hover:bg-gray-700 rounded">
+              Modul Video
+              <svg class="ml-auto w-4 h-4 transition-transform" id="icon-ModulVideoSub" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <ul id="ModulVideoSub" class="pl-8 text-gray-300 space-y-1 hidden">
+              <li><a href="playlist_video.html" class="block py-1 hover:underline">Playlist Video</a></li>
+              <li><a href="video.html" class="block py-1 hover:underline">Video</a></li>
+              <li><a href="tag_video.html" class="block py-1 hover:underline">Tag Video</a></li>
+              <li><a href="komentar_video.html" class="block py-1 hover:underline">Komentar Video</a></li>
+            </ul>
+          </li>
+          <!-- Modul Iklan -->
+          <li>
+            <button onclick="toggleSubmenu('ModulIklanSub', 'icon-ModulIklanSub')" class="w-full flex items-center px-4 py-2 hover:bg-gray-700 rounded">
+              Modul Iklan
+              <svg class="ml-auto w-4 h-4 transition-transform" id="icon-ModulIklanSub" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <ul id="ModulIklanSub" class="pl-8 text-gray-300 space-y-1 hidden">
+              <li><a href="iklan_atas.html" class="block py-1 hover:underline">Iklan Atas</a></li>
+              <li><a href="iklan_home.html" class="block py-1 hover:underline">Iklan Home</a></li>
+              <li><a href="iklan_sidebar.html" class="block py-1 hover:underline">Iklan Sidebar</a></li>
+              <li><a href="iklan_link.html" class="block py-1 hover:underline">Iklan Link</a></li>
+              <li><a href="widget.html" class="block py-1 hover:underline">Widget</a></li>
+            </ul>
+          </li>
+          <!-- Modul Web -->
+          <li>
+            <button onclick="toggleSubmenu('ModulWebSub', 'icon-ModulWebSub')" class="w-full flex items-center px-4 py-2 hover:bg-gray-700 rounded">
+              Modul Web
+              <svg class="ml-auto w-4 h-4 transition-transform" id="icon-ModulWebSub" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <ul id="ModulWebSub" class="pl-8 text-gray-300 space-y-1 hidden">
+              <li><a href="logo_website.html" class="block py-1 hover:underline">Logo Website</a></li>
+              <li><a href="tamplate_website.html" class="block py-1 hover:underline">Tamplate Website</a></li>
+              <li><a href="background_website.html" class="block py-1 hover:underline">Background Website</a></li>
+            </ul>
+          </li>
+          <!-- Modul Interaksi -->
+          <li>
+            <button onclick="toggleSubmenu('ModulInteraksiSub', 'icon-ModulInteraksiSub')" class="w-full flex items-center px-4 py-2 hover:bg-gray-700 rounded">
+              Modul Interaksi
+              <svg class="ml-auto w-4 h-4 transition-transform" id="icon-ModulInteraksiSub" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <ul id="ModulInteraksiSub" class="pl-8 text-gray-300 space-y-1 hidden">
+              <li><a href="agenda_admin.html" class="block py-1 hover:underline">Agenda</a></li>
+              <li><a href="sekilas_info.html" class="block py-1 hover:underline">Sekilas Info</a></li>
+              <li><a href="jejak_pendapat.html" class="block py-1 hover:underline">Jejak Pendapat</a></li>
+              <li><a href="download_area.html" class="block py-1 hover:underline">Download Area</a></li>
+              <li><a href="alamat_kontak.html" class="block py-1 hover:underline">Alamat Kontak</a></li>
+              <li><a href="pesan_masuk.html" class="block py-1 hover:underline">Pesan Masuk</a></li>
+            </ul>
+          </li>
+          <li class="px-4 text-gray-400 uppercase text-xs mt-4">USER MENU</li>
+
+
+                  <!-- Modul Users -->
+                    <li>
+                        <button
+                            onclick="toggleSubmenu('usersSubmenu', 'icon-user')"
+                            class="w-full text-left flex items-center px-4 py-2 hover:bg-gray-700 rounded focus:outline-none"
+                        >
+                            Modul Users
+                            <svg
+                                id="icon-user"
+                                class="ml-auto w-4 h-4 transition-transform"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M19 9l-7 7-7-7"
+                                ></path>
+                            </svg>
+                        </button>
+                        <ul id="usersSubmenu" class="pl-8 space-y-1 text-sm hidden">
+                            <li>
+                                <a href="manajemen_users.html" class="block py-1 hover:underline">Manajemen User</a>
+                            </li>
+                                 <a href="manajemen_modul.html" class="block py-1 hover:underline">Manajemen Model</a>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a
+                            href="#"
+                            class="flex items-center px-4 py-2 hover:bg-gray-700 rounded"
+                            >Logout</a
+                        >
+                    </li>
+                </ul>
+            </nav>
+    </aside>
+        
+    
+    <!-- Content -->
+    <main class="flex-grow p-4">
+      <div class="dashboard-container">
+        <div class="row mb-4">
+          <div class="col">
+            <h1 class="section-title"><i class="fas fa-bars me-2"></i>Pengelolaan Menu</h1>
+          </div>
+        </div>
+        <div class="row">
+          <!-- Kolom Kiri: Form Tambah Menu -->
+          <div class="col-lg-4 mb-4">
+            <div class="card mb-4">
+              <div class="card-header">
+                <i class="fas fa-plus-circle me-2"></i>Tambah Menu Baru
+              </div>
+              <div class="card-body">
+                <form id="menuForm">
+                  <div class="form-group mb-3">
+                    <label for="menuName" class="form-label">Nama Menu</label>
+                    <input type="text" class="form-control" id="menuName" placeholder="Masukkan nama menu" required>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label class="form-label">Tipe Menu</label>
+                    <div class="d-flex gap-3">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="menuType" id="menuTypeLink" value="link" checked>
+                        <label class="form-check-label" for="menuTypeLink">Link</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="menuType" id="menuTypePage" value="page">
+                        <label class="form-check-label" for="menuTypePage">Halaman</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="menuType" id="menuTypeCategory" value="category">
+                        <label class="form-check-label" for="menuTypeCategory">Kategori</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="menuUrl" class="form-label">URL</label>
+                    <input type="text" class="form-control" id="menuUrl" placeholder="Masukkan URL" required>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label class="form-label">Status</label>
+                    <div class="d-flex gap-3">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="menuStatus" id="menuStatusPublished" value="published" checked>
+                        <label class="form-check-label" for="menuStatusPublished">
+                          <span class="status-indicator status-published"></span> Published
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="menuStatus" id="menuStatusDraft" value="draft">
+                        <label class="form-check-label" for="menuStatusDraft">
+                          <span class="status-indicator status-draft"></span> Draft
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary flex-grow-1">
+                      <i class="fas fa-plus me-2"></i>Tambah Menu
+                    </button>
+                    <button type="reset" class="btn btn-outline-secondary">
+                      <i class="fas fa-undo me-2"></i>Reset
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <i class="fas fa-code me-2"></i>Struktur Menu (JSON)
+              </div>
+              <div class="card-body">
+                <div class="json-output" id="jsonOutput"></div>
+                <button class="btn btn-outline-primary w-100 mt-3" id="saveMenuBtn">
+                  <i class="fas fa-save me-2"></i>Simpan Struktur Menu
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Kolom Kanan: Struktur Menu -->
+          <div class="col-lg-8">
+            <div class="card menu-panel">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                  <i class="fas fa-sitemap me-2"></i>Struktur Menu
+                </div>
+                <div class="text-muted small">Drag & drop untuk mengurutkan</div>
+              </div>
+              <div class="card-body p-0">
+                <div id="menuStructure">
+                  <ul class="menu-list" id="menuList"></ul>
+                  <div class="empty-state" id="emptyState" style="display:none;">
+                    <i class="fas fa-inbox"></i>
+                    <h5>Belum Ada Menu</h5>
+                    <p>Tambahkan menu baru menggunakan form di sebelah kiri</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Modal Edit Menu -->
+      <div class="modal fade" id="editMenuModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Edit Menu</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="editMenuForm">
+                <input type="hidden" id="editMenuId">
+                <div class="form-group mb-3">
+                  <label for="editMenuName" class="form-label">Nama Menu</label>
+                  <input type="text" class="form-control" id="editMenuName" required>
+                </div>
+                <div class="form-group mb-3">
+                  <label class="form-label">Tipe Menu</label>
+                  <div class="d-flex gap-3">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="editMenuType" id="editMenuTypeLink" value="link">
+                      <label class="form-check-label" for="editMenuTypeLink">Link</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="editMenuType" id="editMenuTypePage" value="page">
+                      <label class="form-check-label" for="editMenuTypePage">Halaman</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="editMenuType" id="editMenuTypeCategory" value="category">
+                      <label class="form-check-label" for="editMenuTypeCategory">Kategori</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="editMenuUrl" class="form-label">URL</label>
+                  <input type="text" class="form-control" id="editMenuUrl" required>
+                </div>
+                <div class="form-group mb-3">
+                  <label class="form-label">Status</label>
+                  <div class="d-flex gap-3">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="editMenuStatus" id="editMenuStatusPublished" value="published">
+                      <label class="form-check-label" for="editMenuStatusPublished">
+                        <span class="status-indicator status-published"></span> Published
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="editMenuStatus" id="editMenuStatusDraft" value="draft">
+                      <label class="form-check-label" for="editMenuStatusDraft">
+                        <span class="status-indicator status-draft"></span> Draft
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button type="button" class="btn btn-primary" id="saveEditMenuBtn">Simpan Perubahan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <!-- Bootstrap & jQuery JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+  <script>
+    // Sidebar submenu toggle
+    function toggleSubmenu(subId, iconId) {
+      const subMenu = document.getElementById(subId);
+      if (subMenu) {
+        subMenu.classList.toggle('hidden');
+        subMenu.classList.toggle('block');
+        // Icon rotate
+        const icon = document.getElementById(iconId);
+        if (icon) {
+          icon.style.transform = subMenu.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+        }
+      }
+    }
+
+    // Data contoh menu
+    let menuItems = [
+      {
+        id: 'm1',
+        name: 'Beranda',
+        type: 'link',
+        url: '/',
+        status: 'published',
+        children: []
+      },
+      {
+        id: 'm2',
+        name: 'Profil',
+        type: 'category',
+        url: '/produk',
+        status: 'published',
+        children: [ ]
+      },
+      {
+        id: 'm3',
+        name: 'Subbagian Perencanaan dan Keuangan',
+        type: 'page',
+        url: '/tentang',
+        status: 'published',
+        children: []
+      },
+      {
+        id: 'm1',
+        name: 'Bidang TISP',
+        type: 'link',
+        url: '/',
+        status: 'published',
+        children: []
+      },
+      {
+        id: 'm2',
+        name: 'Bidang IKP',
+        type: 'category',
+        url: '/produk',
+        status: 'published',
+        children: [ ]
+      },
+      {
+        id: 'm3',
+        name: 'Subbagian Perencanaan dan',
+        type: 'page',
+        url: '/tentang',
+        status: 'published',
+        children: []
+      }
+    
+    ];
+
+    // Generate ID unik
+    function generateId() {
+      return 'm' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+    }
+
+    // Render menu items
+    function renderMenuItems(items, parentId = 'menuList') {
+      const container = document.getElementById(parentId);
+      if (!items || items.length === 0) {
+        if (parentId === 'menuList') document.getElementById('emptyState').style.display = 'block';
+        if (parentId === 'menuList') container.innerHTML = '';
+        return '';
+      }
+      if (parentId === 'menuList') document.getElementById('emptyState').style.display = 'none';
+      let html = '';
+      items.forEach(item => {
+        const hasChildren = item.children && item.children.length > 0;
+        const isPublished = item.status === 'published';
+        const childrenHtml = hasChildren ? `<div class="nested-menu collapse show" id="children-${item.id}">
+            <ul class="menu-list" id="children-list-${item.id}">
+              ${renderMenuItems(item.children, `children-list-${item.id}`)}
+            </ul>
+          </div>` : '';
+        html += `<li class="menu-item" data-id="${item.id}">
+          <div class="menu-item-handle">
+            <div class="menu-item-content">
+              <span class="drag-handle"><i class="fas fa-grip-lines"></i></span>
+              <span class="collapse-toggle" onclick="toggleCollapse('children-${item.id}', this)">
+                ${hasChildren ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-minus" style="opacity:0.3"></i>'}
+              </span>
+              <h6 class="menu-item-title mb-0">${item.name}</h6>
+              <span class="menu-item-type badge bg-light text-dark">${item.type}</span>
+            </div>
+            <div class="menu-item-actions">
+              <span class="status-indicator ${isPublished ? 'status-published' : 'status-draft'}"></span>
+              <button class="action-btn edit-menu" data-id="${item.id}"><i class="fas fa-edit"></i></button>
+              <button class="action-btn delete-menu" data-id="${item.id}"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>
+          ${childrenHtml}
+        </li>`;
+      });
+      if (parentId === 'menuList') {
+        container.innerHTML = html;
+        initSortable();
+        addEventListeners();
+        updateJsonOutput();
+      }
+      return html;
+    }
+
+    // Collapse toggle for nested menu
+    function toggleCollapse(childrenId, el) {
+      const target = document.getElementById(childrenId);
+      if (target) {
+        $(target).collapse('toggle');
+        el.querySelector('i').classList.toggle('fa-chevron-down');
+        el.querySelector('i').classList.toggle('fa-chevron-right');
+      }
+    }
+
+    // Inisialisasi SortableJS untuk drag and drop
+    function initSortable() {
+      // Root menu
+      if (document.getElementById('menuList')) {
+        new Sortable(document.getElementById('menuList'), {
+          group: 'menu',
+          animation: 150,
+          handle: '.drag-handle',
+          fallbackOnBody: true,
+          swapThreshold: 0.65,
+        });
+      }
+      // Nested menu
+      document.querySelectorAll('.nested-menu > .menu-list').forEach(nestedList => {
+        new Sortable(nestedList, {
+          group: 'menu',
+          animation: 150,
+          handle: '.drag-handle',
+          fallbackOnBody: true,
+          swapThreshold: 0.65,
+        });
+      });
+    }
+
+    // Tambahkan event listeners
+    function addEventListeners() {
+      // Edit menu
+      document.querySelectorAll('.edit-menu').forEach(btn => {
+        btn.onclick = function() {
+          const menuId = this.getAttribute('data-id');
+          editMenuItem(menuId);
+        }
+      });
+      // Hapus menu
+      document.querySelectorAll('.delete-menu').forEach(btn => {
+        btn.onclick = function() {
+          const menuId = this.getAttribute('data-id');
+          deleteMenuItem(menuId);
+        }
+      });
+    }
+
+    // Tambah menu baru
+    document.getElementById('menuForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('menuName').value;
+      const type = document.querySelector('input[name="menuType"]:checked').value;
+      const url = document.getElementById('menuUrl').value;
+      const status = document.querySelector('input[name="menuStatus"]:checked').value;
+      const newItem = {
+        id: generateId(),
+        name: name,
+        type: type,
+        url: url,
+        status: status,
+        children: []
+      };
+      menuItems.push(newItem);
+      renderMenuItems(menuItems);
+      this.reset();
+      document.getElementById('menuTypeLink').checked = true;
+      document.getElementById('menuStatusPublished').checked = true;
+    });
+
+    // Edit menu
+    function editMenuItem(menuId) {
+      const item = findMenuItem(menuItems, menuId);
+      if (item) {
+        document.getElementById('editMenuId').value = item.id;
+        document.getElementById('editMenuName').value = item.name;
+        document.getElementById('editMenuUrl').value = item.url;
+        document.querySelectorAll('input[name="editMenuType"]').forEach(radio => {
+          radio.checked = (radio.value === item.type);
+        });
+        document.querySelectorAll('input[name="editMenuStatus"]').forEach(radio => {
+          radio.checked = (radio.value === item.status);
+        });
+        const modal = new bootstrap.Modal(document.getElementById('editMenuModal'));
+        modal.show();
+      }
+    }
+
+    // Simpan perubahan edit menu
+    document.getElementById('saveEditMenuBtn').addEventListener('click', function() {
+      const menuId = document.getElementById('editMenuId').value;
+      const name = document.getElementById('editMenuName').value;
+      const url = document.getElementById('editMenuUrl').value;
+      const type = document.querySelector('input[name="editMenuType"]:checked').value;
+      const status = document.querySelector('input[name="editMenuStatus"]:checked').value;
+      const item = findMenuItem(menuItems, menuId);
+      if (item) {
+        item.name = name;
+        item.url = url;
+        item.type = type;
+        item.status = status;
+        renderMenuItems(menuItems);
+        const modal = bootstrap.Modal.getInstance(document.getElementById('editMenuModal'));
+        modal.hide();
+      }
+    });
+
+    // Hapus menu
+    function deleteMenuItem(menuId) {
+      if (confirm('Apakah Anda yakin ingin menghapus menu ini?')) {
+        menuItems = deleteMenuItemRecursive(menuItems, menuId);
+        renderMenuItems(menuItems);
+      }
+    }
+
+    // Fungsi rekursif untuk menghapus menu
+    function deleteMenuItemRecursive(items, id) {
+      return items.filter(item => {
+        if (item.id === id) return false;
+        if (item.children && item.children.length > 0) {
+          item.children = deleteMenuItemRecursive(item.children, id);
+        }
+        return true;
+      });
+    }
+
+    // Cari menu item berdasarkan ID
+    function findMenuItem(items, id) {
+      for (const item of items) {
+        if (item.id === id) return item;
+        if (item.children && item.children.length > 0) {
+          const found = findMenuItem(item.children, id);
+          if (found) return found;
+        }
+      }
+      return null;
+    }
+
+    // Update JSON output
+    function updateJsonOutput() {
+      document.getElementById('jsonOutput').textContent = JSON.stringify(menuItems, null, 2);
+    }
+
+    // Simpan struktur menu
+    document.getElementById('saveMenuBtn').addEventListener('click', function() {
+      alert('Struktur menu berhasil disimpan!');
+      // Di sini biasanya akan ada kode untuk mengirim data ke server
+      console.log('Menu yang disimpan:', menuItems);
+    });
+
+    // Inisialisasi saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', function() {
+      renderMenuItems(menuItems);
+    });
+  </script>
+</body>
+</html>

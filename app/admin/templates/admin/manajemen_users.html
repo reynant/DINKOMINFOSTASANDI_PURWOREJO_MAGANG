@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"/>
+  <style>.scrollbar-hidden::-webkit-scrollbar{display:none}</style>
+</head>
+<body>
+
+  {% include "admin/sidebar.html" %}
+
+  <div class="container mt-4">
+    <h3>Dashboard</h3>
+
+    <div class="card mt-3">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Manajemen Users</h5>
+        <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">
+          Tambahkan Data
+        </a>
+      </div>
+
+      <div class="card-body">
+        <!-- Filter & Search -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex align-items-center">
+            Show
+            <select class="form-select form-select-sm mx-2" style="width:auto">
+              <option>10</option><option>25</option><option>50</option><option>100</option>
+            </select>
+            entries
+          </div>
+          <div><input type="search" class="form-control form-control-sm" placeholder="Search..."/></div>
+        </div>
+
+        <!-- Tabel Users -->
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-sm align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>No</th>
+                <th>Username</th>
+                <th>Nama Lengkap</th>
+                <th>Email</th>
+                <th>Foto</th>
+                <th>Blokir</th>
+                <th>Level</th>
+                <th>Kiriman</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if users %}
+                {% for u in users %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ u.Username }}</td>
+                <td>{{ u.Nama_Lengkap }}</td>
+                <td>{{ u.Email }}</td>
+                <td class="text-center">
+                  {% if u.Foto %}
+                    <img src="{{ url_for('static', filename='uploads/users/' ~ u.Foto) }}" 
+                         class="rounded-circle" width="40" height="40">
+                  {% else %}
+                    <span class="text-muted">-</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if u.Blokir == 'N' %}
+                    <span class="badge bg-success">Aktif</span>
+                  {% else %}
+                    <span class="badge bg-danger">Nonaktif</span>
+                  {% endif %}
+                </td>
+                <td>{{ u.level }}</td>
+                <td>{{ u.Kiriman }} Artikel</td>
+                <td class="text-nowrap">
+                  <!-- Tombol Edit -->
+                  <button type="button"
+                          class="btn btn-warning btn-sm"
+                          data-id="{{ u.id }}"
+                          data-username="{{ u.Username|e }}"
+                          data-nama="{{ u.Nama_Lengkap|e }}"
+                          data-email="{{ u.Email|e }}"
+                          data-level="{{ u.level }}"
+                          data-status="{{ u.Blokir }}"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalEdit"
+                          onclick="setEditData(this)">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <!-- Tombol Hapus -->
+                  <a href="{{ url_for('admin.hapus_user', id=u.id) }}"
+                     class="btn btn-danger btn-sm"
+                     onclick="return confirm('Yakin ingin menghapus user ini?')">
+                    <i class="bi bi-trash"></i>
+                  </a>
+                </td>
+              </tr>
+                {% endfor %}
+              {% else %}
+                <tr><td colspan="9" class="text-center">Tidak ada data user</td></tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-between mt-3">
+          <div>Showing 1 to {{ users|length }} of {{ users|length }} entries</div>
+          <nav>
+            <ul class="pagination pagination-sm mb-0">
+              <li class="page-item disabled"><a class="page-link">Previous</a></li>
+              <li class="page-item active"><a class="page-link" href="#">1</a></li>
+              <li class="page-item disabled"><a class="page-link">Next</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-4 text-center text-sm text-gray-500">
+          <p>
+            Copyright © 2014-2025
+            <a href="#" class="text-blue-700 fw-semibold">
+              Dinas Komunikasi, Informatika, Statistik dan Persandian Kabupaten Purworejo
+            </a>.
+            All rights reserved. Version 3.0.0
+          </p>
+        </footer>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Tambah User -->
+  <div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form method="POST" action="{{ url_for('admin.tambah_user') }}" enctype="multipart/form-data">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Tambah User</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3"><label class="form-label">Username</label><input type="text" name="username" class="form-control" required></div>
+            <div class="mb-3"><label class="form-label">Nama Lengkap</label><input type="text" name="nama_lengkap" class="form-control"></div>
+            <div class="mb-3"><label class="form-label">Email</label><input type="email" name="email" class="form-control"></div>
+            <div class="mb-3"><label class="form-label">Level</label>
+              <select name="level" class="form-select">
+                <option value="admin">Admin</option>
+                <option value="editor">Editor</option>
+                <option value="user" selected>User</option>
+              </select>
+            </div>
+            <div class="mb-3"><label class="form-label">Status</label>
+              <select name="status" class="form-select">
+                <option value="N" selected>Aktif</option>
+                <option value="Y">Nonaktif</option>
+              </select>
+            </div>
+            <div class="mb-3"><label class="form-label">Foto</label><input type="file" name="foto" class="form-control"></div>
+          </div>
+          <div class="modal-footer"><button type="submit" class="btn btn-primary">Simpan</button></div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Edit User -->
+  <div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="form-edit" method="POST" enctype="multipart/form-data">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit User</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Hidden ID harus punya name -->
+            <input type="hidden" id="edit-id" name="id">
+            <div class="mb-3"><label class="form-label">Username</label><input type="text" id="edit-username" name="username" class="form-control" required></div>
+            <div class="mb-3"><label class="form-label">Nama Lengkap</label><input type="text" id="edit-nama" name="nama_lengkap" class="form-control"></div>
+            <div class="mb-3"><label class="form-label">Email</label><input type="email" id="edit-email" name="email" class="form-control"></div>
+            <div class="mb-3"><label class="form-label">Level</label>
+              <select id="edit-level" name="level" class="form-select">
+                <option value="admin">Admin</option>
+                <option value="editor">Editor</option>
+                <option value="user">User</option>
+              </select>
+            </div>
+            <div class="mb-3"><label class="form-label">Status</label>
+              <select id="edit-status" name="status" class="form-select">
+                <option value="N">Aktif</option>
+                <option value="Y">Nonaktif</option>
+              </select>
+            </div>
+            <div class="mb-3"><label class="form-label">Foto</label><input type="file" name="foto" class="form-control"></div>
+          </div>
+          <div class="modal-footer"><button type="submit" class="btn btn-primary">Simpan Perubahan</button></div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function setEditData(btn) {
+      const id       = btn.getAttribute('data-id');
+      const username = btn.getAttribute('data-username');
+      const nama     = btn.getAttribute('data-nama');
+      const email    = btn.getAttribute('data-email');
+      const level    = btn.getAttribute('data-level');
+      const status   = btn.getAttribute('data-status');
+
+      document.getElementById('edit-id').value = id;
+      document.getElementById('edit-username').value = username;
+      document.getElementById('edit-nama').value = nama;
+      document.getElementById('edit-email').value = email;
+      document.getElementById('edit-level').value = level;
+      document.getElementById('edit-status').value = status;
+
+      // set action form edit sesuai id
+      document.getElementById('form-edit').action = "/admin/edit_user/" + id;
+    }
+  </script>
+
+</body>
+</html>

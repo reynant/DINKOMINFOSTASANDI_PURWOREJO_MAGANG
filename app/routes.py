@@ -201,6 +201,14 @@ def wisata():
     except TemplateNotFound:
         abort(404)
 
+@main.route('/rolasan')
+@main.route('/rolasan.html')
+def rolasan():
+    try:
+        return render_template('public/rolasan.html')  
+    except TemplateNotFound:
+        abort(404)
+
 @main.route('/gendhing')
 @main.route('/gendhing.html')
 def gendhing():

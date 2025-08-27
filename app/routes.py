@@ -16,6 +16,7 @@ def index():
     except TemplateNotFound:
         abort(404)
 
+
 @main.route('/about')
 @main.route('/about.html')
 def about():
@@ -157,6 +158,70 @@ def foto():
 def video():
     try:
         return render_template('public/vidio.html')  
+    except TemplateNotFound:
+        abort(404)
+
+@main.route('/podkesdjo')
+@main.route('/podkesdjo.html')
+def podkesdjo():
+    try:
+        return render_template('public/podkesdjo.html')  
+    except TemplateNotFound:
+        abort(404)
+
+@main.route('/gendis')
+@main.route('/gendis.html')
+def gendis():
+    try:
+        return render_template('public/gendis.html')  
+    except TemplateNotFound:
+        abort(404)
+
+@main.route('/ngobras')
+@main.route('/ngobras.html')
+def ngobras():
+    try:
+        return render_template('public/ngobras.html')  
+    except TemplateNotFound:
+        abort(404)
+
+@main.route('/cvp')
+@main.route('/cvp.html')
+def cvp():
+    try:
+        return render_template('public/cvp.html')  
+    except TemplateNotFound:
+        abort(404)
+
+@main.route('/wisata')
+@main.route('/wisata.html')
+def wisata():
+    try:
+        return render_template('public/wisata.html')  
+    except TemplateNotFound:
+        abort(404)
+
+@main.route('/gendhing')
+@main.route('/gendhing.html')
+def gendhing():
+    try:
+        return render_template('public/gendhing.html')  
+    except TemplateNotFound:
+        abort(404)
+
+@main.route('/cangkir')
+@main.route('/cangkir.html')
+def caangkir():
+    try:
+        return render_template('public/cangkir.html')  
+    except TemplateNotFound:
+        abort(404)
+
+@main.route('/kominfogoes')
+@main.route('/kominfogoes.html')
+def kominfogoes():
+    try:
+        return render_template('public/kominfogoes.html')  
     except TemplateNotFound:
         abort(404)
 

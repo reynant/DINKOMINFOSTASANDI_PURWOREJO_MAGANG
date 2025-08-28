@@ -1,39 +1,56 @@
 import os
-import mysql.connector
-from flask import (Flask, redirect, url_for, session,
-                   request, render_template)
-from werkzeug.security import check_password_hash
-
-# Impor blueprint 'main' dan 'admin'
-from .routes import main as main_blueprint
-from .admin.routes import admin as admin_blueprint
+from flask import Flask
+# Hapus import yang salah di sini
 
 def create_app():
-    """Membungkus pembuatan aplikasi dalam sebuah fungsi."""
+    """Membungkus pembuatan aplikasi dalam sebuah fungsi (Application Factory)."""
     app = Flask(__name__)
-    app.secret_key = 'ganti-dengan-kunci-rahasia-yang-kuat-dan-unik'
-
-    # --- Konfigurasi Koneksi MySQL ---
+    
+    # Atur konfigurasi dasar
+    # (Sangat disarankan untuk memindahkannya ke file config.py seperti saran sebelumnya)
+    app.config['SECRET_KEY'] = 'ganti-dengan-kunci-rahasia-yang-kuat'
     app.config['MYSQL_HOST'] = 'localhost'
     app.config['MYSQL_USER'] = 'root'
     app.config['MYSQL_PASSWORD'] = ''
-    app.config['MYSQL_DB'] = 'web_kominfo'
-    app.config['UPLOAD_FOLDER'] = 'static/favicon'
+    app.config['MYSQL_DB'] = 'db_dinkominfostasandi'
+    app.config['UPLOAD_FOLDER'] = 'app/static/uploads' # Nama folder yang lebih umum
 
+    # Pastikan folder upload ada
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
         os.makedirs(app.config['UPLOAD_FOLDER'])
 
-    def get_db():
-        """Fungsi helper untuk koneksi ke database MySQL."""
-        return mysql.connector.connect(
-            host=app.config['MYSQL_HOST'],
-            user=app.config['MYSQL_USER'],
-            password=app.config['MYSQL_PASSWORD'],
-            database=app.config['MYSQL_DB']
-        )
+    # --- PERBAIKAN UTAMA ADA DI SINI ---# app/__init__.py
 
-    # --- Daftarkan Blueprint ---
-    app.register_blueprint(main_blueprint)
-    app.register_blueprint(admin_blueprint, url_prefix='/admin')
+import os
+from flask import Flask
+
+def create_app():
+    """Membungkus pembuatan aplikasi dalam sebuah fungsi (Application Factory)."""
+    app = Flask(__name__)
+    
+    # ... (kode konfigurasi Anda) ...
+    app.config['SECRET_KEY'] = 'ganti-dengan-kunci-rahasia-yang-kuat'
+    # ... (dan konfigurasi lainnya) ...
+
+    # Pastikan folder upload ada
+    if not os.path.exists(app.config.get('UPLOAD_FOLDER', 'app/static/uploads')):
+        os.makedirs(app.config.get('UPLOAD_FOLDER', 'app/static/uploads'))
+
+    # Impor blueprint dari lokasi yang benar di dalam fungsi create_app
+    from .public.routes import public_bp
+    from .admin.routes import admin  # Ganti 'admin_bp' menjadi 'admin'
+
+    # Daftarkan blueprint ke aplikasi
+    app.register_blueprint(public_bp)
+    app.register_blueprint(admin, url_prefix='/admin') # Ganti 'admin_bp' menjadi 'admin'
+
+    return app
+    # Impor blueprint dari lokasi yang benar di dalam fungsi create_app
+    from .public.routes import public_bp
+    from .admin.routes import admin
+
+    # Daftarkan blueprint ke aplikasi
+    app.register_blueprint(public_bp)
+    app.register_blueprint(admin, url_prefix='/admin')
 
     return app

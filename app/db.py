@@ -7,7 +7,7 @@ def get_db():
             host="localhost",
             user="root",
             password="",
-            database="db_kominfo",  # ganti sesuai nama database kamu
+            database="db_dinkominfostasandi",  # ganti sesuai nama database kamu
             charset="utf8mb4"
         )
     return g.db

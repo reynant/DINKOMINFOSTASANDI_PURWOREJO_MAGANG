@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, abort
+from flask import Blueprint, render_template, abort, request, current_app, redirect, url_for
+import mysql.connector
 from jinja2 import TemplateNotFound
 
 # Blueprint dengan template_folder yang benar
@@ -6,6 +7,54 @@ public_bp = Blueprint('public', __name__)
 
 
 # HALAMAN UTAMA
+
+@public_bp.route('/search')
+def search():
+    """Menangani permintaan pencarian dari publik."""
+    query = request.args.get('q')  # Ambil kata kunci dari URL
+
+    if not query:
+        # Jika tidak ada kata kunci, kembali ke halaman utama
+        return redirect(url_for('public.index'))
+
+    results = []
+    try:
+        # Hubungkan ke database
+        conn = mysql.connector.connect(
+            host=current_app.config['MYSQL_HOST'],
+            user=current_app.config['MYSQL_USER'],
+            password=current_app.config['MYSQL_PASSWORD'],
+            database=current_app.config['MYSQL_DB']
+        )
+        cursor = conn.cursor(dictionary=True)
+
+        # SQL Query untuk mencari berita yang 'aktif' atau sudah di-publish
+        # Ganti nama tabel dan kolom sesuai database Anda
+        search_query = "%" + query + "%"
+        sql = """
+            SELECT id, judul, isi, tanggal, gambar 
+            FROM berita 
+            WHERE judul LIKE %s AND status = 'publish' 
+            ORDER BY tanggal DESC
+        """
+
+        cursor.execute(sql, (search_query,))
+        results = cursor.fetchall()
+
+    except mysql.connector.Error as err:
+        print(f"Database Error: {err}")  # Tampilkan error di konsol server
+        # Di sini Anda bisa menambahkan flash message jika perlu
+    finally:
+        # Selalu tutup koneksi
+        if 'conn' in locals() and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+    # Render halaman hasil pencarian
+    return render_template('search_results.html',
+                           results=results,
+                           query=query,
+                           title="Hasil Pencarian")
 
 
 @public_bp.route('/')
@@ -377,7 +426,7 @@ def spbe():
 @public_bp.route('/smart-city.html')
 def smart_city():
     try:
-        return render_template(']smart-city.html', title='smart-city')
+        return render_template('smart-city.html', title='smart-city')
     except TemplateNotFound:
         abort(404)
 
@@ -454,15 +503,6 @@ def skm():
 def hubungi_kami():
     try:
         return render_template('hubungi-kami.html', title='Hubungi Kami')
-    except TemplateNotFound:
-        abort(404)
-
-
-@public_bp.route('/search')
-@public_bp.route('/search.html')
-def search():
-    try:
-        return render_template('search.html', title='search')
     except TemplateNotFound:
         abort(404)
 

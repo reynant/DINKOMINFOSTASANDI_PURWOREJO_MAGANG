@@ -1,0 +1,55 @@
+{% extends "base.html" %} {% block title %}Hasil Pencarian untuk {{ query }}{%
+endblock %} {% block content %}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-12">
+      <h2 class="mb-4">
+        Hasil Pencarian untuk: <em class="text-primary">"{{ query }}"</em>
+      </h2>
+
+      {% if results %}
+      <p class="text-muted">Ditemukan {{ results|length }} hasil yang cocok.</p>
+      <hr />
+
+      {% for item in results %}
+      <div class="card mb-3">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <img
+              src="{{ url_for('static', filename='uploads/' + item.gambar) if item.gambar else url_for('static', filename='img/placeholder.png') }}"
+              class="card-img"
+              alt="{{ item.judul }}"
+            />
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ item.judul }}</h5>
+              <p class="card-text text-muted">
+                <small
+                  >Dipublikasikan pada: {{ item.tanggal.strftime('%d %B %Y') if
+                  item.tanggal }}</small
+                >
+              </p>
+              <p class="card-text">{{ item.isi|striptags|truncate(150) }}</p>
+              <a
+                href="{{ url_for('public.news_detail', news_id=item.id) }}"
+                class="btn btn-primary"
+                >Baca Selengkapnya</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %} {% else %}
+      <div class="alert alert-warning">
+        <h4>Pencarian Tidak Ditemukan</h4>
+        <p>
+          Maaf, kami tidak dapat menemukan hasil apa pun untuk kata kunci
+          <strong>"{{ query }}"</strong>. Silakan coba dengan kata kunci lain.
+        </p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

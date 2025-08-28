@@ -1,9 +1,42 @@
-from flask import Blueprint, render_template, abort, request, current_app, redirect, url_for
-import mysql.connector
+from flask import Blueprint, render_template, abort, request, redirect, url_for
 from jinja2 import TemplateNotFound
 
 # Blueprint dengan template_folder yang benar
-public_bp = Blueprint('public', __name__)
+# Pastikan path ini benar sesuai dengan struktur folder Anda
+public_bp = Blueprint('public', __name__, template_folder='../../templates')
+
+
+# =============================================================================
+# DATA HALAMAN STATIS (PENGGANTI DATABASE)
+# =============================================================================
+searchable_pages = [
+    {'endpoint': 'public.index', 'title': 'Beranda', 'keywords': 'utama halaman depan home'},
+    {'endpoint': 'public.about', 'title': 'Tentang Kami', 'keywords': 'about mengenai kami'},
+    {'endpoint': 'public.profil', 'title': 'Profil', 'keywords': 'profil dinas gambaran umum'},
+    {'endpoint': 'public.tugas_pokok', 'title': 'Tugas Pokok dan Fungsi', 'keywords': 'tupoksi tugas pokok fungsi'},
+    {'endpoint': 'public.struktur_organisasi', 'title': 'Struktur Organisasi', 'keywords': 'organisasi struktur bagan'},
+    {'endpoint': 'public.visi_misi', 'title': 'Visi dan Misi', 'keywords': 'visi misi tujuan sasaran'},
+    {'endpoint': 'public.sekretariat', 'title': 'Sekretariat', 'keywords': 'sekretariat administrasi'},
+    {'endpoint': 'public.subbagian_perencanaan', 'title': 'Subbagian Perencanaan dan Keuangan', 'keywords': 'perencanaan keuangan anggaran'},
+    {'endpoint': 'public.subbagian_umum', 'title': 'Subbagian Umum dan Kepegawaian', 'keywords': 'umum kepegawaian sdm'},
+    {'endpoint': 'public.bidang_ikp', 'title': 'Bidang IKP', 'keywords': 'ikp informasi komunikasi publik'},
+    {'endpoint': 'public.bidang_tisp', 'title': 'Bidang TISP', 'keywords': 'tisp telematika informatika statistik persandian'},
+    {'endpoint': 'public.bidang_pplkc', 'title': 'Bidang PPLKC', 'keywords': 'pplkc pengelolaan pengaduan layanan'},
+    {'endpoint': 'public.profil_pejabat', 'title': 'Profil Pejabat', 'keywords': 'pejabat pimpinan kepala dinas'},
+    {'endpoint': 'public.news', 'title': 'Berita', 'keywords': 'news berita artikel informasi terkini'},
+    {'endpoint': 'public.galeri', 'title': 'Galeri', 'keywords': 'galeri foto video dokumentasi'},
+    {'endpoint': 'public.foto', 'title': 'Galeri Foto', 'keywords': 'foto gambar album'},
+    {'endpoint': 'public.video', 'title': 'Galeri Video', 'keywords': 'video klip rekaman'},
+    {'endpoint': 'public.hoaks', 'title': 'Cek Fakta Hoaks', 'keywords': 'hoaks antihoax fakta berita palsu'},
+    {'endpoint': 'public.laporan_hoaks', 'title': 'Laporan Isu Hoaks', 'keywords': 'lapor aduan isu hoaks'},
+    {'endpoint': 'public.kegiatan', 'title': 'Kegiatan', 'keywords': 'kegiatan acara event agenda'},
+    {'endpoint': 'public.download', 'title': 'Download', 'keywords': 'unduh berkas file dokumen'},
+    {'endpoint': 'public.agenda', 'title': 'Agenda', 'keywords': 'agenda jadwal acara mendatang'},
+    {'endpoint': 'public.hubungi_kami', 'title': 'Hubungi Kami', 'keywords': 'kontak alamat email telepon'},
+    {'endpoint': 'public.smart_city', 'title': 'Smart City', 'keywords': 'smart city kota cerdas purworejo'},
+    {'endpoint': 'public.ppid', 'title': 'PPID', 'keywords': 'ppid pejabat pengelola informasi dan dokumentasi'},
+]
+# =============================================================================
 
 
 # HALAMAN UTAMA
@@ -18,44 +51,19 @@ def search():
         return redirect(url_for('public.index'))
 
     results = []
-    try:
-        # Hubungkan ke database
-        conn = mysql.connector.connect(
-            host=current_app.config['MYSQL_HOST'],
-            user=current_app.config['MYSQL_USER'],
-            password=current_app.config['MYSQL_PASSWORD'],
-            database=current_app.config['MYSQL_DB']
-        )
-        cursor = conn.cursor(dictionary=True)
+    search_term = query.lower()
 
-        # SQL Query untuk mencari berita yang 'aktif' atau sudah di-publish
-        # Ganti nama tabel dan kolom sesuai database Anda
-        search_query = "%" + query + "%"
-        sql = """
-            SELECT id, judul, isi, tanggal, gambar 
-            FROM berita 
-            WHERE judul LIKE %s AND status = 'publish' 
-            ORDER BY tanggal DESC
-        """
-
-        cursor.execute(sql, (search_query,))
-        results = cursor.fetchall()
-
-    except mysql.connector.Error as err:
-        print(f"Database Error: {err}")  # Tampilkan error di konsol server
-        # Di sini Anda bisa menambahkan flash message jika perlu
-    finally:
-        # Selalu tutup koneksi
-        if 'conn' in locals() and conn.is_connected():
-            cursor.close()
-            conn.close()
+    # Logika pencarian pada data halaman statis
+    for page in searchable_pages:
+        # Mencocokkan kata kunci dengan judul atau keywords halaman
+        if search_term in page['title'].lower() or search_term in page['keywords'].lower():
+            results.append(page)
 
     # Render halaman hasil pencarian
     return render_template('search_results.html',
                            results=results,
                            query=query,
-                           title="Hasil Pencarian")
-
+                           title=f"Hasil Pencarian untuk '{query}'")
 
 @public_bp.route('/')
 @public_bp.route('/index.html')
@@ -70,13 +78,12 @@ def index():
 @public_bp.route('/about.html')
 def about():
     try:
-        return render_template('about.html', title='about')
+        return render_template('about.html', title='Tentang Kami')
     except TemplateNotFound:
         abort(404)
 
 
 # PROFIL & SUBMENU
-
 
 @public_bp.route('/profil')
 @public_bp.route('/profil.html')
@@ -168,7 +175,7 @@ def bidang_pplkc():
         abort(404)
 
 
-@public_bp.route('/profil-pejabat')  # Belum Bisa
+@public_bp.route('/profil-pejabat')
 @public_bp.route('/profil-pejabat.html')
 def profil_pejabat():
     try:
@@ -187,7 +194,6 @@ def kebijakan_umum():
 
 
 # KONTEN
-
 
 @public_bp.route('/news')
 @public_bp.route('/news.html')
@@ -335,7 +341,6 @@ def kegiatan():
 
 # DOWNLOAD & AGENDA
 
-
 @public_bp.route('/download')
 @public_bp.route('/download.html')
 def download():
@@ -364,7 +369,6 @@ def layananskpd():
 
 
 # INFORMASI PUBLIK
-
 
 @public_bp.route('/dokumen-pelaksanaan-anggaran')
 @public_bp.route('/dokumen-pelaksanaan-anggaran.html')
@@ -402,7 +406,6 @@ def lhkan():
         abort(404)
 
 # LAIN-LAIN
-
 
 @public_bp.route('/ppid')
 @public_bp.route('/ppid.html')
@@ -485,7 +488,7 @@ def kebijakan():
         abort(404)
 
 
-@public_bp.route('/skm')  # Gak ada isi
+@public_bp.route('/skm')
 @public_bp.route('/skm.html')
 def skm():
     try:
@@ -494,7 +497,6 @@ def skm():
         abort(404)
 
 # HUBUNGI KAMI
-
 
 @public_bp.route('/hubungi')
 @public_bp.route('/hubungi.html')

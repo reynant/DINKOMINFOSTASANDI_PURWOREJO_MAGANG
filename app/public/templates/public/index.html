@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dinas Komunikasi, Informatika, Statistik dan Persandian Kabupaten Purworejo</title>
+    <title>
+      Dinas Komunikasi, Informatika, Statistik dan Persandian Kabupaten
+      Purworejo
+    </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       /* Custom scrollbar for horizontal menus */
@@ -47,50 +50,64 @@
         overflow-y: auto; /* Enable vertical scrolling */
       }
     </style>
-</head>
-<body class="bg-white font-sans text-gray-700 leading-relaxed selection:bg-blue-300 selection:text-white">
+  </head>
+  <body
+    class="bg-white font-sans text-gray-700 leading-relaxed selection:bg-blue-300 selection:text-white"
+  >
+    <!-- Header with blurred background image, logo, title, and search -->
+    <header 
+      class="relative h-40 sm:h-48 md:h-56 lg:h-8 xl:h-60 w-full bg-gray-200 shadow-lg"
+    >
+      <img
+        src="static/img/bg2.png"
+        class="absolute inset-0 w-full h-full object-cover brightness-75"
+        onerror="this.style.display='none'"
+      />
+      <div
+        class="absolute inset-0 flex flex-col py-4 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-10"
+      >
+        <!-- Baris atas: Logo + Judul & Pencarian -->
+        <div class="flex items-start justify-between w-full">
+          <!-- Kiri: Logo + Judul -->
+          <div class="flex items-start gap-3 sm:gap-4">
+            <img
+              src="static/img/logo kabupaten pwr.png"
+              alt="Logo Kabupaten Purworejo"
+              class="w-12 sm:w-14 md:w-16 h-auto object-contain"
+              onerror="this.style.display='none'"
+            />
+            <h1
+              class="text-white text-sm sm:text-base md:text-lg lg:text-xl font-extrabold drop-shadow-lg leading-tight select-none mt-1"
+            >
+              DINAS KOMUNIKASI, INFORMATIKA,<br />
+              STATISTIK DAN PERSANDIAN<br />
+              KABUPATEN PURWOREJO
+            </h1>
+          </div>
 
-
-<!-- Header with blurred background image, logo, title, and search -->
-<header class="relative h-40 sm:h-48 md:h-56 lg:h-8 xl:h-60 w-full bg-gray-200 shadow-lg">
-  <img 
-    src=" " />
-   
-  <div class="absolute inset-0 flex flex-col py-4 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-10">
-    <!-- Baris atas: Logo + Judul & Pencarian -->
-    <div class="flex items-start justify-between w-full">
-      <!-- Kiri: Logo + Judul -->
-      <div class="flex items-start gap-3 sm:gap-4">
-        <img 
-          src="static/img/logo kabupaten pwr.png" 
-          alt="Logo Kabupaten Purworejo" 
-          class="w-12 sm:w-14 md:w-16 h-auto object-contain"
-          onerror="this.style.display='none'"
-        />
-        <h1 class="text-white text-sm sm:text-base md:text-lg lg:text-xl font-extrabold drop-shadow-lg leading-tight select-none mt-1">
-          DINAS KOMUNIKASI, INFORMATIKA,<br />
-          STATISTIK DAN PERSANDIAN<br />
-          KABUPATEN PURWOREJO
-        </h1>
+          <!-- Kanan: Form Pencarian -->
+          <form
+            role="search"
+            aria-label="Pencarian"
+            class="relative w-36 sm:w-44 md:w-52 lg:w-60"
+          >
+            <input
+              type="search"
+              placeholder="Cari ..."
+              aria-label="Cari informasi di situs Dinas Komunikasi"
+              class="w-full py-2 pl-3 pr-10 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800 text-sm"
+            />
+            <button
+              type="submit"
+              aria-label="Tombol cari"
+              class="absolute right-1 top-1 bottom-1 px-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+            >
+              Cari
+            </button>
+          </form>
+        </div>
       </div>
-
-      <!-- Kanan: Form Pencarian -->
-      <form role="search" aria-label="Pencarian" class="relative w-36 sm:w-44 md:w-52 lg:w-60">
-        <input 
-          type="search" 
-          placeholder="Cari ..." 
-          aria-label="Cari informasi di situs Dinas Komunikasi" 
-          class="w-full py-2 pl-3 pr-10 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800 text-sm"
-        />
-        <button type="submit" aria-label="Tombol cari" class="absolute right-1 top-1 bottom-1 px-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
-          Cari
-        </button>
-      </form>
-    </div>
-  </div>
-</header>
-
-
+    </header>
 
 <!-- Navigation menu -->
 <nav class="bg-blue-800 text-white select-none shadow-sm text-xs font-bold uppercase">

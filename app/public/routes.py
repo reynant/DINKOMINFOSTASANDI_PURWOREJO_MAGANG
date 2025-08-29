@@ -35,7 +35,31 @@ searchable_pages = [
     {'endpoint': 'public.hubungi_kami', 'title': 'Hubungi Kami', 'keywords': 'kontak alamat email telepon'},
     {'endpoint': 'public.smart_city', 'title': 'Smart City', 'keywords': 'smart city kota cerdas purworejo'},
     {'endpoint': 'public.ppid', 'title': 'PPID', 'keywords': 'ppid pejabat pengelola informasi dan dokumentasi'},
-]
+    {'endpoint': 'public.podkesdjo', 'title': 'podkesdjo', 'keywords': 'podkesdjo podcast audio'},
+    {'endpoint': 'public.gendis', 'title': 'gendis', 'keywords': 'gendis podcast audio'},
+    {'endpoint': 'public.ngobras', 'title': 'ngobras', 'keywords': 'ngobras podcast audio'},
+    {'endpoint': 'public.cvp', 'title': 'cvp', 'keywords': 'cvp podcast audio'},
+    {'endpoint': 'public.wisata', 'title': 'wisata', 'keywords': 'wisata travel pariwisata'},
+    {'endpoint': 'public.rolasan', 'title': 'rolasan', 'keywords': 'rolasan podcast audio'},
+    {'endpoint': 'public.gendhing', 'title': 'gendhing', 'keywords': 'gendhing setu legi'},
+    {'endpoint': 'public.caangkir', 'title': 'cangkir', 'keywords': 'cangkir podcast audio'},
+    {'endpoint': 'public.kominfogoes', 'title': 'kominfogoes', 'keywords': 'kominfogoes kominfo podcast audio'},
+    {'endpoint': 'public.dokumen_anggaran', 'title': 'Dokumen Pelaksanaan Anggaran', 'keywords': 'dokumen anggaran keuangan'},
+    {'endpoint': 'public.informasi_publik', 'title': 'Informasi Publik', 'keywords': 'informasi publik keterbukaan informasi'},
+    {'endpoint': 'public.ljkip', 'title': 'LKjIP', 'keywords': 'lkjip laporan kinerja'},
+    {'endpoint': 'public.lhkan', 'title': 'LHKAN', 'keywords': 'lhkan laporan hasil akuntabilitas kinerja'},
+    {'endpoint': 'public.spbe', 'title': 'SPBE', 'keywords': 'spbe sistem pemerintahan berbasis elektronik'},
+    {'endpoint': 'public.sosial', 'title': 'sosial', 'keywords': 'sosial sosial media'},
+    {'endpoint': 'public.rekrutmen', 'title': 'rekrutmen', 'keywords': 'rekrutmen lowongan kerja'},
+    {'endpoint': 'public.kim', 'title': 'kim', 'keywords': 'kim kelompok informasi masyarakat'},
+    {'endpoint': 'public.budaya', 'title': 'budaya', 'keywords': 'budaya seni tradisi heritage '},   
+    {'endpoint': 'public.moap', 'title': 'moap', 'keywords': 'moap podcast audio'},
+    {'endpoint': 'public.kebijakan', 'title': 'kebijakan', 'keywords': 'kebijakan aturan regulasi'},
+    {'endpoint': 'public.skm', 'title': 'skm', 'keywords': 'skm survei kepuasan masyarakat'},
+    {'endpoint': 'public.pip', 'title': 'pip', 'keywords': 'pip pelayanan informasi publik'},
+
+]    
+    
 # =============================================================================
 
 

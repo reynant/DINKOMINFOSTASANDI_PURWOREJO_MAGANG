@@ -166,56 +166,51 @@
         </ul>
     </nav>
     
-    <!-- ===== KONTEN UTAMA: HASIL PENCARIAN ===== -->
+    <!-- ===== KONTEN UTAMA: HASIL PENCARIAN (VERSI TEMPLATE) ===== -->
     <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 my-12">
       <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+        
+        {#
+          Ini adalah kerangka untuk menampilkan hasil pencarian.
+          Anda dapat mengisinya secara dinamis menggunakan template engine seperti Jinja2.
+          Variabel seperti `query` dan `results` akan diisi oleh backend Anda.
+        #}
+
         <h2 class="text-2xl md:text-3xl font-bold text-blue-800 mb-2">
-          Hasil Pencarian untuk: <em class="text-teal-500">"Smart City"</em>
+          Hasil Pencarian untuk: <em class="text-teal-500">"{{ query }}"</em>
         </h2>
-        
-        <!-- ===== TAMPILAN JIKA HASIL DITEMUKAN ===== -->
-        <p class="text-gray-500 mb-6">Ditemukan 3 halaman yang cocok.</p>
-        
-        <div class="space-y-4">
-          <!-- Contoh item hasil pencarian 1 -->
-          <a href="smart-city.html" class="block p-5 border rounded-lg hover:bg-gray-50 hover:border-teal-300 transition-all duration-300">
-            <h3 class="text-lg font-semibold text-blue-700 mb-1">Smart City</h3>
-            <p class="text-sm text-gray-600">
-              Klik untuk mengunjungi halaman <strong>Smart City</strong> dan pelajari lebih lanjut tentang inisiatif kota cerdas di Purworejo.
-            </p>
-          </a>
-          <!-- Contoh item hasil pencarian 2 -->
-          <a href="#" class="block p-5 border rounded-lg hover:bg-gray-50 hover:border-teal-300 transition-all duration-300">
-            <h3 class="text-lg font-semibold text-blue-700 mb-1">Berita: Peluncuran Program Smart City 2025</h3>
-            <p class="text-sm text-gray-600">
-              Klik untuk mengunjungi halaman <strong>Berita: Peluncuran Program Smart City 2025</strong>.
-            </p>
-          </a>
-          <!-- Contoh item hasil pencarian 3 -->
-          <a href="#" class="block p-5 border rounded-lg hover:bg-gray-50 hover:border-teal-300 transition-all duration-300">
-            <h3 class="text-lg font-semibold text-blue-700 mb-1">Download: Panduan Implementasi Smart City</h3>
-            <p class="text-sm text-gray-600">
-              Klik untuk mengunjungi halaman <strong>Download: Panduan Implementasi Smart City</strong>.
-            </p>
-          </a>
-        </div>
-        
-        
-        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-6 rounded-r-lg">
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <div class="ml-3">
-              <p class="text-sm text-yellow-700">
-                Maaf, kami tidak dapat menemukan halaman apa pun untuk kata kunci
-                <strong class="font-semibold text-yellow-800">"Nama Query di Sini"</strong>. Silakan coba dengan kata kunci lain.
-              </p>
+
+        {% if results %}
+          <p class="text-gray-500 mb-6">Ditemukan {{ results|length }} halaman yang cocok.</p>
+          
+          <div class="space-y-4">
+            {% for page in results %}
+              <a href="{{ url_for(page.endpoint) }}" class="block p-5 border rounded-lg hover:bg-gray-50 hover:border-teal-300 transition-all duration-300">
+                <h3 class="text-lg font-semibold text-blue-700 mb-1">{{ page.title }}</h3>
+                <p class="text-sm text-gray-600">
+                  Klik untuk mengunjungi halaman <strong>{{ page.title }}</strong>.
+                </p>
+              </a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-6 rounded-r-lg">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm text-yellow-700">
+                  Maaf, kami tidak dapat menemukan halaman apa pun untuk kata kunci
+                  <strong class="font-semibold text-yellow-800">"{{ query }}"</strong>. Silakan coba dengan kata kunci lain.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        {% endif %}
+
       </div>
     </main>
 
@@ -361,3 +356,4 @@
     </script>
   </body>
 </html>
+

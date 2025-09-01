@@ -25,25 +25,30 @@
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
       }
+      
+      /* ===== PERBAIKAN CSS DROPDOWN DIMULAI DI SINI ===== */
       .dropdown-menu {
-        /* Kecepatan transisi disesuaikan agar lebih responsif */
-        transition: opacity 0.3s ease, transform 0.3s ease;
+        /* Menu disembunyikan menggunakan opacity, bukan display:none */
+        transition: opacity 0.2s ease, transform 0.2s ease;
         opacity: 0;
         transform: translateY(10px);
-        pointer-events: none;
+        pointer-events: none; /* Tidak bisa diklik saat tersembunyi */
         max-height: 320px;
         overflow-y: auto;
       }
+
+      /* Saat parent (.group) di-hover, menu dropdown akan muncul */
       .group:hover .dropdown-menu {
         opacity: 1;
         transform: translateY(0);
-        pointer-events: auto;
+        pointer-events: auto; /* Bisa diklik saat muncul */
       }
+      /* ===== PERBAIKAN CSS DROPDOWN SELESAI DI SINI ===== */
+
       .dropdown-menu::-webkit-scrollbar { width: 5px; }
       .dropdown-menu::-webkit-scrollbar-thumb { background-color: #14b8a6; border-radius: 10px; }
       .dropdown-menu::-webkit-scrollbar-track { background-color: #f1f5f9; }
 
-      /* Style untuk popup */
       #popupKanalAduan.hidden { display: none; }
     </style>
   </head>
@@ -74,7 +79,7 @@
         <form
           role="search"
           aria-label="Pencarian Utama"
-          action="#"
+          action="{{ url_for('public.search')}}"
           method="get"
           class="relative"
           id="search-form"
@@ -102,18 +107,22 @@
         <svg class="relative block w-full h-[60px] md:h-[80px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M985.66,92.83C906.67,72,823.78,31.84,759.84,14.19c-63.95-17.66-128.06-24.83-192.27-24.83c-134.13,0-258.11,54.3-332.39,122.51V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" class="fill-current text-gray-100"></path></svg>
       </div>
     </header>
-<br>
-<br>
-<br>
+
+    <br>
+    <br>
+    <br>
+    
     <nav class="w-full bg-gray-100 pb-4 flex justify-center -mt-10 z-10">
         <ul class="flex flex-wrap items-center justify-center gap-1 md:gap-2 px-3 py-2 bg-white shadow-lg rounded-full">
             <li><a href="index.html" class="block px-3 py-2 text-sm font-semibold rounded-full hover:bg-blue-100 hover:text-blue-800 transition-colors">Beranda</a></li>
-            <li class="relative group pb-3">
+            
+            <!-- FIX: Menambahkan padding-bottom (pb-3) untuk membuat "jembatan" hover -->
+            <li class="relative group pb-3 -mb-3">
                 <a href="#" class="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-full hover:bg-blue-100 hover:text-blue-800 transition-colors">
                     <span>Profil</span>
                     <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </a>
-                <ul class="absolute top-full mt-2 z-50 bg-white shadow-xl rounded-lg w-64 text-gray-700 dropdown-menu">
+                <ul class="absolute top-full pt-1 z-50 bg-white shadow-xl rounded-lg w-64 text-gray-700 dropdown-menu">
                     <li><a href="visi-dan-misi.html" class="block px-4 py-2 text-sm hover:bg-teal-50 transition">Visi dan Misi</a></li>
                     <li><a href="stuktur-organisasi.html" class="block px-4 py-2 text-sm hover:bg-teal-50 transition">Struktur Organisasi</a></li>
                     <li><a href="profil-pejabat.html" class="block px-4 py-2 text-sm hover:bg-teal-50 transition">Profil Pejabat</a></li>
@@ -127,13 +136,16 @@
                     <li><a href="kebijakan-umum-sistem-manajemen.html" class="block px-4 py-2 text-sm hover:bg-teal-50 transition">Kebijakan Umum Sistem Manajemen</a></li>
                 </ul>
             </li>
+            
             <li><a href="news.html" class="block px-3 py-2 text-sm font-semibold rounded-full hover:bg-blue-100 hover:text-blue-800 transition-colors">News</a></li>
-            <li class="relative group pb-3">
+            
+            <!-- FIX: Menambahkan padding-bottom (pb-3) untuk membuat "jembatan" hover -->
+            <li class="relative group pb-3 -mb-3">
                 <a href="#" class="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-full hover:bg-blue-100 hover:text-blue-800 transition-colors">
                     <span>Video</span>
                     <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </a>
-                <ul class="absolute top-full mt-2 z-50 bg-white shadow-xl rounded-lg w-56 text-gray-700 dropdown-menu">
+                <ul class="absolute top-full pt-1 z-50 bg-white shadow-xl rounded-lg w-56 text-gray-700 dropdown-menu">
                     <li><a href="podkesdjo.html" class="block px-4 py-2 text-sm hover:bg-teal-50 transition">PODKESDJO</a></li>
                     <li><a href="gendis.html" class="block px-4 py-2 text-sm hover:bg-teal-50 transition">GENDIS BROTO</a></li>
                     <li><a href="ngobras.html" class="block px-4 py-2 text-sm hover:bg-teal-50 transition">NGOBRAS DPRD</a></li>
@@ -145,16 +157,19 @@
                     <li><a href="kominfogoes.html" class="block px-4 py-2 text-sm hover:bg-teal-50 transition">KOMINFO GOES TO THE RADIO</a></li>
                 </ul>
             </li>
+
             <li><a href="laporan-isu-hoaks.html" class="block px-3 py-2 text-sm font-semibold rounded-full hover:bg-blue-100 hover:text-blue-800 transition-colors">Isu Hoaks</a></li>
             <li><a href="download.html" class="block px-3 py-2 text-sm font-semibold rounded-full hover:bg-blue-100 hover:text-blue-800 transition-colors">Download</a></li>
             <li><a href="agenda.html" class="block px-3 py-2 text-sm font-semibold rounded-full hover:bg-blue-100 hover:text-blue-800 transition-colors">Agenda</a></li>
             <li><a href="layanan-skpd.html" class="block px-3 py-2 text-sm font-semibold rounded-full hover:bg-blue-100 hover:text-blue-800 transition-colors">Layanan</a></li>
-            <li class="relative group pb-3">
+
+            <!-- FIX: Menambahkan padding-bottom (pb-3) untuk membuat "jembatan" hover -->
+            <li class="relative group pb-3 -mb-3">
                 <a href="#" class="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-full hover:bg-blue-100 hover:text-blue-800 transition-colors">
                     <span>Informasi Publik</span>
                     <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </a>
-                <ul class="absolute top-full mt-2 z-50 bg-white shadow-xl rounded-lg w-64 text-gray-700 dropdown-menu">
+                <ul class="absolute top-full pt-1 z-50 bg-white shadow-xl rounded-lg w-64 text-gray-700 dropdown-menu">
                     <li><a href="dokumen-pelaksanaan-anggaran.html" class="block px-4 py-2 text-sm hover:bg-teal-50 transition">Dokumen Pelaksanaan Anggaran</a></li>
                     <li><a href="LKjlP.html" class="block px-4 py-2 text-sm hover:bg-teal-50 transition">LKjIP</a></li>
                     <li><a href="LKHAN.html" class="block px-4 py-2 text-sm hover:bg-teal-50 transition">LHKAN</a></li>

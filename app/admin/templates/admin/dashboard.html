@@ -33,12 +33,45 @@
         style="height: 100vh"
       >
         <!-- Header -->
-        <header
-          class="flex items-center justify-between bg-white shadow px-6 py-4"
-        >
+        <header class="flex items-center justify-between bg-white shadow px-6 py-4">
           <div class="text-xl font-bold text-gray-800">📊 Dashboard</div>
-          <div class="text-sm text-gray-600">
-            👋 Halo, Selamat Datang Admin!
+          <div class="flex items-center gap-4">
+            <!-- User Menu Dropdown -->
+            <div class="relative">
+              <button
+                id="userMenuButton"
+                class="flex items-center space-x-2 text-gray-600 hover:text-gray-800"
+              >
+                <i class="bi bi-person-circle text-xl"></i>
+                <span>👋 Admin</span>
+                <i class="bi bi-chevron-down"></i>
+              </button>
+              <!-- Dropdown Menu -->
+              <div
+                id="userMenuDropdown"
+                class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50"
+              >
+                <a
+                  href="#"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  <i class="bi bi-person-badge mr-2"></i> Profile
+                </a>
+                <a
+                  href="#"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  <i class="bi bi-gear mr-2"></i> Settings
+                </a>
+                <div class="border-t border-gray-100 my-1"></div>
+                <a
+                  href="{{ url_for('admin.logout') }}"
+                  class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                >
+                  <i class="bi bi-box-arrow-right mr-2"></i> Logout
+                </a>
+              </div>
+            </div>
           </div>
         </header>
 
@@ -150,5 +183,22 @@
         </footer>
       </main>
     </div>
+
+    <!-- Add this JavaScript at the bottom of the body tag -->
+    <script>
+      const userMenuButton = document.getElementById('userMenuButton');
+      const userMenuDropdown = document.getElementById('userMenuDropdown');
+
+      userMenuButton.addEventListener('click', () => {
+          userMenuDropdown.classList.toggle('hidden');
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (event) => {
+          if (!userMenuButton.contains(event.target) && !userMenuDropdown.contains(event.target)) {
+              userMenuDropdown.classList.add('hidden');
+          }
+      });
+    </script>
   </body>
 </html>

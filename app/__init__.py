@@ -37,4 +37,7 @@ def create_app():
     app.register_blueprint(public_bp)
     app.register_blueprint(admin, url_prefix='/admin')
 
+    # Set session to be permanent and last for 1 hour
+    app.permanent_session_lifetime = datetime.timedelta(hours=1)
+    
     return app

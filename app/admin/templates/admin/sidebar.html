@@ -380,13 +380,14 @@
                         </ul>
                     </li>
 
-                    <li>
-                        <a
-                            href="#"
-                            class="flex items-center px-4 py-2 hover:bg-gray-700 rounded"
-                            >Logout</a
-                        >
-                    </li>
+                    <!-- Logout -->
+                    <div class="border-t border-gray-700 mt-auto">
+  <a href="{{ url_for('admin.logout') }}" 
+     class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white">
+    <i class="bi bi-box-arrow-left mr-3"></i>
+    <span>Logout</span>
+  </a>
+</div>
                 </ul>
             </nav>
     </aside>  

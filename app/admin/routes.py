@@ -9,6 +9,7 @@ import os
 import time
 from werkzeug.utils import secure_filename
 from flask_wtf.csrf import CSRFProtect
+from functools import wraps
 
 admin = Blueprint('admin', __name__, template_folder='templates')
 csrf = CSRFProtect()
@@ -22,8 +23,21 @@ def get_db():
         database='web_kominfo'
     )
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user' not in session:
+            flash('Silakan login terlebih dahulu', 'warning')
+            return redirect(url_for('admin.login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 @admin.route('/login', methods=['GET', 'POST'])
 def login():
+    # If user is already logged in, redirect to dashboard
+    if 'user' in session:
+        return redirect(url_for('admin.dashboard'))
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -66,10 +80,8 @@ def login():
 
 
 @admin.route('/dashboard')
+@login_required
 def dashboard():
-    if 'user' not in session:
-        return redirect(url_for('admin.login'))
-
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
 
@@ -92,7 +104,15 @@ def dashboard():
 
 @admin.route('/logout')
 def logout():
+    # Clear session data
+    session.clear()
     session.pop('user', None)
+    session.pop('user_level', None)
+    
+    # Add logout message
+    flash('Anda telah berhasil logout', 'success')
+    
+    # Redirect to login page
     return redirect(url_for('admin.login'))
 
 # ------------------ SENSOR KOMENTAR ------------------

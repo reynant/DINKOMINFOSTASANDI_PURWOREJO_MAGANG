@@ -15,6 +15,126 @@
     .dropdown-menu::-webkit-scrollbar { width:5px; }
     .dropdown-menu::-webkit-scrollbar-thumb { background-color:#14b8a6; }
     .dropdown-menu::-webkit-scrollbar-track { background-color:#f1f5f9; }
+
+    /* Hamburger menu styles */
+.mobile-menu-button {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1000;
+  padding: 0.75rem;
+  background-color: #1d4ed8; /* blue-700 */
+  color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-button:hover {
+  background-color: #2563eb; /* blue-600 */
+  transform: scale(1.05);
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 300px;
+  height: 100%;
+  background-color: #1e293b; /* slate-800 */
+  padding: 2rem 1.5rem;
+  overflow-y: auto;
+  transition: left 1s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 999;
+}
+
+.mobile-menu.active {
+  left: 0;
+}
+
+@media (max-width: 1024px) {
+  /* Hide desktop menu items */
+  .flex-1.flex.flex-wrap.items-center.justify-center {
+    display: none;
+  }
+  
+  /* Hide search container on nav */
+  #nav-search-container {
+    display: none;
+  }
+
+  /* Show mobile menu button */
+  .mobile-menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-menu {
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  }
+
+  .mobile-menu .close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: white;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  .mobile-menu .close-button:hover {
+    transform: rotate(90deg);
+  }
+
+  .mobile-menu ul {
+    margin-top: 3rem;
+  }
+
+  .mobile-menu ul li {
+    display: block;
+    width: 100%;
+  }
+
+  .mobile-menu li a {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .mobile-menu li a:hover {
+    background: rgba(59, 130, 246, 0.5);
+    padding-left: 1.5rem;
+  }
+
+  .mobile-menu .dropdown-content {
+    display: none;
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+    border-left: 2px solid rgba(59, 130, 246, 0.5);
+  }
+
+  .mobile-menu .dropdown-content.active {
+    display: block;
+    animation: slideDown 0.3s ease;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
   </style>
 </head>
 <body class="bg-gray-100 text-gray-800 selection:bg-teal-300 selection:text-white">
@@ -43,6 +163,14 @@
   <nav id="main-nav" class="sticky top-0 z-50 w-full transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <ul class="flex items-center justify-between gap-4 px-2 sm:px-4 py-2 bg-blue-600 rounded-2xl shadow-md">
+        <!-- Add hamburger button -->
+        <button class="mobile-menu-button" aria-label="Menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+
+        <!-- Existing menu items -->
         <div class="flex-1 flex flex-wrap items-center justify-center gap-x-1 md:gap-x-2">
           <li><a href="index.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Beranda</a></li>
           <li class="relative group">
@@ -105,6 +233,62 @@
     </div>
   </nav>
 
+  <!-- Add mobile menu -->
+<div class="mobile-menu">
+  <button class="close-button" aria-label="Close menu">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+    </svg>
+  </button>
+  <ul>
+    <li><a href="index.html">Beranda</a></li>
+    <li>
+      <a href="#" class="dropdown-trigger flex items-center justify-between">
+        Profil
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </a>
+      <ul class="dropdown-content">
+        <li><a href="visi-dan-misi.html">Visi dan Misi</a></li>
+        <li><a href="struktur-organisasi.html">Struktur Organisasi</a></li>
+        <li><a href="profil-pejabat.html">Profil Pejabat</a></li>
+        <li><a href="sekretariat.html">Sekretariat</a></li>
+        <li><a href="bidangIKP.html">Bidang IKP</a></li>
+        <li><a href="bidangTISP.html">Bidang TISP</a></li>
+        <li><a href="bidangPPLKC.html">Bidang PPLKC</a></li>
+      </ul>
+    </li>
+    <li><a href="news.html">News</a></li>
+    <li>
+      <a href="#" class="dropdown-trigger flex items-center justify-between">
+        Video
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </a>
+      <ul class="dropdown-content">
+          <li><a href="podkesdjo.html">PODKESDJO</a></li>
+          <li><a href="gendis.html">GENDIS BROTO</a></li>
+          <li><a href="ngobras.html">NGOBRAS DPRD</a></li>
+          <li><a href="cvp.html">CVP</a></li>
+          <li><a href="wisata.html">WISATA</a></li>
+          <li><a href="rolasan.html">ROLASAN</a></li>
+          <li><a href="gendhing.html">GENDHING SETU LEGI</a></li>
+          <li><a href="cangkir.html">CANGKIR KOPI</a></li>
+          <li><a href="kominfogoes.html">KOMINFO GOES TO THE RADIO</a></li>
+      </ul>
+    </li>
+    <li><a href="laporan-isu-hoaks.html">Isu Hoaks</a></li>
+    <li><a href="download.html">Download</a></li>
+    <li><a href="agenda.html">Agenda</a></li>
+    <li><a href="layanan-skpd.html">Layanan</a></li>
+    <li><a href="kebijakan.html">Kebijakan</a></li>
+    <li><a href="skm.html">SKM</a></li>
+    <li><a href="hubungi-kami.html" class="bg-teal-600">Hubungi Kami</a></li>
+  </ul>
+</div>
+
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12">
     <h2 class="text-3xl font-bold text-blue-800 mb-4">Konten Utama Halaman</h2>
     <p class="text-gray-600 leading-relaxed">Tinggal Diisi Konten.</p>
@@ -142,6 +326,64 @@
       searchInputWrapper.classList.remove('opacity-100', 'translate-x-0');
     }
   });
+
+  const mobileMenuButton = document.querySelector('.mobile-menu-button');
+  const mobileMenuCloseButton = document.querySelector('.mobile-menu .close-button');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  const dropdownTriggers = document.querySelectorAll('.dropdown-trigger');
+
+  // Toggle mobile menu with smooth transition
+  mobileMenuButton.addEventListener('click', () => {
+    mobileMenu.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  });
+
+  mobileMenuCloseButton.addEventListener('click', () => {
+    mobileMenu.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+
+  // Handle dropdowns in mobile menu
+  dropdownTriggers.forEach(trigger => {
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      const dropdownContent = trigger.nextElementSibling;
+      dropdownContent.classList.toggle('active');
+    });
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (mobileMenu.classList.contains('active') && 
+        !mobileMenu.contains(e.target) && 
+        !mobileMenuButton.contains(e.target)) {
+      mobileMenu.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Hide/show menu button on scroll
+  let lastScrollTop = 0;
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+    if (currentScroll > lastScrollTop) {
+      // Scrolling down
+      mobileMenuButton.style.opacity = '0.5';
+    } else {
+      // Scrolling up
+      mobileMenuButton.style.opacity = '1';
+    }
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+  }, false);
+
+  // Add smooth transition when opening/closing dropdowns
+  const style = document.createElement('style');
+  style.textContent = `
+    .dropdown-content {
+      transition: all 0.3s ease-in-out;
+    }
+  `;
+  document.head.appendChild(style);
 </script>
 
 </body>
@@ -447,7 +689,7 @@
       const aduanButton = document.getElementById('kanalAduanButton');
       const popup = document.getElementById('popupKanalAduan');
       const popupContent = document.getElementById('popupContent');
-      const closeButton = document.getElementById('tutupPopup');
+      const popupCloseButton = document.getElementById('tutupPopup');
 
       const openPopup = () => {
         popup.classList.remove('hidden');
@@ -467,7 +709,7 @@
       };
 
       aduanButton.addEventListener('click', openPopup);
-      closeButton.addEventListener('click', closePopup);
+      popupCloseButton.addEventListener('click', closePopup);
       
       // Menutup popup jika mengklik di luar area kontennya
       popup.addEventListener('click', (event) => {

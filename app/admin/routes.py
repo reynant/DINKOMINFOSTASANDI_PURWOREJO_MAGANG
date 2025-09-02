@@ -8,7 +8,10 @@ from werkzeug.security import check_password_hash
 import os
 import time
 from werkzeug.utils import secure_filename
+from flask_wtf.csrf import CSRFProtect
+
 admin = Blueprint('admin', __name__, template_folder='templates')
+csrf = CSRFProtect()
 
 def get_db():
     """Fungsi helper untuk koneksi ke database MySQL."""
@@ -23,28 +26,42 @@ def get_db():
 def login():
     if request.method == 'POST':
         username = request.form['username']
-        password_input = request.form['password']
-
-        conn = get_db()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute('SELECT * FROM users WHERE Username = %s', (username,))
-        user = cursor.fetchone()
-        cursor.close()
-        conn.close()
-
-        if user:
-            # Menggunakan hashlib untuk memverifikasi hash SHA1
-            hashed_password_input = hashlib.sha1(password_input.encode()).hexdigest()
+        password = request.form['password']
+        
+        try:
+            conn = get_db()
+            cursor = conn.cursor(dictionary=True)
             
-            # Perhatikan: Nama kolom di SQL Anda adalah 'password'
-            if hashed_password_input == user['password']: 
-                session['user'] = user['Username']
-                return redirect(url_for('admin.dashboard'))
-            else:
-                flash("Login Gagal. Periksa kembali username dan password Anda.", "danger")
-        else:
-            flash("Login Gagal. Periksa kembali username dan password Anda.", "danger")
+            # Get user with matching username
+            cursor.execute('SELECT * FROM users WHERE Username = %s', (username,))
+            user = cursor.fetchone()
             
+            if user:
+                # Hash the input password
+                hashed_password = hashlib.sha1(password.encode()).hexdigest()
+                
+                # Check if passwords match
+                if hashed_password == user['password']:
+                    # Store user info in session
+                    session['user'] = user['Username']
+                    session['user_level'] = user['level']
+                    
+                    cursor.close()
+                    conn.close()
+                    
+                    flash('Login berhasil!', 'success')
+                    return redirect(url_for('admin.dashboard'))
+                
+            flash('Username atau password salah!', 'danger')
+            
+        except mysql.connector.Error as err:
+            flash(f'Database error: {err}', 'danger')
+        finally:
+            if 'cursor' in locals():
+                cursor.close()
+            if 'conn' in locals():
+                conn.close()
+                
     return render_template('admin/login.html')
 
 
@@ -1203,7 +1220,7 @@ def hapus_komentar(id):
 
 
 # ---------------- SEKILAS INFO   ----------------
-@admin.route('/sekilas_info', endpoint='sekilas_info')
+@admin.route('/sekilas_info')
 def sekilas_info():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1306,6 +1323,7 @@ def hapus_sekilas(id):
     cursor.execute('SELECT foto FROM sekilas_info WHERE id=%s', (id,))
     row = cursor.fetchone()
 
+    # hapus file foto
     if row and row['foto']:
         file_path = os.path.join(current_app.root_path, 'static/uploads/sekilas_info', row['foto'])
         if os.path.exists(file_path):
@@ -1480,9 +1498,10 @@ def hapus_pesan_masuk(id):
 # ---------------- SEKILAS INFO  ----------------
 # ========== Helper untuk upload ==========
 
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 def allowed_file(filename):
-    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp'}
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def ensure_upload_folder():
     """Ensure the upload folder for sekilas_info exists and return its path."""

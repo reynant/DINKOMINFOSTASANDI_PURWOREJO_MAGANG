@@ -9,6 +9,7 @@ def create_app():
     # Flask secara otomatis akan mencari folder 'templates' di direktori root, 
     # jadi kita tidak perlu menentukannya secara manual.
     app = Flask(__name__)
+    app.secret_key = 'your-secret-key-here'  # Required for sessions
     
     # Atur konfigurasi dasar
     app.config['SECRET_KEY'] = 'ganti-dengan-kunci-rahasia-yang-kuat'

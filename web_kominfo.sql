@@ -437,7 +437,15 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`Username`, `Nama_Lengkap`, `Email`, `Foto`, `Blokir`, `level`, `Kiriman`, `created_at`, `updated_at`, `id`, `password`) VALUES
 ('ellymonicamunthe', 'Elly Monica Munthe', '2211102248@ittelkom-pwt.ac.id', 'coba.png', 'N', 'user', 0, '2025-08-19 15:20:04', '2025-08-19 15:20:04', 1, ''),
 ('monica', 'Elly Monica Munthe', 'ellymonica@gmail.com', 'coba.pdf', 'aktif', 'Admin', 0, '2025-08-19 14:23:27', '2025-08-19 14:23:27', 2, ''),
-('admin', 'Admin Utama', 'admin@contoh.com', NULL, 'N', 'admin', 0, '2025-08-21 13:14:32', '2025-08-21 13:19:10', 3, 'b986415c93241513d33d01fcf532a6c47ac4f3ee');
+('admin', 'Admin Utama', 'admin@contoh.com', NULL, 'N', 'admin', 0, '2025-08-21 13:14:32', '2025-08-21 13:19:10', 3, 'b986415c93241513d33d01fcf532a6c47ac4f3ee'),
+('admin', 'Administrator', 'admin@example.com', NULL, 'N', 'admin', 0, '2025-08-21 13:14:32', '2025-08-21 13:19:10', 4, 'admin123');
+
+--
+-- Update the password for the admin user
+--
+UPDATE users 
+SET password = SHA1('admin123') 
+WHERE Username = 'admin';
 
 -- --------------------------------------------------------
 

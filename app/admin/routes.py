@@ -1,5 +1,6 @@
+import datetime
 import hashlib
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from flask import Blueprint, current_app, render_template, request, redirect, url_for, session, flash
 import os
 from werkzeug.utils import secure_filename
 import mysql.connector
@@ -1478,6 +1479,17 @@ def hapus_pesan_masuk(id):
 
 # ---------------- SEKILAS INFO  ----------------
 # ========== Helper untuk upload ==========
+
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp'}
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def ensure_upload_folder():
+    """Ensure the upload folder for sekilas_info exists and return its path."""
+    upload_dir = os.path.join(current_app.root_path, 'static/uploads/sekilas_info')
+    os.makedirs(upload_dir, exist_ok=True)
+    return upload_dir
+
 @admin.route('/sekilas_info')
 def sekilas_info_index():
     if 'user' not in session:

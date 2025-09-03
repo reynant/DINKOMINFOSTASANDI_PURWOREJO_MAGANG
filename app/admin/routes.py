@@ -44,11 +44,11 @@ def login():
         
         try:
             conn = get_db()
-            cursor = conn.cursor(dictionary=True)
+            cursor = conn.cursor(dictionary=True, buffered=True)
             
             # Get user with matching username
             cursor.execute('SELECT * FROM users WHERE Username = %s', (username,))
-            user = cursor.fetchone()
+            user = cursor.fetchone()  # hasil diambil, aman
             
             if user:
                 # Hash the input password
@@ -60,9 +60,6 @@ def login():
                     session['user'] = user['Username']
                     session['user_level'] = user['level']
                     
-                    cursor.close()
-                    conn.close()
-                    
                     flash('Login berhasil!', 'success')
                     return redirect(url_for('admin.dashboard'))
                 
@@ -71,9 +68,9 @@ def login():
         except mysql.connector.Error as err:
             flash(f'Database error: {err}', 'danger')
         finally:
-            if 'cursor' in locals():
+            if 'cursor' in locals() and cursor:
                 cursor.close()
-            if 'conn' in locals():
+            if 'conn' in locals() and conn:
                 conn.close()
                 
     return render_template('admin/login.html')

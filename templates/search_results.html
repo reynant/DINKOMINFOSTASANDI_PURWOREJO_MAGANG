@@ -1,180 +1,439 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>
-      Hasil Pencarian - Dinas Komunikasi, Informatika, Statistik dan Persandian Kabupaten Purworejo
-    </title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        font-family: "Poppins", sans-serif;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dinas Kominfo Purworejo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: "Poppins", sans-serif; }
+    .animated-gradient { background-size: 200% 200%; animation: gradient-animation 10s ease infinite; }
+    @keyframes gradient-animation { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+    .dropdown-menu { transition:opacity .2s ease,transform .2s ease; opacity:0; transform:translateY(10px); pointer-events:none; max-height:320px; overflow-y:auto; }
+    .group:hover .dropdown-menu { opacity:1; transform:translateY(0); pointer-events:auto; }
+    .dropdown-menu::-webkit-scrollbar { width:5px; }
+    .dropdown-menu::-webkit-scrollbar-thumb { background-color:#14b8a6; }
+    .dropdown-menu::-webkit-scrollbar-track { background-color:#f1f5f9; }
 
-      .animated-gradient {
-        background-size: 200% 200%;
-        animation: gradient-animation 10s ease infinite;
-      }
+    /* Hamburger menu styles */
+.mobile-menu-button {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1000;
+  padding: 0.75rem;
+  background-color: #1d4ed8; /* blue-700 */
+  color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
 
-      @keyframes gradient-animation {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-      }
+.mobile-menu-button:hover {
+  background-color: #2563eb; /* blue-600 */
+  transform: scale(1.05);
+}
 
-      /* Dropdown: tampilkan dengan opacity & translate (hover) */
-      .dropdown-menu {
-        transition: opacity 0.2s ease, transform 0.2s ease;
-        opacity: 0;
-        transform: translateY(10px);
-        pointer-events: none;
-        max-height: 320px;
-        overflow-y: auto;
-      }
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 300px;
+  height: 100%;
+  background-color: #1e293b; /* slate-800 */
+  padding: 2rem 1.5rem;
+  overflow-y: auto;
+  transition: left 1s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 999;
+}
 
-      .group:hover .dropdown-menu {
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
-      }
+.mobile-menu.active {
+  left: 0;
+}
 
-      .dropdown-menu::-webkit-scrollbar { width: 5px; }
-      .dropdown-menu::-webkit-scrollbar-thumb { background-color: #14b8a6; }
-      .dropdown-menu::-webkit-scrollbar-track { background-color: #f1f5f9; }
+@media (max-width: 1024px) {
+  /* Hide desktop menu items */
+  .flex-1.flex.flex-wrap.items-center.justify-center {
+    display: none;
+  }
+  
+  /* Hide search container on nav */
+  #nav-search-container {
+    display: none;
+  }
 
-      #popupKanalAduan.hidden { display: none; }
-    </style>
-  </head>
-  <body class="bg-gray-100 text-gray-800 selection:bg-teal-300 selection:text-white">
+  /* Hide navigation border/line */
+  #main-nav ul {
+    border: none;
+    box-shadow: none;
+  }
 
-    <!-- HEADER -->
-    <header
-      class="relative flex flex-col items-center justify-center w-full h-72 md:h-80 pt-12 pb-12 text-white bg-gradient-to-r from-blue-800 via-teal-600 to-blue-900 animated-gradient"
-    >
-      <div class="flex items-center gap-4 text-center mb-6">
-        <img
-          src="static/img/logo kabupaten pwr.png"
-          alt="Logo Kabupaten Purworejo"
-          class="w-14 h-auto object-contain"
-          onerror="this.style.display='none'"
-        />
-        <div>
-          <h1 class="text-xl md:text-2xl font-bold tracking-wide uppercase">
-            Dinas Kominfo Purworejo
-          </h1>
-          <p class="text-xs md:text-sm opacity-80">
-            Statistik dan Persandian Kabupaten Purworejo
-          </p>
-        </div>
+  /* Hide background color and rounded corners */
+  #main-nav ul.flex {
+    background-color: transparent;
+    border-radius: 0;
+  }
+
+  /* Show mobile menu button */
+  .mobile-menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-menu {
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  }
+
+  .mobile-menu .close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: white;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  .mobile-menu .close-button:hover {
+    transform: rotate(90deg);
+  }
+
+  .mobile-menu ul {
+    margin-top: 3rem;
+  }
+
+  .mobile-menu ul li {
+    display: block;
+    width: 100%;
+  }
+
+  .mobile-menu li a {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .mobile-menu li a:hover {
+    background: rgba(59, 130, 246, 0.5);
+    padding-left: 1.5rem;
+  }
+
+  .mobile-menu .dropdown-content {
+    display: none;
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+    border-left: 2px solid rgba(59, 130, 246, 0.5);
+  }
+
+  .mobile-menu .dropdown-content.active {
+    display: block;
+    animation: slideDown 0.3s ease;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-800 selection:bg-teal-300 selection:text-white">
+
+  <header id="main-header" class="relative flex flex-col items-center justify-center w-full h-72 md:h-80 pt-12 pb-12 text-white bg-gradient-to-r from-blue-800 via-teal-600 to-blue-900 animated-gradient">
+    <div class="flex items-center gap-4 text-center mb-6">
+      <img
+        src="static/img/logo kabupaten pwr.png"
+        alt="Logo Kabupaten Purworejo"
+        class="w-14 h-auto object-contain"
+        onerror="this.style.display='none'"
+      />
+      <div>
+        <h1 class="text-xl md:text-2xl font-bold tracking-wide uppercase">Dinas Kominfo Purworejo</h1>
+        <p class="text-xs md:text-sm opacity-80">Statistik dan Persandian Kabupaten Purworejo</p>
       </div>
-
-      <!-- SEARCH BAR (dibuat membulat) -->
-      <div class="w-full max-w-2xl px-4 z-20">
-        <form
-          role="search"
-          aria-label="Pencarian Utama"
-          action="{{ url_for('public.search') }}"
-          method="get"
-          class="relative flex"
-          id="search-form"
-        >
-          <input
-            id="search-input"
-            type="search"
-            name="q"
-            placeholder="Cari berita, layanan, atau informasi publik..."
-            class="flex-grow py-4 px-6 text-md text-gray-900 rounded-l-full border-2 border-gray-300 focus:outline-none focus:border-teal-500 shadow-md transition-all duration-300"
-            autocomplete="off"
-            required
-          />
-          <button
-            type="submit"
-            aria-label="Tombol Cari"
-            class="px-6 bg-blue-700 hover:bg-teal-500 text-white font-semibold rounded-r-full transition-colors duration-300"
-          >
-            Cari
-          </button>
-
-          <div
-            id="suggestions-container"
-            class="absolute top-full left-0 mt-2 w-full bg-white border border-gray-200 shadow-lg z-30 hidden text-left rounded-lg"
-          ></div>
-        </form>
-      </div>
-    </header>
-
+    </div>
+    <div class="w-full max-w-2xl px-4 z-20">
+      <form role="search" action="{{ url_for('public.search') }}" method="get" class="relative flex">
+        <input id="search-input" type="search" name="q" placeholder="Cari berita, layanan, atau informasi publik..." class="flex-grow py-4 px-6 text-md text-gray-900 rounded-l-full border-2 border-gray-300 focus:outline-none focus:border-teal-500 shadow-md" required />
+        <button type="submit" class="px-6 bg-blue-700 hover:bg-teal-500 text-white font-semibold rounded-r-full">Cari</button>
+      </form>
+    </div>
+  </header>
 <br>
+  <nav id="main-nav" class="sticky top-0 z-50 w-full transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <ul class="flex items-center justify-between gap-4 px-2 sm:px-4 py-2 bg-blue-600 rounded-2xl shadow-md">
+        <!-- Add hamburger button -->
+        <button class="mobile-menu-button" aria-label="Menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
 
-    <!-- NAVBAR (dibuat membulat) -->
-    <nav class="w-full bg-white border-b border-gray-200 shadow-sm">
-      <ul class="flex flex-wrap items-center justify-center gap-1 md:gap-2 px-4 py-3 bg-blue-600 rounded-full shadow-md">
-        <li><a href="index.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full transition-colors">Beranda</a></li>
-
-        <!-- Profil (dropdown) -->
-        <li class="relative group">
-          <a href="#" class="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full transition-colors">
-            Profil
-            <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-          </a>
-          <ul class="absolute top-full left-0 z-50 bg-white border border-gray-200 shadow-lg w-64 text-gray-700 dropdown-menu rounded-lg">
-            <li><a href="visi-dan-misi.html" class="block px-4 py-2 text-sm hover:bg-teal-50 rounded">Visi dan Misi</a></li>
-            <li><a href="struktur-organisasi.html" class="block px-4 py-2 text-sm hover:bg-teal-50 rounded">Struktur Organisasi</a></li>
-            <li><a href="profil-pejabat.html" class="block px-4 py-2 text-sm hover:bg-teal-50 rounded">Profil Pejabat</a></li>
-            <li><hr class="border-gray-200"></li>
-            <li><p class="px-4 pt-2 pb-1 text-xs font-bold text-gray-400 uppercase">Tugas Pokok & Fungsi</p></li>
-            <li><a href="sekretariat.html" class="block px-6 py-2 text-sm hover:bg-teal-50 rounded">Sekretariat</a></li>
-            <li><a href="bidangIKP.html" class="block px-6 py-2 text-sm hover:bg-teal-50 rounded">Bidang IKP</a></li>
-            <li><a href="bidangTISP.html" class="block px-6 py-2 text-sm hover:bg-teal-50 rounded">Bidang TISP</a></li>
-            <li><a href="bidangPPLKC.html" class="block px-6 py-2 text-sm hover:bg-teal-50 rounded">Bidang PPLKC</a></li>
-          </ul>
-        </li>
-
-        <li><a href="news.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full transition-colors">News</a></li>
-
-        <!-- Video (dropdown membulat) -->
-        <li class="relative group">
-          <a href="#" class="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full transition-colors">
-            Video
-            <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-          </a>
-          <ul class="absolute top-full left-0 z-50 bg-white border border-gray-200 shadow-lg w-56 text-gray-700 dropdown-menu rounded-lg">
-            <li><a href="podkesdjo.html" class="block px-4 py-2 text-sm hover:bg-teal-50 rounded">PODKESDJO</a></li>
-            <li><a href="gendis.html" class="block px-4 py-2 text-sm hover:bg-teal-50 rounded">GENDIS BROTO</a></li>
-            <li><a href="ngobras.html" class="block px-4 py-2 text-sm hover:bg-teal-50 rounded">NGOBRAS DPRD</a></li>
-            <li><a href="cvp.html" class="block px-4 py-2 text-sm hover:bg-teal-50 rounded">CVP</a></li>
-            <li><a href="wisata.html" class="block px-4 py-2 text-sm hover:bg-teal-50 rounded">WISATA</a></li>
-            <li><a href="rolasan.html" class="block px-4 py-2 text-sm hover:bg-teal-50 rounded">ROLASAN</a></li>
-            <li><a href="gendhing.html" class="block px-4 py-2 text-sm hover:bg-teal-50 rounded">GENDHING SETU LEGI</a></li>
-            <li><a href="cangkir.html" class="block px-4 py-2 text-sm hover:bg-teal-50 rounded">CANGKIR KOPI</a></li>
-            <li><a href="kominfogoes.html" class="block px-4 py-2 text-sm hover:bg-teal-50 rounded">KOMINFO GOES TO THE RADIO</a></li>
-          </ul>
-        </li>
-
-        <li><a href="laporan-isu-hoaks.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Isu Hoaks</a></li>
-        <li><a href="download.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Download</a></li>
-        <li><a href="agenda.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Agenda</a></li>
-        <li><a href="layanan-skpd.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Layanan</a></li>
-        <li><a href="kebijakan.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Kebijakan</a></li>
-        <li><a href="skm.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">SKM</a></li>
-        <li><a href="hubungi-kami.html" class="block px-4 py-2 text-sm font-semibold text-white bg-teal-600 hover:bg-teal-700 rounded-full">Hubungi Kami</a></li>
+        <!-- Existing menu items -->
+        <div class="flex-1 flex flex-wrap items-center justify-center gap-x-1 md:gap-x-2">
+          <li><a href="index.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Beranda</a></li>
+          <li class="relative group">
+            <a href="#" class="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">
+              <span>Profil</span>
+              <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </a>
+            <ul class="absolute top-full left-0 z-50 bg-white border border-gray-200 shadow-lg w-64 text-gray-700 dropdown-menu rounded-lg">
+              <li><a href="visi-dan-misi.html" class="block px-4 py-2 text-sm hover:bg-teal-50">Visi dan Misi</a></li>
+              <li><a href="struktur-organisasi.html" class="block px-4 py-2 text-sm hover:bg-teal-50">Struktur Organisasi</a></li>
+              <li><a href="profil-pejabat.html" class="block px-4 py-2 text-sm hover:bg-teal-50">Profil Pejabat</a></li>
+              <li><hr class="border-gray-200"></li>
+              <li><p class="px-4 pt-2 pb-1 text-xs font-bold text-gray-400 uppercase">Tugas Pokok & Fungsi</p></li>
+              <li><a href="sekretariat.html" class="block px-6 py-2 text-sm hover:bg-teal-50">Sekretariat</a></li>
+              <li><a href="bidangIKP.html" class="block px-6 py-2 text-sm hover:bg-teal-50">Bidang IKP</a></li>
+              <li><a href="bidangTISP.html" class="block px-6 py-2 text-sm hover:bg-teal-50">Bidang TISP</a></li>
+              <li><a href="bidangPPLKC.html" class="block px-6 py-2 text-sm hover:bg-teal-50">Bidang PPLKC</a></li>
+            </ul>
+          </li>
+          <li><a href="news.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">News</a></li>
+          <li class="relative group">
+            <a href="#" class="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">
+              <span>Video</span>
+              <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </a>
+            <ul class="absolute top-full left-0 z-50 bg-white border border-gray-200 shadow-lg w-56 text-gray-700 dropdown-menu rounded-lg">
+                <li><a href="podkesdjo.html" class="block px-4 py-2 text-sm hover:bg-teal-50">PODKESDJO</a></li>
+                <li><a href="gendis.html" class="block px-4 py-2 text-sm hover:bg-teal-50">GENDIS BROTO</a></li>
+                <li><a href="ngobras.html" class="block px-4 py-2 text-sm hover:bg-teal-50">NGOBRAS DPRD</a></li>
+                <li><a href="cvp.html" class="block px-4 py-2 text-sm hover:bg-teal-50">CVP</a></li>
+                <li><a href="wisata.html" class="block px-4 py-2 text-sm hover:bg-teal-50">WISATA</a></li>
+                <li><a href="rolasan.html" class="block px-4 py-2 text-sm hover:bg-teal-50">ROLASAN</a></li>
+                <li><a href="gendhing.html" class="block px-4 py-2 text-sm hover:bg-teal-50">GENDHING SETU LEGI</a></li>
+                <li><a href="cangkir.html" class="block px-4 py-2 text-sm hover:bg-teal-50">CANGKIR KOPI</a></li>
+                <li><a href="kominfogoes.html" class="block px-4 py-2 text-sm hover:bg-teal-50">KOMINFO GOES TO THE RADIO</a></li>
+            </ul>
+          </li>
+          <li><a href="laporan-isu-hoaks.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Isu Hoaks</a></li>
+          <li><a href="download.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Download</a></li>
+          <li><a href="agenda.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Agenda</a></li>
+          <li><a href="layanan-skpd.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Layanan</a></li>
+          <li><a href="kebijakan.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Kebijakan</a></li>
+          <li><a href="skm.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">SKM</a></li>
+          <li><a href="hubungi-kami.html" class="block px-4 py-2 text-sm font-semibold text-white bg-teal-600 hover:bg-teal-700 rounded-full">Hubungi Kami</a></li>
+        </div>
+        <div id="nav-search-container" class="flex-shrink-0 flex items-center transition-opacity duration-300 opacity-0 pointer-events-none">
+          <div class="relative flex items-center">
+            <div id="search-input-wrapper" class="absolute top-1/2 right-10 -translate-y-1/2 transition-all duration-300 opacity-0 -translate-x-4 pointer-events-none">
+              <form action="{{ url_for('public.search') }}" method="get" class="relative">
+                <input type="search" name="q" placeholder="Cari..." class="w-48 py-2 pl-4 pr-10 text-sm text-gray-900 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-400" />
+                <button type="submit" class="absolute top-1/2 right-2 -translate-y-1/2 p-1 text-gray-500 hover:text-blue-600">
+                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                </button>
+              </form>
+            </div>
+            <button id="search-toggle-btn" type="button" class="p-2.5 text-white hover:bg-blue-500 rounded-full transition-colors z-10">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            </button>
+          </div>
+        </div>
       </ul>
-    </nav>
+    </div>
+  </nav>
 
-    <!-- MAIN CONTENT -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12">
-      <h2 class="text-3xl font-bold text-blue-800 mb-4">
-        Konten Utama Halaman
-      </h2>
-      <p class="text-gray-600 leading-relaxed">
-        Area ini adalah tempat untuk konten utama situs web Anda, seperti berita terbaru, artikel, pengumuman, dan informasi lainnya.
-      </p>
-    </main>
-  </body>
+  <!-- Add mobile menu -->
+<div class="mobile-menu">
+  <button class="close-button" aria-label="Close menu">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+    </svg>
+  </button>
+
+  <!-- Search box -->
+  <div class="p-3">
+    <input type="text" id="menu-search" placeholder="Cari menu..."
+      class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+  </div>
+
+  <ul id="menu-list">
+    <li><a href="index.html">Beranda</a></li>
+    <li>
+      <a href="#" class="dropdown-trigger flex items-center justify-between">
+        Profil
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </a>
+      <ul class="dropdown-content">
+        <li><a href="visi-dan-misi.html">Visi dan Misi</a></li>
+        <li><a href="struktur-organisasi.html">Struktur Organisasi</a></li>
+        <li><a href="profil-pejabat.html">Profil Pejabat</a></li>
+        <li><a href="sekretariat.html">Sekretariat</a></li>
+        <li><a href="bidangIKP.html">Bidang IKP</a></li>
+        <li><a href="bidangTISP.html">Bidang TISP</a></li>
+        <li><a href="bidangPPLKC.html">Bidang PPLKC</a></li>
+      </ul>
+    </li>
+    <li><a href="news.html">News</a></li>
+    <li>
+      <a href="#" class="dropdown-trigger flex items-center justify-between">
+        Video
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </a>
+      <ul class="dropdown-content">
+          <li><a href="podkesdjo.html">PODKESDJO</a></li>
+          <li><a href="gendis.html">GENDIS BROTO</a></li>
+          <li><a href="ngobras.html">NGOBRAS DPRD</a></li>
+          <li><a href="cvp.html">CVP</a></li>
+          <li><a href="wisata.html">WISATA</a></li>
+          <li><a href="rolasan.html">ROLASAN</a></li>
+          <li><a href="gendhing.html">GENDHING SETU LEGI</a></li>
+          <li><a href="cangkir.html">CANGKIR KOPI</a></li>
+          <li><a href="kominfogoes.html">KOMINFO GOES TO THE RADIO</a></li>
+      </ul>
+    </li>
+    <li><a href="laporan-isu-hoaks.html">Isu Hoaks</a></li>
+    <li><a href="download.html">Download</a></li>
+    <li><a href="agenda.html">Agenda</a></li>
+    <li><a href="layanan-skpd.html">Layanan</a></li>
+    <li><a href="kebijakan.html">Kebijakan</a></li>
+    <li><a href="skm.html">SKM</a></li>
+    <li><a href="hubungi-kami.html" class="bg-teal-600">Hubungi Kami</a></li>
+  </ul>
+</div>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12">
+  <h2 class="text-3xl font-bold text-blue-800 mb-4">Konten Utama Halaman</h2>
+  <p class="text-gray-600 leading-relaxed">Tinggal Diisi Konten.</p>
+</main>
+
+<script>
+  const header = document.getElementById('main-header');
+  const navbar = document.getElementById('main-nav');
+  const navSearchContainer = document.getElementById('nav-search-container');
+  const searchToggleButton = document.getElementById('search-toggle-btn');
+  const searchInputWrapper = document.getElementById('search-input-wrapper');
+  const searchInputField = searchInputWrapper.querySelector('input');
+  const scrollThreshold = header.offsetHeight / 2;
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > scrollThreshold) {
+      navbar.classList.remove('top-0');
+      navbar.classList.add('top-4');
+      navSearchContainer.classList.remove('opacity-0', 'pointer-events-none');
+    } else {
+      navbar.classList.add('top-0');
+      navbar.classList.remove('top-4');
+      navSearchContainer.classList.add('opacity-0', 'pointer-events-none');
+      searchInputWrapper.classList.add('opacity-0', '-translate-x-4', 'pointer-events-none');
+      searchInputWrapper.classList.remove('opacity-100', 'translate-x-0');
+    }
+  });
+  searchToggleButton.addEventListener('click', () => {
+    const isHidden = searchInputWrapper.classList.contains('opacity-0');
+    if (isHidden) {
+      searchInputWrapper.classList.remove('opacity-0', '-translate-x-4', 'pointer-events-none');
+      searchInputWrapper.classList.add('opacity-100', 'translate-x-0');
+      searchInputField.focus();
+    } else {
+      searchInputWrapper.classList.add('opacity-0', '-translate-x-4', 'pointer-events-none');
+      searchInputWrapper.classList.remove('opacity-100', 'translate-x-0');
+    }
+  });
+
+  const mobileMenuButton = document.querySelector('.mobile-menu-button');
+  const mobileMenuCloseButton = document.querySelector('.mobile-menu .close-button');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  const dropdownTriggers = document.querySelectorAll('.dropdown-trigger');
+
+  // Toggle mobile menu with smooth transition
+  mobileMenuButton.addEventListener('click', () => {
+    mobileMenu.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  });
+
+  mobileMenuCloseButton.addEventListener('click', () => {
+    mobileMenu.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+
+  // Handle dropdowns in mobile menu
+  dropdownTriggers.forEach(trigger => {
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      const dropdownContent = trigger.nextElementSibling;
+      dropdownContent.classList.toggle('active');
+    });
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (mobileMenu.classList.contains('active') && 
+        !mobileMenu.contains(e.target) && 
+        !mobileMenuButton.contains(e.target)) {
+      mobileMenu.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Hide/show menu button on scroll
+  let lastScrollTop = 0;
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+    if (currentScroll > lastScrollTop) {
+      // Scrolling down
+      mobileMenuButton.style.opacity = '0.5';
+    } else {
+      // Scrolling up
+      mobileMenuButton.style.opacity = '1';
+    }
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+  }, false);
+
+  // Add smooth transition when opening/closing dropdowns
+  const style = document.createElement('style');
+  style.textContent = `
+    .dropdown-content {
+      transition: all 0.3s ease-in-out;
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Search filter function
+  document.getElementById("menu-search").addEventListener("keyup", function(e) {
+    let filter = this.value.toLowerCase();
+    let menuItems = document.querySelectorAll("#menu-list li");
+    let firstMatch = null;
+
+    menuItems.forEach(item => {
+      let text = item.innerText.toLowerCase();
+      if (text.includes(filter)) {
+        item.style.display = "";
+        if (!firstMatch) firstMatch = item.querySelector("a");
+      } else {
+        item.style.display = "none";
+      }
+    });
+
+    // jika tekan Enter -> buka link hasil pertama
+    if (e.key === "Enter" && firstMatch) {
+      window.location.href = firstMatch.href;
+    }
+  });
+</script>
+
+</body>
 </html>
     
     <!-- ===== KONTEN UTAMA: HASIL PENCARIAN (VERSI TEMPLATE) ===== -->

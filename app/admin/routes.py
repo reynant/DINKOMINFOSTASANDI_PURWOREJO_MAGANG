@@ -20,7 +20,7 @@ def get_db():
         host='localhost',
         user='root',
         password='',
-        database='web_kominfo'
+        database='db_dinkominfostasandi_dummy'
     )
 
 def login_required(f):

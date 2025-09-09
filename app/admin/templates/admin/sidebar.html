@@ -136,6 +136,7 @@
     .logo-container {
       position: relative;
       overflow: hidden;
+      width: 60px;
     }
     
     .logo-container::before {
@@ -143,14 +144,14 @@
       position: absolute;
       top: -50%;
       left: -50%;
-      width: 200%;
-      height: 200%;
-      background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.3), transparent);
+      width: 50%;
+      height: 50%;
       animation: rotate 3s linear infinite;
+
     }
     
     @keyframes rotate {
-      to { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
     }
     
     /* Status Indicator */
@@ -238,12 +239,10 @@
       <!-- Header -->
       <div class="p-6 flex items-center gap-4 border-b border-white/20 animate-fadeIn delay-100">
         <div class="logo-container relative">
-          <img src="https://dinkominfo.purworejokab.go.id/asset/images/Logo_Kementerian_Kominfo.png" 
-               class="rounded-full shadow-lg animate-float w-12 h-12 border-2 border-white/30" 
-               alt="Admin Logo">
+        <img src="{{ url_for('static', filename='img/Logo_Kementerian_Kominfo_Purworejo.png') }}">
         </div>
         <div class="flex-1">
-          <div class="font-bold text-xl tracking-wide animate-shimmer bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent bg-[length:200px_100%]">
+          <div class="font-bold text-l tracking-wide animate-shimmer bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent">
             ADMIN PANEL
           </div>
           <div class="status-online text-green-300 text-sm font-medium mt-1">

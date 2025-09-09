@@ -266,7 +266,7 @@
             </a>
           </li>
 
-          <!-- Menu Utama -->
+                           <!-- Menu Utama -->
           <li class="animate-fadeIn delay-300">
             <button
               onclick="toggleSubmenu('menuUtamaSub', 'icon-menuUtamaSub')"
@@ -277,65 +277,114 @@
               <i class="bi bi-chevron-down ml-auto transition-transform duration-300 group-hover:scale-110" id="icon-menuUtamaSub"></i>
             </button>
             <ul id="menuUtamaSub" class="submenu submenu-closed pl-6 mt-2 space-y-1 text-purple-200">
-              <li class="animate-fadeIn delay-400">
-                <a href="{{ url_for('admin.identitas_website') }}" 
-                   class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 hover:pl-6">
-                  <i class="bi bi-person-badge mr-2"></i>
-                  Identitas Website
+              <li>
+                <a href="{{ url_for('admin.identitas_website') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-person-badge mr-2"></i> Identitas Website
                 </a>
               </li>
-              <li class="animate-fadeIn delay-500">
-                <a href="menu_website.html" 
-                   class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 hover:pl-6">
-                  <i class="bi bi-menu-button-wide mr-2"></i>
-                  Menu Website
+              <li>
+                <a href="menu_website.html" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-menu-button-wide mr-2"></i> Menu Website
                 </a>
               </li>
-              <li class="animate-fadeIn delay-600">
-                <a href="{{ url_for('admin.halaman_baru') }}" 
-                   class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 hover:pl-6">
-                  <i class="bi bi-file-plus mr-2"></i>
-                  Halaman Baru
+              <li>
+                <a href="{{ url_for('admin.halaman_baru') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-file-plus mr-2"></i> Halaman Baru
                 </a>
               </li>
             </ul>
           </li>
 
-          <!-- Content Management -->
+          <!-- Berita -->
           <li class="animate-fadeIn delay-400">
             <button
-              onclick="toggleSubmenu('contentSub', 'icon-contentSub')"
+              onclick="toggleSubmenu('beritaSub', 'icon-beritaSub')"
               class="menu-item w-full flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition-all duration-300 group"
             >
-              <i class="bi bi-file-text mr-3 text-lg group-hover:scale-110 transition-transform"></i>
-              <span class="font-medium">Konten</span>
-              <i class="bi bi-chevron-down ml-auto transition-transform duration-300 group-hover:scale-110" id="icon-contentSub"></i>
+              <i class="bi bi-newspaper mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+              <span class="font-medium">Berita</span>
+              <i class="bi bi-chevron-down ml-auto transition-transform duration-300 group-hover:scale-110" id="icon-beritaSub"></i>
             </button>
-            <ul id="contentSub" class="submenu submenu-closed pl-6 mt-2 space-y-1 text-purple-200">
-              <li class="animate-fadeIn delay-500">
-                <a href="#" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 hover:pl-6">
-                  <i class="bi bi-newspaper mr-2"></i>
-                  Kelola Berita
+            <ul id="beritaSub" class="submenu submenu-closed pl-6 mt-2 space-y-1 text-purple-200">
+              <li>
+                <a href="{{ url_for('admin.kategori_berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-folder mr-2"></i> Kategori Berita
                 </a>
               </li>
-              <li class="animate-fadeIn delay-600">
-                <a href="#" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 hover:pl-6">
-                  <i class="bi bi-folder mr-2"></i>
-                  Kategori
+              <li>
+                <a href="{{ url_for('admin.komentar_berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-chat-left-text mr-2"></i> Komentar Berita
                 </a>
               </li>
-              <li class="animate-fadeIn delay-700">
-                <a href="#" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 hover:pl-6">
-                  <i class="bi bi-tags mr-2"></i>
-                  Tag Berita
+              <li>
+                <a href="{{ url_for('admin.tag_berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-tags mr-2"></i> Tag Berita
+                </a>
+              </li>
+              <li>
+                <a href="{{ url_for('admin.sensor_komentar') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-shield-lock mr-2"></i> Sensor Komentar
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Media -->
+          <li class="animate-fadeIn delay-500">
+            <button
+              onclick="toggleSubmenu('mediaSub', 'icon-mediaSub')"
+              class="menu-item w-full flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition-all duration-300 group"
+            >
+              <i class="bi bi-collection-play mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+              <span class="font-medium">Media</span>
+              <i class="bi bi-chevron-down ml-auto transition-transform duration-300 group-hover:scale-110" id="icon-mediaSub"></i>
+            </button>
+            <ul id="mediaSub" class="submenu submenu-closed pl-6 mt-2 space-y-1 text-purple-200">
+              <li>
+                <a href="{{ url_for('admin.playlist_video') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-collection-play mr-2"></i> Playlist Video
+                </a>
+              </li>
+              <li>
+                <a href="{{ url_for('admin.video') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-play-btn mr-2"></i> Video
+                </a>
+              </li>
+              <li>
+                <a href="{{ url_for('admin.tag_video') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-tags-fill mr-2"></i> Tag Video
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Lainnya -->
+          <li class="animate-fadeIn delay-600">
+            <button
+              onclick="toggleSubmenu('lainnyaSub', 'icon-lainnyaSub')"
+              class="menu-item w-full flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition-all duration-300 group"
+            >
+              <i class="bi bi-grid-1x2 mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+              <span class="font-medium">Lainnya</span>
+              <i class="bi bi-chevron-down ml-auto transition-transform duration-300 group-hover:scale-110" id="icon-lainnyaSub"></i>
+            </button>
+            <ul id="lainnyaSub" class="submenu submenu-closed pl-6 mt-2 space-y-1 text-purple-200">
+              <li>
+                <a href="{{ url_for('admin.sekilas_info') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-info-circle mr-2"></i> Sekilas Info
+                </a>
+              </li>
+              <li>
+                <a href="{{ url_for('admin.pesan_masuk') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-envelope mr-2"></i> Pesan Masuk
                 </a>
               </li>
             </ul>
           </li>
 
           <!-- User Management -->
-          <li class="animate-fadeIn delay-500">
-            <a href="#" class="menu-item flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition-all duration-300 group">
+          <li class="animate-fadeIn delay-700">
+            <a href="#" class="menu-item flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition group">
               <i class="bi bi-people mr-3 text-lg group-hover:scale-110 transition-transform"></i>
               <span class="font-medium">Kelola Users</span>
               <span class="ml-auto bg-yellow-500 text-xs text-white rounded-full px-2 py-1">
@@ -345,8 +394,8 @@
           </li>
 
           <!-- Analytics -->
-          <li class="animate-fadeIn delay-600">
-            <a href="#" class="menu-item flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition-all duration-300 group">
+          <li class="animate-fadeIn delay-800">
+            <a href="#" class="menu-item flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition group">
               <i class="bi bi-graph-up mr-3 text-lg group-hover:scale-110 transition-transform"></i>
               <span class="font-medium">Analytics</span>
               <i class="bi bi-arrow-right ml-auto opacity-0 group-hover:opacity-100 transition-opacity"></i>
@@ -354,8 +403,8 @@
           </li>
 
           <!-- Settings -->
-          <li class="animate-fadeIn delay-700">
-            <a href="#" class="menu-item flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition-all duration-300 group">
+          <li class="animate-fadeIn delay-900">
+            <a href="#" class="menu-item flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition group">
               <i class="bi bi-gear mr-3 text-lg group-hover:scale-110 transition-transform animate-pulse-custom"></i>
               <span class="font-medium">Pengaturan</span>
               <i class="bi bi-arrow-right ml-auto opacity-0 group-hover:opacity-100 transition-opacity"></i>
@@ -364,19 +413,17 @@
         </ul>
 
         <!-- Logout Section -->
-        <div class="border-t border-white/20 mt-6 pt-4 animate-fadeIn delay-800">
-          <a href="{{ url_for('admin.logout') }}" 
-   onclick="return confirm('Apakah Anda yakin ingin logout?')" 
-   class="logout-btn menu-item flex items-center px-4 py-3 text-red-300 hover:text-white rounded-xl transition-all duration-300 group">
-  <i class="bi bi-box-arrow-right mr-3 text-lg group-hover:scale-110 transition-transform"></i>
-  <span class="font-medium">Logout</span>
-  <i class="bi bi-arrow-right ml-auto opacity-0 group-hover:opacity-100 transition-opacity"></i>
-</a>
-
+        <div class="border-t border-white/20 mt-6 pt-4 animate-fadeIn delay-1000">
+          <a href="{{ url_for('admin.logout') }}" onclick="return confirm('Apakah Anda yakin ingin logout?')" 
+             class="logout-btn menu-item flex items-center px-4 py-3 text-red-300 hover:text-white rounded-xl transition group">
+            <i class="bi bi-box-arrow-right mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+            <span class="font-medium">Logout</span>
+            <i class="bi bi-arrow-right ml-auto opacity-0 group-hover:opacity-100 transition-opacity"></i>
+          </a>
         </div>
 
         <!-- Footer Info -->
-        <div class="mt-4 p-3 bg-white/10 rounded-xl text-center animate-fadeIn delay-900">
+        <div class="mt-4 p-3 bg-white/10 rounded-xl text-center animate-fadeIn delay-1100">
           <div class="text-xs text-purple-200 mb-1">Admin Panel</div>
           <div class="text-xs text-purple-300 font-semibold">v3.0.0</div>
           <div class="w-full h-1 bg-white/20 rounded-full mt-2 overflow-hidden">
@@ -387,6 +434,7 @@
       </nav>
     </div>
   </aside>
+
 
   <!-- Enhanced JavaScript -->
   <script>

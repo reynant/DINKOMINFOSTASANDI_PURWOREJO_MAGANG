@@ -57,6 +57,7 @@ searchable_pages = [
     {'endpoint': 'public.kebijakan', 'title': 'kebijakan', 'keywords': 'kebijakan aturan regulasi'},
     {'endpoint': 'public.skm', 'title': 'skm', 'keywords': 'skm survei kepuasan masyarakat'},
     {'endpoint': 'public.pip', 'title': 'pip', 'keywords': 'pip pelayanan informasi publik'},
+    {'endpoint': 'public.halaman_berita', 'title': 'Halaman Berita', 'keywords': 'berita artikel informasi terkini'},
 
 ]    
     
@@ -538,5 +539,14 @@ def hubungi_kami():
 def pip():
     try:
         return render_template('pip.html', title='pip')
+    except TemplateNotFound:
+        abort(404)
+
+# Route halaman berita
+@public_bp.route('/halaman_berita')
+@public_bp.route('/halaman_berita.html')
+def halaman_berita():
+    try:
+        return render_template('halaman_berita.html', title='halaman_berita')
     except TemplateNotFound:
         abort(404)

@@ -1890,6 +1890,105 @@ def hapus_galeri_berita_foto(id):
     flash('Foto gallery berhasil dihapus', 'success')
     return redirect(url_for('admin.galeri_berita_foto'))
 
-# ---------------- HALAMAN BARU ----------------
+# ---------------- HALAMAN BERITA ----------------
+
+from flask import render_template, request, redirect, url_for, flash
+from werkzeug.utils import secure_filename
+import os
+
+# Route tampil daftar berita
+@admin.route('/halaman_berita')
+def halaman_berita():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute('SELECT * FROM halaman_berita ORDER BY Id DESC')
+    berita = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template('admin/halaman_berita.html', berita=berita)
+
+# Route tambah berita
+@admin.route('/tambah_halaman_berita', methods=['POST'])
+def tambah_halaman_berita():
+    if not os.path.exists('static/uploads'):
+        os.makedirs('static/uploads')
+
+    judul = request.form['judul']
+    isi = request.form['isi']
+    foto = request.files.get('foto')
+
+    foto_path = ''
+    if foto and foto.filename:
+        filename = secure_filename(foto.filename)
+        foto_path = f"uploads/{filename}"
+        foto.save(os.path.join('static', foto_path))
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute(
+        'INSERT INTO halaman_berita (Judul, Isi, Foto, Tanggal) VALUES (%s, %s, %s, NOW())',
+        (judul, isi, foto_path)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    flash('Berita berhasil ditambahkan', 'success')
+    return redirect(url_for('admin.halaman_berita'))
+
+# Route edit berita
+@admin.route('/edit_halaman_berita/<int:id>', methods=['POST'])
+def edit_halaman_berita(id):
+    judul = request.form['judul']
+    isi = request.form['isi']
+    foto = request.files.get('foto')
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    if foto and foto.filename:
+        if not os.path.exists('static/uploads'):
+            os.makedirs('static/uploads')
+        filename = secure_filename(foto.filename)
+        foto_path = f"uploads/{filename}"
+        foto.save(os.path.join('static', foto_path))
+
+        cursor.execute(
+            'UPDATE halaman_berita SET Judul=%s, Isi=%s, Foto=%s WHERE Id=%s',
+            (judul, isi, foto_path, id)
+        )
+    else:
+        cursor.execute(
+            'UPDATE halaman_berita SET Judul=%s, Isi=%s WHERE Id=%s',
+            (judul, isi, id)
+        )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    flash('Berita berhasil diperbarui', 'success')
+    return redirect(url_for('admin.halaman_berita'))
+
+# Route hapus berita
+@admin.route('/hapus_halaman_berita/<int:id>', methods=['POST'])
+def hapus_halaman_berita(id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute('SELECT Foto FROM halaman_berita WHERE Id=%s', (id,))
+    result = cursor.fetchone()
+
+    if result and result['Foto'] and os.path.exists(os.path.join('static', result['Foto'])):
+        os.remove(os.path.join('static', result['Foto']))
+
+    cursor.execute('DELETE FROM halaman_berita WHERE Id=%s', (id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    flash('Berita berhasil dihapus', 'success')
+    return redirect(url_for('admin.halaman_berita'))
+
 # ---------------- HALAMAN BARU ----------------
 # ---------------- HALAMAN BARU ----------------

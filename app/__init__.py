@@ -1,43 +1,38 @@
 import os
 import datetime
 from flask import Flask
+from .db import close_db   # 🔥 tambahkan ini
 
 def create_app():
-    """Membungkus pembuatan aplikasi dalam sebuah fungsi (Application Factory)."""
-    
-    # Membuat instance aplikasi Flask. 
-    # Flask secara otomatis akan mencari folder 'templates' di direktori root, 
-    # jadi kita tidak perlu menentukannya secara manual.
     app = Flask(__name__)
-    app.secret_key = 'your-secret-key-here'  # Required for sessions
+    app.secret_key = 'your-secret-key-here'
     
-    # Atur konfigurasi dasar
+    # Konfigurasi DB
     app.config['SECRET_KEY'] = 'ganti-dengan-kunci-rahasia-yang-kuat'
     app.config['MYSQL_HOST'] = 'localhost'
     app.config['MYSQL_USER'] = 'root'
     app.config['MYSQL_PASSWORD'] = ''
-    app.config['MYSQL_DB'] = 'db_dinkominfostasandi'
+    app.config['MYSQL_DB'] = 'db_dinkominfostasandi_dummy'   # 🔥 pakai DB yang benar
     app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'uploads')
 
-    # Pastikan folder upload ada
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
         os.makedirs(app.config['UPLOAD_FOLDER'])
 
-    # Menambahkan fungsi 'now' ke konteks template Jinja2
-    # Ini diperlukan untuk menampilkan tahun di footer base.html
     @app.context_processor
     def inject_now():
         return {'now': datetime.datetime.utcnow}
 
-    # Impor blueprint dari lokasi yang benar di dalam fungsi create_app
+    # Import & register blueprint
     from .public.routes import public_bp
     from .admin.routes import admin
-
-    # Daftarkan blueprint ke aplikasi
     app.register_blueprint(public_bp)
     app.register_blueprint(admin, url_prefix='/admin')
 
-    # Set session to be permanent and last for 1 hour
+    # Tutup koneksi DB tiap request selesai
+    @app.teardown_appcontext
+    def teardown_db(exception):
+        close_db()
+
     app.permanent_session_lifetime = datetime.timedelta(hours=1)
     
     return app

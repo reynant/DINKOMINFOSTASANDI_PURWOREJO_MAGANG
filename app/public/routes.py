@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, abort, request, redirect, url_for
 from jinja2 import TemplateNotFound
-
+from app.db import get_db   # ✅ tambahkan ini
 # Blueprint dengan template_folder yang benar
 # Pastikan path ini benar sesuai dengan struktur folder Anda
 public_bp = Blueprint('public', __name__, template_folder='../../templates')
@@ -542,11 +542,49 @@ def pip():
     except TemplateNotFound:
         abort(404)
 
-# Route halaman berita
 @public_bp.route('/halaman_berita')
 @public_bp.route('/halaman_berita.html')
 def halaman_berita():
-    try:
-        return render_template('halaman_berita.html', title='halaman_berita')
-    except TemplateNotFound:
+    db = get_db()
+    cur = db.cursor(dictionary=True)
+
+    # Hanya tampilkan berita dengan status Published
+    cur.execute("""
+        SELECT id, judul, sub_judul, isi_berita, gambar, waktu_posting, tanggal
+        FROM berita
+        WHERE status = 'Published'
+        ORDER BY waktu_posting DESC
+    """)
+    berita_list = cur.fetchall()
+
+    cur.close()
+    db.close()
+
+    return render_template(
+        'halaman_berita.html',
+        title='Halaman Berita',
+        berita_list=berita_list
+    )
+
+@public_bp.route('/halaman_berita/<int:id>')
+def detail_berita(id):
+    db = get_db()
+    cur = db.cursor(dictionary=True)
+    cur.execute("""
+        SELECT id, judul, sub_judul, isi_berita, gambar, waktu_posting, tanggal
+        FROM berita
+        WHERE id=%s AND status = 'Published'
+    """, (id,))
+    berita = cur.fetchone()
+    cur.close()
+    db.close()
+
+    if not berita:
         abort(404)
+
+    return render_template(
+        'detail_berita.html',
+        title=berita['judul'],
+        berita=berita
+    )
+

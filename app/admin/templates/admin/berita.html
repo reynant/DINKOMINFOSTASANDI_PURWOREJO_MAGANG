@@ -1,190 +1,413 @@
-{% extends "admin/base_admin.html" %}
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Manajemen Berita</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    {% include "admin/sidebar.html" %}
 
-{% block title %}Manajemen Berita{% endblock %}
+    <div class="container mt-4">
+      <h3>Manajemen Berita</h3>
 
-{% block page_title %}
-    <i class="bi bi-newspaper mr-2"></i> Upload Berita
-{% endblock %}
-
-{% block content %}
-<div class="bg-white shadow-md rounded-lg">
-    <div class="p-4 border-b d-flex justify-content-between align-items-center">
-        <h5 class="mb-0 font-semibold">Daftar Berita</h5>
-        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">
-            <i class="bi bi-plus-circle mr-1"></i> Tambahkan Berita
-        </button>
-    </div>
-
-    <div class="p-4">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                <div class="alert {{ 'alert-success' if category == 'success' else 'alert-danger' }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
-        <div class="d-flex justify-content-end mb-3">
-            <div class="w-full sm:w-auto">
-                <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Search Judul..." onkeyup="filterTable()">
-            </div>
+      <div class="card mt-3">
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+        >
+          <h5 class="mb-0">Daftar Berita</h5>
+          <a
+            href="#"
+            class="btn btn-primary btn-sm"
+            data-bs-toggle="modal"
+            data-bs-target="#modalTambah"
+          >
+            Tambahkan Berita
+          </a>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped table-hover table-sm" id="beritaTable">
-                <thead class="table-light">
-                    <tr>
-                        <th class="text-center" style="width: 50px;">No</th>
-                        <th style="width: 100px;">Gambar</th>
-                        <th>Judul</th>
-                        <th>Status</th>
-                        <th class="text-center" style="width: 120px;">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for berita in daftar_berita %}
-                    <tr>
-                        <td class="text-center">{{ loop.index }}</td>
-                        <td class="text-center">
-                            {% if berita.gambar %}
-                            <img src="{{ url_for('static', filename='uploads/' ~ berita.gambar) }}" width="80" class="img-thumbnail" alt="Gambar Berita"/>
-                            {% else %}
-                            <span class="text-muted text-xs">No Image</span>
-                            {% endif %}
-                        </td>
-                        <td>{{ berita.judul }}</td>
-                        <td>
-                            {% if berita.status == 'Published' %}
-                                <span class="badge bg-success">Published</span>
-                            {% else %}
-                                <span class="badge bg-secondary">Draft</span>
-                            {% endif %}
-                        </td>
-                        <td class="text-center">
-                            <button type="button" class="btn btn-warning btn-sm"
-                                    data-id="{{ berita.id }}"
-                                    data-judul="{{ berita.judul }}"
-                                    data-sub_judul="{{ berita.sub_judul }}"
-                                    data-video_youtube="{{ berita.video_youtube }}"
-                                    data-kategori="{{ berita.kategori }}"
-                                    data-headline="{{ berita.headline }}"
-                                    data-berita_utama="{{ berita.berita_utama }}"
-                                    data-isi="{{ berita.isi_berita }}"
-                                    data-tag="{{ berita.tag }}"
-                                    data-tanggal="{{ berita.tanggal }}"
-                                    data-waktu="{{ berita.waktu_posting }}"
-                                    data-status="{{ berita.status or berita.status_berita }}"
-                                    data-bs-toggle="modal" data-bs-target="#modalEdit" onclick="setEditData(this)">
-                                <i class="bi bi-pencil-square"></i>
-                            </button>
-                            <form method="POST" action="{{ url_for('admin.hapus_berita', id=berita.id) }}" style="display: inline"
-                                onsubmit="return confirm('Yakin ingin menghapus berita ini?');">
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash3-fill"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex align-items-center">
+              Show
+              <select
+                class="form-select form-select-sm mx-2"
+                style="width: auto"
+              >
+                <option>10</option>
+                <option>25</option>
+                <option>50</option>
+                <option>100</option>
+              </select>
+              entries
+            </div>
+            <div class="card-body">
+              <!-- Search Bar -->
+              <div class="mb-3 d-flex justify-content-end">
+                <input
+                  type="text"
+                  id="searchInput"
+                  class="form-control form-control-sm w-auto"
+                  placeholder="Search..."
+                  onkeyup="filterTable()"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table
+              class="table table-bordered table-striped table-sm"
+              id="playlistTable"
+            >
+              <thead class="table-light">
+                <tr>
+                  <th>No</th>
+                  <th>Gambar</th>
+                  <th>Judul</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for berita in daftar_berita %}
+                <tr>
+                  <td>{{ loop.index }}</td>
+                  <td>
+                    {% if berita.gambar %}
+                    <img
+                      src="{{ url_for('static', filename='uploads/' ~ berita.gambar) }}"
+                      width="80"
+                      class="img-thumbnail"
+                    />
                     {% else %}
-                    <tr>
-                        <td colspan="5" class="text-center text-gray-500 py-4">Belum ada data berita.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+                    <span class="text-muted">Tidak ada</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ berita.judul }}</td>
+                  <td>
+                    {% if berita.status %} {{ berita.status }} {% elif
+                    berita.status_berita %} {{ berita.status_berita }} {% else
+                    %}
+                    <span class="text-muted">Published</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-warning btn-sm"
+                      data-id="{{ berita.id }}"
+                      data-judul="{{ berita.judul }}"
+                      data-sub_judul="{{ berita.sub_judul }}"
+                      data-video_youtube="{{ berita.video_youtube }}"
+                      data-kategori="{{ berita.kategori }}"
+                      data-headline="{{ berita.headline }}"
+                      data-berita_utama="{{ berita.berita_utama }}"
+                      data-isi="{{ berita.isi_berita }}"
+                      data-tag="{{ berita.tag }}"
+                      data-tanggal="{{ berita.tanggal }}"
+                      data-waktu="{{ berita.waktu_posting }}"
+                      data-status="{{ berita.status or berita.status_berita }}"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalEdit"
+                      onclick="setEditData(this)"
+                    >
+                      Edit
+                    </button>
+
+                    <form
+                      method="POST"
+                      action="{{ url_for('admin.hapus_berita', id=berita.id) }}"
+                      style="display: inline"
+                      onsubmit="return confirm('Yakin ingin menghapus berita ini?');"
+                    >
+                      <button type="submit" class="btn btn-danger btn-sm">
+                        Hapus
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
             </table>
+          </div>
+
+          <!-- Footer -->
+          <footer class="mt-4 text-center text-sm text-gray-500">
+            <p>
+              Copyright © 2014-2025
+              <a href="#" class="text-blue-700 font-semibold">
+                Dinas Komunikasi, Informatika, Statistik dan Persandian
+                Kabupaten Purworejo </a
+              >. All rights reserved. Version 3.0.0
+            </p>
+          </footer>
         </div>
+      </div>
     </div>
-</div>
 
-<!-- Modal Tambah -->
-<div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <form method="POST" action="{{ url_for('admin.tambah_berita') }}" enctype="multipart/form-data">
-            <div class="modal-content">
-                <div class="modal-header"><h5 class="modal-title">Tambah Berita</h5></div>
-                <div class="modal-body row g-3">
-                    <div class="col-md-6"><label>Judul</label><input type="text" name="judul" class="form-control" required /></div>
-                    <div class="col-md-6"><label>Sub Judul</label><input type="text" name="sub_judul" class="form-control" /></div>
-                    <div class="col-md-6"><label>Video YouTube (URL)</label><input type="text" name="video_youtube" class="form-control" /></div>
-                    <div class="col-md-6"><label>Kategori</label><input type="text" name="kategori" class="form-control" /></div>
-                    <div class="col-md-6"><label>Headline</label><input type="text" name="headline" class="form-control" /></div>
-                    <div class="col-md-6"><label>Berita Utama</label><input type="text" name="berita_utama" class="form-control" /></div>
-                    <div class="col-12"><label>Isi Berita</label><textarea name="isi_berita" class="form-control" rows="5" required></textarea></div>
-                    <div class="col-md-6"><label>Tag</label><input type="text" name="tag" class="form-control" /></div>
-                    <div class="col-md-3"><label>Tanggal</label><input type="date" name="tanggal" class="form-control" required /></div>
-                    <div class="col-md-3"><label>Waktu Posting</label><input type="time" name="waktu_posting" class="form-control" required /></div>
-                    <div class="col-md-6"><label>Gambar</label><input type="file" name="gambar" class="form-control" /></div>
-                    <div class="col-md-6"><label>Status</label><select name="status" class="form-select"><option value="Draft">Draft</option><option value="Published" selected>Published</option></select></div>
-                </div>
-                <div class="modal-footer"><button type="submit" class="btn btn-primary">Simpan</button></div>
+    <!-- Modal Tambah -->
+    <div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <form
+          method="POST"
+          action="{{ url_for('admin.tambah_berita') }}"
+          enctype="multipart/form-data"
+        >
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Tambah Berita</h5>
             </div>
+            <div class="modal-body row g-3">
+              <div class="col-md-6">
+                <label>Judul</label>
+                <input type="text" name="judul" class="form-control" required />
+              </div>
+              <div class="col-md-6">
+                <label>Sub Judul</label>
+                <input type="text" name="sub_judul" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label>Video YouTube (URL)</label>
+                <input type="text" name="video_youtube" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label>Kategori</label>
+                <input type="text" name="kategori" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label>Headline</label>
+                <input type="text" name="headline" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label>Berita Utama</label>
+                <input type="text" name="berita_utama" class="form-control" />
+              </div>
+              <div class="col-12">
+                <label>Isi Berita</label>
+                <textarea
+                  name="isi_berita"
+                  class="form-control"
+                  rows="5"
+                  required
+                ></textarea>
+              </div>
+              <div class="col-md-6">
+                <label>Tag</label>
+                <input type="text" name="tag" class="form-control" />
+              </div>
+              <div class="col-md-3">
+                <label>Tanggal</label>
+                <input
+                  type="date"
+                  name="tanggal"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="col-md-3">
+                <label>Waktu Posting</label>
+                <input
+                  type="time"
+                  name="waktu_posting"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label>Gambar</label>
+                <input type="file" name="gambar" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label>Status</label>
+                <select name="status" class="form-select">
+                  <option value="Draft">Draft</option>
+                  <option value="Published">Published</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+          </div>
         </form>
+      </div>
     </div>
-</div>
 
-<!-- Modal Edit -->
-<div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <!-- Modal Edit -->
+    <div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
         <form id="form-edit" method="POST" enctype="multipart/form-data">
-            <div class="modal-content">
-                <div class="modal-header"><h5 class="modal-title">Edit Berita</h5></div>
-                <div class="modal-body row g-3">
-                    <input type="hidden" id="edit-id" name="id" />
-                    <div class="col-md-6"><label>Judul</label><input type="text" id="edit-judul" name="judul" class="form-control" required /></div>
-                    <div class="col-md-6"><label>Sub Judul</label><input type="text" id="edit-sub_judul" name="sub_judul" class="form-control" /></div>
-                    <div class="col-md-6"><label>Video YouTube</label><input type="text" id="edit-video_youtube" name="video_youtube" class="form-control" /></div>
-                    <div class="col-md-6"><label>Kategori</label><input type="text" id="edit-kategori" name="kategori" class="form-control" /></div>
-                    <div class="col-md-6"><label>Headline</label><input type="text" id="edit-headline" name="headline" class="form-control" /></div>
-                    <div class="col-md-6"><label>Berita Utama</label><input type="text" id="edit-berita_utama" name="berita_utama" class="form-control" /></div>
-                    <div class="col-12"><label>Isi Berita</label><textarea id="edit-isi" name="isi_berita" class="form-control" rows="5" required></textarea></div>
-                    <div class="col-md-6"><label>Tag</label><input type="text" id="edit-tag" name="tag" class="form-control" /></div>
-                    <div class="col-md-3"><label>Tanggal</label><input type="date" id="edit-tanggal" name="tanggal" class="form-control" /></div>
-                    <div class="col-md-3"><label>Waktu Posting</label><input type="time" id="edit-waktu" name="waktu_posting" class="form-control" /></div>
-                    <div class="col-md-6"><label>Gambar Baru (Opsional)</label><input type="file" name="gambar" class="form-control" /></div>
-                    <div class="col-md-6"><label>Status</label><select id="edit-status" name="status" class="form-select"><option value="Draft">Draft</option><option value="Published">Published</option></select></div>
-                </div>
-                <div class="modal-footer"><button type="submit" class="btn btn-primary">Update</button></div>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Edit Berita</h5>
             </div>
+            <div class="modal-body row g-3">
+              <input type="hidden" id="edit-id" name="id" />
+              <div class="col-md-6">
+                <label>Judul</label>
+                <input
+                  type="text"
+                  id="edit-judul"
+                  name="judul"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label>Sub Judul</label>
+                <input
+                  type="text"
+                  id="edit-sub_judul"
+                  name="sub_judul"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-md-6">
+                <label>Video YouTube</label>
+                <input
+                  type="text"
+                  id="edit-video_youtube"
+                  name="video_youtube"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-md-6">
+                <label>Kategori</label>
+                <input
+                  type="text"
+                  id="edit-kategori"
+                  name="kategori"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-md-6">
+                <label>Headline</label>
+                <input
+                  type="text"
+                  id="edit-headline"
+                  name="headline"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-md-6">
+                <label>Berita Utama</label>
+                <input
+                  type="text"
+                  id="edit-berita_utama"
+                  name="berita_utama"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-12">
+                <label>Isi Berita</label>
+                <textarea
+                  id="edit-isi"
+                  name="isi_berita"
+                  class="form-control"
+                  rows="5"
+                  required
+                ></textarea>
+              </div>
+              <div class="col-md-6">
+                <label>Tag</label>
+                <input
+                  type="text"
+                  id="edit-tag"
+                  name="tag"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-md-3">
+                <label>Tanggal</label>
+                <input
+                  type="date"
+                  id="edit-tanggal"
+                  name="tanggal"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-md-3">
+                <label>Waktu Posting</label>
+                <input
+                  type="time"
+                  id="edit-waktu"
+                  name="waktu_posting"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-md-6">
+                <label>Gambar Baru</label>
+                <input type="file" name="gambar" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label>Status</label>
+                <select id="edit-status" name="status" class="form-select">
+                  <option value="Draft">Draft</option>
+                  <option value="Publish">Publish</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+          </div>
         </form>
+      </div>
     </div>
-</div>
-{% endblock %}
 
-{% block scripts %}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    function setEditData(btn) {
-        document.getElementById("form-edit").action = "/admin/berita/edit/" + btn.getAttribute("data-id");
+    <script>
+      function setEditData(btn) {
+        document.getElementById("form-edit").action =
+          "/admin/berita/edit/" + btn.getAttribute("data-id");
         document.getElementById("edit-id").value = btn.getAttribute("data-id");
-        document.getElementById("edit-judul").value = btn.getAttribute("data-judul");
-        document.getElementById("edit-sub_judul").value = btn.getAttribute("data-sub_judul");
-        document.getElementById("edit-video_youtube").value = btn.getAttribute("data-video_youtube");
-        document.getElementById("edit-kategori").value = btn.getAttribute("data-kategori");
-        document.getElementById("edit-headline").value = btn.getAttribute("data-headline");
-        document.getElementById("edit-berita_utama").value = btn.getAttribute("data-berita_utama");
-        document.getElementById("edit-isi").value = btn.getAttribute("data-isi");
-        document.getElementById("edit-tag").value = btn.getAttribute("data-tag");
-        document.getElementById("edit-tanggal").value = btn.getAttribute("data-tanggal");
-        document.getElementById("edit-waktu").value = btn.getAttribute("data-waktu");
-        document.getElementById("edit-status").value = btn.getAttribute("data-status");
-    }
+        document.getElementById("edit-judul").value =
+          btn.getAttribute("data-judul");
+        document.getElementById("edit-sub_judul").value =
+          btn.getAttribute("data-sub_judul");
+        document.getElementById("edit-video_youtube").value =
+          btn.getAttribute("data-video_youtube");
+        document.getElementById("edit-kategori").value =
+          btn.getAttribute("data-kategori");
+        document.getElementById("edit-headline").value =
+          btn.getAttribute("data-headline");
+        document.getElementById("edit-berita_utama").value =
+          btn.getAttribute("data-berita_utama");
+        document.getElementById("edit-isi").value =
+          btn.getAttribute("data-isi");
+        document.getElementById("edit-tag").value =
+          btn.getAttribute("data-tag");
+        document.getElementById("edit-tanggal").value =
+          btn.getAttribute("data-tanggal");
+        document.getElementById("edit-waktu").value =
+          btn.getAttribute("data-waktu");
+        document.getElementById("edit-status").value =
+          btn.getAttribute("data-status");
+      }
 
-    function filterTable() {
-        const input = document.getElementById("searchInput");
-        const filter = input.value.toLowerCase();
-        const table = document.getElementById("beritaTable");
-        const trs = table.getElementsByTagName("tr");
+      // 🔎 Fungsi search
+      function filterTable() {
+        let input = document.getElementById("searchInput");
+        let filter = input.value.toLowerCase();
+        let table = document.getElementById("playlistTable");
+        let trs = table.getElementsByTagName("tr");
 
-        for (let i = 1; i < trs.length; i++) { // Mulai dari 1 untuk lewati header
-            const td = trs[i].getElementsByTagName("td")[2]; // Kolom Judul
-            if (td) {
-                const text = td.textContent || td.innerText;
-                trs[i].style.display = text.toLowerCase().indexOf(filter) > -1 ? "" : "none";
-            }
+        for (let i = 1; i < trs.length; i++) {
+          // mulai dari 1 biar skip <thead>
+          let row = trs[i];
+          let text = row.textContent.toLowerCase();
+          if (text.indexOf(filter) > -1) {
+            row.style.display = "";
+          } else {
+            row.style.display = "none";
+          }
         }
-    }
-</script>
-{% endblock %}
+      }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

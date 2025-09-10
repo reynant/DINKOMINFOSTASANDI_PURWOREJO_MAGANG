@@ -1985,4 +1985,85 @@ def hapus_halaman_berita(id):
     flash('Berita berhasil dihapus', 'success')
     return redirect(url_for('admin.halaman_berita'))
 
-# ---------------- HALAMAN BARU ----------------
+# ---------------- MENU WEBSITE --------------
+# --
+# Tampilkan daftar menu website
+@admin.route('/menu_website')
+def menu_website():
+    if 'user' not in session:
+        return redirect(url_for('admin.login'))
+
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM menu_website ORDER BY created_at DESC")
+    menus = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    return render_template('admin/menu_website.html', menus=menus)
+
+
+# Tambah menu website
+@admin.route('/tambah_menu', methods=['POST'])
+def tambah_menu():
+    if 'user' not in session:
+        return redirect(url_for('admin.login'))
+
+    nama_menu = request.form['nama_menu']
+    link = request.form['link']
+    status = request.form['status']
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO menu_website (nama_menu, link, status, created_at)
+        VALUES (%s, %s, %s, NOW())
+    """, (nama_menu, link, status))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    flash('Menu berhasil ditambahkan!', 'success')
+    return redirect(url_for('admin.menu_website'))
+
+
+# Edit menu website
+@admin.route('/edit_menu/<int:id>', methods=['POST'])
+def edit_menu(id):
+    if 'user' not in session:
+        return redirect(url_for('admin.login'))
+
+    nama_menu = request.form['nama_menu']
+    link = request.form['link']
+    status = request.form['status']
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE menu_website 
+        SET nama_menu=%s, link=%s, status=%s
+        WHERE id=%s
+    """, (nama_menu, link, status, id))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    flash('Menu berhasil diupdate!', 'success')
+    return redirect(url_for('admin.menu_website'))
+
+
+# Hapus menu website
+@admin.route('/hapus_menu/<int:id>', methods=['GET'])
+def hapus_menu(id):
+    if 'user' not in session:
+        return redirect(url_for('admin.login'))
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM menu_website WHERE id=%s", (id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    flash('Menu berhasil dihapus!', 'success')
+    return redirect(url_for('admin.menu_website'))

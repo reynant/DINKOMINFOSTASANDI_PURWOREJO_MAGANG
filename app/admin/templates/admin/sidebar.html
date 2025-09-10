@@ -296,38 +296,44 @@
           </li>
 
           <!-- Berita -->
-          <li class="animate-fadeIn delay-400">
-            <button
-              onclick="toggleSubmenu('beritaSub', 'icon-beritaSub')"
-              class="menu-item w-full flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition-all duration-300 group"
-            >
-              <i class="bi bi-newspaper mr-3 text-lg group-hover:scale-110 transition-transform"></i>
-              <span class="font-medium">Berita</span>
-              <i class="bi bi-chevron-down ml-auto transition-transform duration-300 group-hover:scale-110" id="icon-beritaSub"></i>
-            </button>
-            <ul id="beritaSub" class="submenu submenu-closed pl-6 mt-2 space-y-1 text-purple-200">
-              <li>
-                <a href="{{ url_for('admin.kategori_berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
-                  <i class="bi bi-folder mr-2"></i> Kategori Berita
-                </a>
-              </li>
-              <li>
-                <a href="{{ url_for('admin.komentar_berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
-                  <i class="bi bi-chat-left-text mr-2"></i> Komentar Berita
-                </a>
-              </li>
-              <li>
-                <a href="{{ url_for('admin.tag_berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
-                  <i class="bi bi-tags mr-2"></i> Tag Berita
-                </a>
-              </li>
-              <li>
-                <a href="{{ url_for('admin.sensor_komentar') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
-                  <i class="bi bi-shield-lock mr-2"></i> Sensor Komentar
-                </a>
-              </li>
-            </ul>
-          </li>
+<li class="animate-fadeIn delay-400">
+  <button
+    onclick="toggleSubmenu('beritaSub', 'icon-beritaSub')"
+    class="menu-item w-full flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition-all duration-300 group"
+  >
+    <i class="bi bi-newspaper mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+    <span class="font-medium">Berita</span>
+    <i class="bi bi-chevron-down ml-auto transition-transform duration-300 group-hover:scale-110" id="icon-beritaSub"></i>
+  </button>
+  <ul id="beritaSub" class="submenu submenu-closed pl-6 mt-2 space-y-1 text-purple-200">
+    <li>
+      <a href="{{ url_for('admin.berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+        <i class="bi bi-upload mr-2"></i> Upload Berita
+      </a>
+    </li>
+    <li>
+      <a href="{{ url_for('admin.kategori_berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+        <i class="bi bi-folder mr-2"></i> Kategori Berita
+      </a>
+    </li>
+    <li>
+      <a href="{{ url_for('admin.komentar_berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+        <i class="bi bi-chat-left-text mr-2"></i> Komentar Berita
+      </a>
+    </li>
+    <li>
+      <a href="{{ url_for('admin.tag_berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+        <i class="bi bi-tags mr-2"></i> Tag Berita
+      </a>
+    </li>
+    <li>
+      <a href="{{ url_for('admin.sensor_komentar') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+        <i class="bi bi-shield-lock mr-2"></i> Sensor Komentar
+      </a>
+    </li>
+  </ul>
+</li>
+
 
           <!-- Media -->
           <li class="animate-fadeIn delay-500">

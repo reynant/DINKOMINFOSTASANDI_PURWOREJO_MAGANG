@@ -7,13 +7,22 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"/>
-  <style>.scrollbar-hidden::-webkit-scrollbar{display:none}</style>
+  <style>
+    .scrollbar-hidden::-webkit-scrollbar { display: none; }
+    body, html { height: 100%; margin: 0; }
+    .sidebar { min-width: 250px; max-width: 250px; height: 100vh; overflow-y: auto; background-color: #1f2937; color: white; }
+    .content { flex: 1; padding: 20px; overflow-y: auto; }
+  </style>
 </head>
-<body>
+<body class="d-flex">
 
-  {% include "admin/sidebar.html" %}
+  <!-- Sidebar -->
+  <div class="sidebar">
+    {% include "admin/sidebar.html" %}
+  </div>
 
-  <div class="container mt-4">
+  <!-- Konten Utama -->
+  <div class="content">
     <h3>Dashboard</h3>
 
     <div class="card mt-3">
@@ -56,51 +65,49 @@
             <tbody>
               {% if users %}
                 {% for u in users %}
-              <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ u.Username }}</td>
-                <td>{{ u.Nama_Lengkap }}</td>
-                <td>{{ u.Email }}</td>
-                <td class="text-center">
-                  {% if u.Foto %}
-                    <img src="{{ url_for('static', filename='uploads/users/' ~ u.Foto) }}" 
-                         class="rounded-circle" width="40" height="40">
-                  {% else %}
-                    <span class="text-muted">-</span>
-                  {% endif %}
-                </td>
-                <td>
-                  {% if u.Blokir == 'N' %}
-                    <span class="badge bg-success">Aktif</span>
-                  {% else %}
-                    <span class="badge bg-danger">Nonaktif</span>
-                  {% endif %}
-                </td>
-                <td>{{ u.level }}</td>
-                <td>{{ u.Kiriman }} Artikel</td>
-                <td class="text-nowrap">
-                  <!-- Tombol Edit -->
-                  <button type="button"
-                          class="btn btn-warning btn-sm"
-                          data-id="{{ u.id }}"
-                          data-username="{{ u.Username|e }}"
-                          data-nama="{{ u.Nama_Lengkap|e }}"
-                          data-email="{{ u.Email|e }}"
-                          data-level="{{ u.level }}"
-                          data-status="{{ u.Blokir }}"
-                          data-bs-toggle="modal"
-                          data-bs-target="#modalEdit"
-                          onclick="setEditData(this)">
-                    <i class="bi bi-pencil"></i>
-                  </button>
-                  <!-- Tombol Hapus -->
-                  <a href="{{ url_for('admin.hapus_user', id=u.id) }}"
-                     class="btn btn-danger btn-sm"
-                     onclick="return confirm('Yakin ingin menghapus user ini?')">
-                    <i class="bi bi-trash"></i>
-                  </a>
-                </td>
-              </tr>
+                  <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ u.Username }}</td>
+                    <td>{{ u.Nama_Lengkap }}</td>
+                    <td>{{ u.Email }}</td>
+                    <td class="text-center">
+                      {% if u.Foto %}
+                        <img src="{{ url_for('static', filename='uploads/users/' ~ u.Foto) }}" 
+                             class="rounded-circle" width="40" height="40">
+                      {% else %}
+                        <span class="text-muted">-</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if u.Blokir == 'N' %}
+                        <span class="badge bg-success">Aktif</span>
+                      {% else %}
+                        <span class="badge bg-danger">Nonaktif</span>
+                      {% endif %}
+                    </td>
+                    <td>{{ u.level }}</td>
+                    <td>{{ u.Kiriman }} Artikel</td>
+                    <td class="text-nowrap">
+                      <button type="button"
+                              class="btn btn-warning btn-sm"
+                              data-id="{{ u.id }}"
+                              data-username="{{ u.Username|e }}"
+                              data-nama="{{ u.Nama_Lengkap|e }}"
+                              data-email="{{ u.Email|e }}"
+                              data-level="{{ u.level }}"
+                              data-status="{{ u.Blokir }}"
+                              data-bs-toggle="modal"
+                              data-bs-target="#modalEdit"
+                              onclick="setEditData(this)">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <a href="{{ url_for('admin.hapus_user', id=u.id) }}"
+                         class="btn btn-danger btn-sm"
+                         onclick="return confirm('Yakin ingin menghapus user ini?')">
+                        <i class="bi bi-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
                 {% endfor %}
               {% else %}
                 <tr><td colspan="9" class="text-center">Tidak ada data user</td></tr>
@@ -137,38 +144,40 @@
   </div>
 
   <!-- Modal Tambah User -->
-  <div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <form method="POST" action="{{ url_for('admin.tambah_user') }}" enctype="multipart/form-data">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Tambah User</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            <div class="mb-3"><label class="form-label">Username</label><input type="text" name="username" class="form-control" required></div>
-            <div class="mb-3"><label class="form-label">Nama Lengkap</label><input type="text" name="nama_lengkap" class="form-control"></div>
-            <div class="mb-3"><label class="form-label">Email</label><input type="email" name="email" class="form-control"></div>
-            <div class="mb-3"><label class="form-label">Level</label>
-              <select name="level" class="form-select">
-                <option value="admin">Admin</option>
-                <option value="editor">Editor</option>
-                <option value="user" selected>User</option>
-              </select>
-            </div>
-            <div class="mb-3"><label class="form-label">Status</label>
-              <select name="status" class="form-select">
-                <option value="N" selected>Aktif</option>
-                <option value="Y">Nonaktif</option>
-              </select>
-            </div>
-            <div class="mb-3"><label class="form-label">Foto</label><input type="file" name="foto" class="form-control"></div>
-          </div>
-          <div class="modal-footer"><button type="submit" class="btn btn-primary">Simpan</button></div>
+<div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="POST" action="{{ url_for('admin.tambah_user') }}" enctype="multipart/form-data">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Tambah User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-      </form>
-    </div>
+        <div class="modal-body">
+          <div class="mb-3"><label>Username</label><input type="text" name="Username" class="form-control" required></div>
+          <div class="mb-3"><label>Nama Lengkap</label><input type="text" name="Nama_Lengkap" class="form-control"></div>
+          <div class="mb-3"><label>Email</label><input type="email" name="Email" class="form-control"></div>
+          <div class="mb-3"><label>Password</label><input type="password" name="password" class="form-control" required></div>
+          <div class="mb-3"><label>Level</label>
+            <select name="level" class="form-select">
+              <option value="admin">Admin</option>
+              <option value="editor">Editor</option>
+              <option value="user" selected>User</option>
+            </select>
+          </div>
+          <div class="mb-3"><label>Status</label>
+            <select name="Blokir" class="form-select">
+              <option value="N" selected>Aktif</option>
+              <option value="Y">Nonaktif</option>
+            </select>
+          </div>
+          <div class="mb-3"><label>Foto</label><input type="file" name="foto" class="form-control"></div>
+        </div>
+        <div class="modal-footer"><button type="submit" class="btn btn-primary">Simpan</button></div>
+      </div>
+    </form>
   </div>
+</div>
+
 
   <!-- Modal Edit User -->
   <div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
@@ -180,25 +189,24 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
-            <!-- Hidden ID harus punya name -->
             <input type="hidden" id="edit-id" name="id">
-            <div class="mb-3"><label class="form-label">Username</label><input type="text" id="edit-username" name="username" class="form-control" required></div>
-            <div class="mb-3"><label class="form-label">Nama Lengkap</label><input type="text" id="edit-nama" name="nama_lengkap" class="form-control"></div>
-            <div class="mb-3"><label class="form-label">Email</label><input type="email" id="edit-email" name="email" class="form-control"></div>
-            <div class="mb-3"><label class="form-label">Level</label>
+            <div class="mb-3"><label>Username</label><input type="text" id="edit-username" name="Username" class="form-control" required></div>
+            <div class="mb-3"><label>Nama Lengkap</label><input type="text" id="edit-nama" name="Nama_Lengkap" class="form-control"></div>
+            <div class="mb-3"><label>Email</label><input type="email" id="edit-email" name="Email" class="form-control"></div>
+            <div class="mb-3"><label>Level</label>
               <select id="edit-level" name="level" class="form-select">
                 <option value="admin">Admin</option>
                 <option value="editor">Editor</option>
                 <option value="user">User</option>
               </select>
             </div>
-            <div class="mb-3"><label class="form-label">Status</label>
-              <select id="edit-status" name="status" class="form-select">
+            <div class="mb-3"><label>Status</label>
+              <select id="edit-status" name="Blokir" class="form-select">
                 <option value="N">Aktif</option>
                 <option value="Y">Nonaktif</option>
               </select>
             </div>
-            <div class="mb-3"><label class="form-label">Foto</label><input type="file" name="foto" class="form-control"></div>
+            <div class="mb-3"><label>Foto</label><input type="file" name="foto" class="form-control"></div>
           </div>
           <div class="modal-footer"><button type="submit" class="btn btn-primary">Simpan Perubahan</button></div>
         </div>
@@ -223,10 +231,8 @@
       document.getElementById('edit-level').value = level;
       document.getElementById('edit-status').value = status;
 
-      // set action form edit sesuai id
       document.getElementById('form-edit').action = "/admin/edit_user/" + id;
     }
   </script>
-
 </body>
 </html>

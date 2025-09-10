@@ -438,10 +438,10 @@ def hapus_polling(id):
 UPLOAD_FOLDER = os.path.join('static', 'uploads', 'users')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# ------------------- Manajemen Users -------------------
+# Tampilkan daftar user
 @admin.route('/manajemen_users')
 def manajemen_users():
-    if 'user' not in session:  # pastikan login dulu
+    if 'user' not in session:
         return redirect(url_for('admin.login'))
 
     conn = get_db()
@@ -451,20 +451,24 @@ def manajemen_users():
     cursor.close()
     conn.close()
 
-    return render_template('admin/manajemen_users.html', users=users)
+    return render_template('admin/manajemen_users.html', users=users)  # <-- ubah di sini
 
-
-# ------------------- Tambah User -------------------
+# Tambah user
 @admin.route('/tambah_user', methods=['POST'])
 def tambah_user():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
 
-    Username = request.form['username']
-    Nama_Lengkap = request.form['nama_lengkap']
-    Email = request.form['email']
+    Username = request.form['Username']
+    Nama_Lengkap = request.form['Nama_Lengkap']
+    Email = request.form['Email']
+    password = request.form['password']
     level = request.form['level']
-    Blokir = request.form['status']
+    Blokir = request.form['Blokir']
+
+    from werkzeug.security import generate_password_hash
+    hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+
 
     Foto = request.files.get('foto')
     Foto_filename = None
@@ -475,9 +479,9 @@ def tambah_user():
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute("""
-        INSERT INTO users (Username, Nama_Lengkap, Email, level, Blokir, Foto)
-        VALUES (%s, %s, %s, %s, %s, %s)
-    """, (Username, Nama_Lengkap, Email, level, Blokir, Foto_filename))
+        INSERT INTO users (Username, Nama_Lengkap, Email, password, level, Blokir, Foto)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+    """, (Username, Nama_Lengkap, Email, hashed_password, level, Blokir, Foto_filename))
     conn.commit()
     cursor.close()
     conn.close()
@@ -485,18 +489,17 @@ def tambah_user():
     flash('User berhasil ditambahkan!', 'success')
     return redirect(url_for('admin.manajemen_users'))
 
-
-# ------------------- Edit User -------------------
+# Edit user
 @admin.route('/edit_user/<int:id>', methods=['POST'])
 def edit_user(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
 
-    Username = request.form['username']
-    Nama_Lengkap = request.form['nama_lengkap']
-    Email = request.form['email']
+    Username = request.form['Username']
+    Nama_Lengkap = request.form['Nama_Lengkap']
+    Email = request.form['Email']
     level = request.form['level']
-    Blokir = request.form['status']
+    Blokir = request.form['Blokir']
 
     Foto = request.files.get('foto')
     Foto_filename = None
@@ -506,7 +509,6 @@ def edit_user(id):
 
     conn = get_db()
     cursor = conn.cursor()
-
     if Foto_filename:
         cursor.execute("""
             UPDATE users 
@@ -519,7 +521,6 @@ def edit_user(id):
             SET Username=%s, Nama_Lengkap=%s, Email=%s, level=%s, Blokir=%s
             WHERE id=%s
         """, (Username, Nama_Lengkap, Email, level, Blokir, id))
-
     conn.commit()
     cursor.close()
     conn.close()
@@ -527,8 +528,7 @@ def edit_user(id):
     flash('User berhasil diupdate!', 'success')
     return redirect(url_for('admin.manajemen_users'))
 
-
-# ------------------- Hapus User -------------------
+# Hapus user
 @admin.route('/hapus_user/<int:id>', methods=['GET'])
 def hapus_user(id):
     if 'user' not in session:
@@ -537,18 +537,14 @@ def hapus_user(id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
 
-    # ambil foto untuk dihapus dari folder
     cursor.execute("SELECT Foto FROM users WHERE id=%s", (id,))
     user = cursor.fetchone()
 
-    # hapus record
     cursor.execute("DELETE FROM users WHERE id=%s", (id,))
     conn.commit()
-
     cursor.close()
     conn.close()
 
-    # hapus file foto jika ada
     if user and user['Foto']:
         foto_path = os.path.join(UPLOAD_FOLDER, user['Foto'])
         if os.path.exists(foto_path):
@@ -556,7 +552,6 @@ def hapus_user(id):
 
     flash('User berhasil dihapus!', 'success')
     return redirect(url_for('admin.manajemen_users'))
-
 
 # ---------------- TAG VIDEO----------------
 
@@ -1990,5 +1985,4 @@ def hapus_halaman_berita(id):
     flash('Berita berhasil dihapus', 'success')
     return redirect(url_for('admin.halaman_berita'))
 
-# ---------------- HALAMAN BARU ----------------
 # ---------------- HALAMAN BARU ----------------

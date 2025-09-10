@@ -587,4 +587,3 @@ def detail_berita(id):
         title=berita['judul'],
         berita=berita
     )
-

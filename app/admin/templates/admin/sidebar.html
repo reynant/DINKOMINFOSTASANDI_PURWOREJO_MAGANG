@@ -388,16 +388,20 @@
             </ul>
           </li>
 
-          <!-- User Management -->
-          <li class="animate-fadeIn delay-700">
-            <a href="#" class="menu-item flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition group">
-              <i class="bi bi-people mr-3 text-lg group-hover:scale-110 transition-transform"></i>
-              <span class="font-medium">Kelola Users</span>
-              <span class="ml-auto bg-yellow-500 text-xs text-white rounded-full px-2 py-1">
-                {{ total_user }}
-              </span>
-            </a>
-          </li>
+    <!-- User Management -->
+<li class="animate-fadeIn delay-700">
+  <a href="{{ url_for('admin.manajemen_users') }}" 
+     class="menu-item flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition group">
+    <i class="bi bi-people mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+    <span class="font-medium">Manajemen Users</span>
+    <span class="ml-auto bg-yellow-500 text-xs text-white rounded-full px-2 py-1">
+      {{ total_user }}
+    </span>
+  </a>
+</li>
+
+
+
 
           <!-- Analytics -->
           <li class="animate-fadeIn delay-800">

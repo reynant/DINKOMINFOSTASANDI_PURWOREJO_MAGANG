@@ -436,33 +436,25 @@
 </body>
 </html>
 
-<div class="max-w-4xl mx-auto mt-6 bg-white shadow rounded p-6">
-    <!-- Judul -->
-    <h1 class="text-2xl font-bold text-gray-800 mb-2">Struktur Organisasi</h1>
 
-    <!-- Info Admin dan Tanggal -->
-    <div class="flex items-center gap-2 text-gray-500 text-xs mb-4">
-      <i class="fa-solid fa-user-circle text-blue-500 text-lg"></i>
-      <span>By administrator</span>
-      <span>•</span>
-      <span>28 Jul 2018, 21:57:28 WIB</span>
-    </div>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8">
+        <div class="max-w-4xl mx-auto bg-white shadow rounded-lg p-6">
+            <h1 class="text-2xl font-bold text-gray-800 mb-2">Struktur Organisasi</h1>
+            <div class="flex items-center gap-2 text-gray-500 text-xs mb-4">
+                <i class="fa-solid fa-user-circle text-blue-500 text-lg"></i>
+                <span>By administrator</span>
+                <span>•</span>
+                <span>28 Jul 2018, 21:57:28 WIB</span>
+            </div>
+            <div class="border rounded overflow-hidden shadow cursor-pointer group relative">
+                <a href="static/img/struktur organisasi.png" target="_blank">
+                    <img src="static/img/struktur organisasi.png" alt="Struktur Organisasi DINKOMINFO Purworejo" class="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105" />
+                </a>
+            </div>
+        </div>
+    </main>
 
-    <!-- Gambar Struktur -->
-<div class="border rounded overflow-hidden shadow cursor-pointer group relative max-w-4xl mx-auto">
-  <a href="static/img/struktur organisasi.png" target="_blank">
-    <img 
-      src="static/img/struktur organisasi.png" 
-      alt="Struktur Organisasi DINKOMINFO Purworejo" 
-      class="w-full max-h-[700px] object-contain transition-transform duration-300 group-hover:scale-105" 
-    />
-  </a>
-</div>
-
-
-</body>
-
-<!-- ===== FOOTER DESAIN BARU DIMULAI DI SINI ===== -->
+    <!-- ===== FOOTER DESAIN BARU DIMULAI DI SINI ===== -->
     <footer class="bg-blue-900 text-blue-200 relative pt-20">
       <!-- Bentuk SVG di atas footer -->
       <div class="absolute top-0 left-0 w-full overflow-hidden leading-[0] -mt-1">
@@ -557,7 +549,7 @@
       const aduanButton = document.getElementById('kanalAduanButton');
       const popup = document.getElementById('popupKanalAduan');
       const popupContent = document.getElementById('popupContent');
-      const closeButton = document.getElementById('tutupPopup');
+      const popupCloseButton = document.getElementById('tutupPopup');
 
       const openPopup = () => {
         popup.classList.remove('hidden');
@@ -577,7 +569,7 @@
       };
 
       aduanButton.addEventListener('click', openPopup);
-      closeButton.addEventListener('click', closePopup);
+      popupCloseButton.addEventListener('click', closePopup);
       
       // Menutup popup jika mengklik di luar area kontennya
       popup.addEventListener('click', (event) => {

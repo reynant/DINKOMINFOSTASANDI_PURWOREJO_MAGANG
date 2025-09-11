@@ -444,15 +444,16 @@
     <h1 class="text-3xl md:text-4xl font-bold text-blue-900 mb-10 text-center">Berita Terkini</h1>
 
     {% if berita_list %}
-      <div class="space-y-10">
-        {% for berita in berita_list %}
-          <div class="bg-white rounded-xl shadow-md overflow-hidden">
-            <!-- Foto Berita -->
-            {% if berita.gambar %}
-              <img src="{{ url_for('static', filename='uploads/' ~ berita.gambar) }}" 
-                   alt="{{ berita.judul }}" 
-                   class="w-full max-h-96 object-cover">
-            {% endif %}
+  <div class="space-y-10">
+    {% for berita in berita_list %}
+      <div class="bg-white rounded-xl shadow-md overflow-hidden">
+        <!-- Foto Berita -->
+        {% if berita.gambar %}
+          <img src="{{ url_for('static', filename= berita.gambar | replace('C:\\Users\\LENOVO\\OneDrive\\Documents\\Kerja Praktek\\Code\\DINKOMINFOSTASANDI_PURWOREJO_MAGANG\\app\\static\\', '') ) }}" 
+               alt="{{ berita.judul }}" 
+               class="w-full max-h-96 object-cover">
+        {% endif %}
+
 
             <div class="p-6">
               <!-- Judul -->

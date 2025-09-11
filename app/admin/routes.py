@@ -1,3 +1,4 @@
+from flask import render_template, request, redirect, url_for, flash
 import datetime
 import hashlib
 from flask import Blueprint, current_app, render_template, request, redirect, url_for, session, flash
@@ -11,73 +12,95 @@ from werkzeug.utils import secure_filename
 from flask_wtf.csrf import CSRFProtect
 from functools import wraps
 
-admin = Blueprint('admin', __name__, template_folder='templates')
+admin_bp = Blueprint('admin', __name__, template_folder='templates')
 csrf = CSRFProtect()
+
 
 def get_db():
     """Fungsi helper untuk koneksi ke database MySQL."""
     return mysql.connector.connect(
-        host='localhost',
-        user='root',
-        password='',
-        database='db_dinkominfostasandi_dummy'
+        host=current_app.config.get('MYSQL_HOST', 'localhost'),
+        user=current_app.config.get('MYSQL_USER', 'root'),
+        password=current_app.config.get('MYSQL_PASSWORD', ''),
+        database=current_app.config.get(
+            'MYSQL_DB', 'db_dinkominfostasandi_dummy')
     )
 
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'user' not in session:
-            flash('Silakan login terlebih dahulu', 'warning')
-            return redirect(url_for('admin.login'))
-        return f(*args, **kwargs)
-    return decorated_function
+# --- DECORATOR BARU UNTUK MEMERIKSA LEVEL AKSES ---
 
-@admin.route('/login', methods=['GET', 'POST'])
+
+def role_required(allowed_roles):
+    """
+    Decorator untuk memeriksa apakah level pengguna diizinkan mengakses rute.
+    """
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            # 1. Cek apakah pengguna sudah login
+            if 'user_level' not in session:
+                flash('Silakan login terlebih dahulu.', 'warning')
+                return redirect(url_for('admin.login'))
+
+            # 2. Cek apakah level pengguna ada di dalam daftar yang diizinkan
+            user_level = session['user_level']
+            if user_level not in allowed_roles:
+                flash('Anda tidak memiliki izin untuk mengakses halaman ini.', 'danger')
+                return redirect(url_for('admin.dashboard'))
+
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+
+# --- RUTE LOGIN DAN LOGOUT (DIPERBARUI) ---
+
+
+@admin_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    # If user is already logged in, redirect to dashboard
-    if 'user' in session:
+    if 'user_level' in session:
         return redirect(url_for('admin.dashboard'))
 
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        
+
         try:
             conn = get_db()
             cursor = conn.cursor(dictionary=True, buffered=True)
-            
-            # Get user with matching username
-            cursor.execute('SELECT * FROM users WHERE Username = %s', (username,))
-            user = cursor.fetchone()  # hasil diambil, aman
-            
+
+            # Mengambil data user termasuk kolom 'level'
+            cursor.execute(
+                'SELECT * FROM users WHERE username = %s', (username,))
+            user = cursor.fetchone()
+
             if user:
-                # Hash the input password
                 hashed_password = hashlib.sha1(password.encode()).hexdigest()
-                
-                # Check if passwords match
                 if hashed_password == user['password']:
-                    # Store user info in session
-                    session['user'] = user['Username']
+                    # Menyimpan informasi pengguna dan level ke session
+                    session['user'] = user['username']
+                    # Kunci utama hak akses
                     session['user_level'] = user['level']
-                    
+                    session['user_id'] = user['id']
+
                     flash('Login berhasil!', 'success')
                     return redirect(url_for('admin.dashboard'))
-                
+
             flash('Username atau password salah!', 'danger')
-            
         except mysql.connector.Error as err:
             flash(f'Database error: {err}', 'danger')
         finally:
-            if 'cursor' in locals() and cursor:
+            if 'cursor' in locals():
                 cursor.close()
-            if 'conn' in locals() and conn:
+            if 'conn' in locals():
                 conn.close()
-                
+
     return render_template('admin/login.html')
 
+# --- RUTE DASHBOARD ---
 
-@admin.route('/dashboard')
-@login_required
+
+@admin_bp.route('/dashboard')
+# Semua level bisa melihat dashboard
+@role_required(['Admin', 'Editor', 'Operator', 'Kontributor'])
 def dashboard():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -99,21 +122,19 @@ def dashboard():
         komentar_terbaru=[]  # kosongkan
     )
 
-@admin.route('/logout')
+
+@admin_bp.route('/logout')
 def logout():
-    # Clear session data
-    session.clear()
+    # Menghapus semua data sesi pengguna
     session.pop('user', None)
     session.pop('user_level', None)
-    
-    # Add logout message
-    flash('Anda telah berhasil logout', 'success')
-    
-    # Redirect to login page
+    session.pop('user_id', None)
+    flash('Anda telah berhasil logout.', 'success')
     return redirect(url_for('admin.login'))
-
 # ------------------ SENSOR KOMENTAR ------------------
-@admin.route('/sensor_komentar')
+
+
+@admin_bp.route('/sensor_komentar')
 def sensor_komentar():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -127,7 +148,8 @@ def sensor_komentar():
 
     return render_template('admin/sensor_komentar.html', data=data)
 
-@admin.route('/tambah_sensor', methods=['POST'])
+
+@admin_bp.route('/tambah_sensor', methods=['POST'])
 def tambah_sensor():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -147,7 +169,7 @@ def tambah_sensor():
     return redirect(url_for('admin.sensor_komentar'))
 
 
-@admin.route('/edit_sensor/<int:id>', methods=['POST'])
+@admin_bp.route('/edit_sensor/<int:id>', methods=['POST'])
 def edit_sensor(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -167,8 +189,7 @@ def edit_sensor(id):
     return redirect(url_for('admin.sensor_komentar'))
 
 
-
-@admin.route('/hapus_sensor/<int:id>')
+@admin_bp.route('/hapus_sensor/<int:id>')
 def hapus_sensor(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -183,24 +204,27 @@ def hapus_sensor(id):
 
 
 # ------------------ KATEGORI BERITA------------------
-@admin.route('/kategori_berita')
+@admin_bp.route('/kategori_berita')
+@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
 def kategori_berita():
     db = get_db()
     cur = db.cursor(dictionary=True)
-    cur.execute("SELECT id, nama_kategori, link, artikel, posisi, aktif FROM kategori_berita ORDER BY posisi, id")
+    cur.execute(
+        "SELECT id, nama_kategori, link, artikel, posisi, aktif FROM kategori_berita ORDER BY posisi, id")
     kategori = cur.fetchall()
     cur.close()
     db.close()
     return render_template('admin/kategori_berita.html', kategori=kategori)
 
-@admin.route('/tambah_kategori', methods=['POST'])
-def tambah_kategori():
-    nama   = request.form.get('nama_kategori', '').strip()
-    link   = request.form.get('link', '').strip()
-    posisi = request.form.get('posisi', '0').strip()
-    aktif  = request.form.get('aktif', 'Y').strip()
 
-     # fallback angka
+@admin_bp.route('/tambah_kategori', methods=['POST'])
+def tambah_kategori():
+    nama = request.form.get('nama_kategori', '').strip()
+    link = request.form.get('link', '').strip()
+    posisi = request.form.get('posisi', '0').strip()
+    aktif = request.form.get('aktif', 'Y').strip()
+
+    # fallback angka
     try:
         posisi_int = int(posisi)
     except ValueError:
@@ -217,12 +241,13 @@ def tambah_kategori():
     db.close()
     return redirect(url_for('admin.kategori_berita'))
 
-@admin.route('/edit_kategori/<int:id>', methods=['POST'])
+
+@admin_bp.route('/edit_kategori/<int:id>', methods=['POST'])
 def edit_kategori(id):
-    nama   = request.form.get('nama_kategori', '').strip()
-    link   = request.form.get('link', '').strip()
+    nama = request.form.get('nama_kategori', '').strip()
+    link = request.form.get('link', '').strip()
     posisi = request.form.get('posisi', '0').strip()
-    aktif  = request.form.get('aktif', 'Y').strip()
+    aktif = request.form.get('aktif', 'Y').strip()
 
     try:
         posisi_int = int(posisi)
@@ -240,7 +265,8 @@ def edit_kategori(id):
     db.close()
     return redirect(url_for('admin.kategori_berita'))
 
-@admin.route('/hapus_kategori/<int:id>')
+
+@admin_bp.route('/hapus_kategori/<int:id>')
 def hapus_kategori(id):
     db = get_db()
     cur = db.cursor()
@@ -252,7 +278,7 @@ def hapus_kategori(id):
 
 
 # ------------------ VIDEO------------------
-@admin.route('/video')
+@admin_bp.route('/video')
 def video():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -265,7 +291,7 @@ def video():
     return render_template('admin/video.html', data=data)
 
 
-@admin.route('/tambah_video', methods=['POST'])
+@admin_bp.route('/tambah_video', methods=['POST'])
 def tambah_video():
     judul = request.form['judul']
     tanggal = request.form['tanggal']
@@ -282,7 +308,7 @@ def tambah_video():
     return redirect(url_for('admin.video'))
 
 
-@admin.route('/edit_video/<int:id>', methods=['POST'])
+@admin_bp.route('/edit_video/<int:id>', methods=['POST'])
 def edit_video(id):
     judul = request.form['judul']
     tanggal = request.form['tanggal']
@@ -299,7 +325,7 @@ def edit_video(id):
     return redirect(url_for('admin.video'))
 
 
-@admin.route('/hapus_video/<int:id>')
+@admin_bp.route('/hapus_video/<int:id>')
 def hapus_video(id):
     conn = get_db()
     cursor = conn.cursor()
@@ -310,7 +336,7 @@ def hapus_video(id):
 
 
 # ------------------ TAG BERITA ------------------
-@admin.route('/tag_berita')
+@admin_bp.route('/tag_berita')
 def tag_berita():
     db = get_db()
     cur = db.cursor(dictionary=True)
@@ -320,7 +346,8 @@ def tag_berita():
     db.close()
     return render_template('admin/tag_berita.html', tag=tag)
 
-@admin.route('/tambah_tag', methods=['POST'])
+
+@admin_bp.route('/tambah_tag', methods=['POST'])
 def tambah_tag():
     nama = request.form.get('nama_tag', '').strip()
     link = request.form.get('link', '').strip()
@@ -336,7 +363,8 @@ def tambah_tag():
     db.close()
     return redirect(url_for('admin.tag_berita'))
 
-@admin.route('/edit_tag/<int:id>', methods=['POST'])
+
+@admin_bp.route('/edit_tag/<int:id>', methods=['POST'])
 def edit_tag(id):
     nama = request.form.get('nama_tag', '').strip()
     link = request.form.get('link', '').strip()
@@ -352,7 +380,8 @@ def edit_tag(id):
     db.close()
     return redirect(url_for('admin.tag_berita'))
 
-@admin.route('/hapus_tag/<int:id>')
+
+@admin_bp.route('/hapus_tag/<int:id>')
 def hapus_tag(id):
     db = get_db()
     cur = db.cursor()
@@ -363,26 +392,25 @@ def hapus_tag(id):
     return redirect(url_for('admin.tag_berita'))
 
 
-
-
-
 # ------------------ JAJAk PENDAPAT ------------------
-@admin.route('/jajak_pendapat')
+@admin_bp.route('/jajak_pendapat')
 def jajak_pendapat():
     db = get_db()
     cur = db.cursor(dictionary=True)
-    cur.execute("SELECT id, pilihan, status, rating, aktif FROM jejak_pendapat ORDER BY id DESC")
+    cur.execute(
+        "SELECT id, pilihan, status, rating, aktif FROM jejak_pendapat ORDER BY id DESC")
     polling = cur.fetchall()
     cur.close()
     db.close()
     return render_template('admin/jejak_pendapat.html', polling=polling)
 
-@admin.route('/tambah_polling', methods=['POST'])
+
+@admin_bp.route('/tambah_polling', methods=['POST'])
 def tambah_polling():
     pilihan = request.form.get('pilihan', '').strip()
-    status  = request.form.get('status', '').strip()
-    rating  = request.form.get('rating', '0').strip()
-    aktif   = request.form.get('aktif', 'N').strip()
+    status = request.form.get('status', '').strip()
+    rating = request.form.get('rating', '0').strip()
+    aktif = request.form.get('aktif', 'N').strip()
 
     try:
         rating_int = int(rating)
@@ -400,12 +428,13 @@ def tambah_polling():
     db.close()
     return redirect(url_for('admin.jajak_pendapat'))
 
-@admin.route('/edit_polling/<int:id>', methods=['POST'])
+
+@admin_bp.route('/edit_polling/<int:id>', methods=['POST'])
 def edit_polling(id):
     pilihan = request.form.get('pilihan', '').strip()
-    status  = request.form.get('status', '').strip()
-    rating  = request.form.get('rating', '0').strip()
-    aktif   = request.form.get('aktif', 'N').strip()
+    status = request.form.get('status', '').strip()
+    rating = request.form.get('rating', '0').strip()
+    aktif = request.form.get('aktif', 'N').strip()
 
     try:
         rating_int = int(rating)
@@ -423,7 +452,8 @@ def edit_polling(id):
     db.close()
     return redirect(url_for('admin.jajak_pendapat'))
 
-@admin.route('/hapus_polling/<int:id>')
+
+@admin_bp.route('/hapus_polling/<int:id>')
 def hapus_polling(id):
     db = get_db()
     cur = db.cursor()
@@ -439,7 +469,10 @@ UPLOAD_FOLDER = os.path.join('static', 'uploads', 'users')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Tampilkan daftar user
-@admin.route('/manajemen_users')
+
+
+@admin_bp.route('/manajemen_users')
+@role_required(['Admin'])  # Hanya Admin
 def manajemen_users():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -451,15 +484,19 @@ def manajemen_users():
     cursor.close()
     conn.close()
 
-    return render_template('admin/manajemen_users.html', users=users)  # <-- ubah di sini
+    # <-- ubah di sini
+    return render_template('admin/manajemen_users.html', users=users)
 
 # Tambah user
-@admin.route('/tambah_user', methods=['POST'])
+
+
+@admin_bp.route('/tambah_user', methods=['POST'])
+@role_required(['Admin'])  # Hanya Admin
 def tambah_user():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
 
-    Username = request.form['Username']
+    username = request.form['username']
     Nama_Lengkap = request.form['Nama_Lengkap']
     Email = request.form['Email']
     password = request.form['password']
@@ -468,7 +505,6 @@ def tambah_user():
 
     from werkzeug.security import generate_password_hash
     hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-
 
     Foto = request.files.get('foto')
     Foto_filename = None
@@ -479,9 +515,9 @@ def tambah_user():
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute("""
-        INSERT INTO users (Username, Nama_Lengkap, Email, password, level, Blokir, Foto)
+        INSERT INTO users (username, Nama_Lengkap, Email, password, level, Blokir, Foto)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
-    """, (Username, Nama_Lengkap, Email, hashed_password, level, Blokir, Foto_filename))
+    """, (username, Nama_Lengkap, Email, hashed_password, level, Blokir, Foto_filename))
     conn.commit()
     cursor.close()
     conn.close()
@@ -490,12 +526,15 @@ def tambah_user():
     return redirect(url_for('admin.manajemen_users'))
 
 # Edit user
-@admin.route('/edit_user/<int:id>', methods=['POST'])
+
+
+@admin_bp.route('/edit_user/<int:id>', methods=['POST'])
+@role_required(['Admin'])  # Hanya Admin
 def edit_user(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
 
-    Username = request.form['Username']
+    username = request.form['username']
     Nama_Lengkap = request.form['Nama_Lengkap']
     Email = request.form['Email']
     level = request.form['level']
@@ -512,15 +551,15 @@ def edit_user(id):
     if Foto_filename:
         cursor.execute("""
             UPDATE users 
-            SET Username=%s, Nama_Lengkap=%s, Email=%s, level=%s, Blokir=%s, Foto=%s
+            SET username=%s, Nama_Lengkap=%s, Email=%s, level=%s, Blokir=%s, Foto=%s
             WHERE id=%s
-        """, (Username, Nama_Lengkap, Email, level, Blokir, Foto_filename, id))
+        """, (username, Nama_Lengkap, Email, level, Blokir, Foto_filename, id))
     else:
         cursor.execute("""
             UPDATE users 
-            SET Username=%s, Nama_Lengkap=%s, Email=%s, level=%s, Blokir=%s
+            SET username=%s, Nama_Lengkap=%s, Email=%s, level=%s, Blokir=%s
             WHERE id=%s
-        """, (Username, Nama_Lengkap, Email, level, Blokir, id))
+        """, (username, Nama_Lengkap, Email, level, Blokir, id))
     conn.commit()
     cursor.close()
     conn.close()
@@ -529,7 +568,10 @@ def edit_user(id):
     return redirect(url_for('admin.manajemen_users'))
 
 # Hapus user
-@admin.route('/hapus_user/<int:id>', methods=['GET'])
+
+
+@admin_bp.route('/hapus_user/<int:id>', methods=['GET'])
+@role_required(['Admin'])  # Hanya Admin
 def hapus_user(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -555,26 +597,28 @@ def hapus_user(id):
 
 # ---------------- TAG VIDEO----------------
 
-@admin.route('/tag_video')
+
+@admin_bp.route('/tag_video')
 def tag_video():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
 
     db = get_db()
     cur = db.cursor(dictionary=True)
-    cur.execute("SELECT id, nama_tag, link_video, posisi, aktif FROM tag_video ORDER BY posisi, id")
+    cur.execute(
+        "SELECT id, nama_tag, link_video, posisi, aktif FROM tag_video ORDER BY posisi, id")
     data = cur.fetchall()
     cur.close()
     db.close()
     return render_template('admin/tag_video.html', data=data)
 
 
-@admin.route('/tambah_tag_video', methods=['POST'])
+@admin_bp.route('/tambah_tag_video', methods=['POST'])
 def tambah_tag_video():
-    nama   = request.form.get('nama_tag', '').strip()
-    link   = request.form.get('link_video', '').strip()
+    nama = request.form.get('nama_tag', '').strip()
+    link = request.form.get('link_video', '').strip()
     posisi = request.form.get('posisi', '0').strip()
-    aktif  = 1 if request.form.get('aktif') == '1' else 0
+    aktif = 1 if request.form.get('aktif') == '1' else 0
 
     try:
         posisi_int = int(posisi)
@@ -593,12 +637,12 @@ def tambah_tag_video():
     return redirect(url_for('admin.tag_video'))
 
 
-@admin.route('/edit_tag_video/<int:id>', methods=['POST'])
+@admin_bp.route('/edit_tag_video/<int:id>', methods=['POST'])
 def edit_tag_video(id):
-    nama   = request.form.get('nama_tag', '').strip()
-    link   = request.form.get('link_video', '').strip()
+    nama = request.form.get('nama_tag', '').strip()
+    link = request.form.get('link_video', '').strip()
     posisi = request.form.get('posisi', '0').strip()
-    aktif  = 1 if request.form.get('aktif') == '1' else 0
+    aktif = 1 if request.form.get('aktif') == '1' else 0
 
     try:
         posisi_int = int(posisi)
@@ -617,7 +661,7 @@ def edit_tag_video(id):
     return redirect(url_for('admin.tag_video'))
 
 
-@admin.route('/hapus_tag_video/<int:id>', methods=['POST'])
+@admin_bp.route('/hapus_tag_video/<int:id>', methods=['POST'])
 def hapus_tag_video(id):
     db = get_db()
     cur = db.cursor()
@@ -628,13 +672,15 @@ def hapus_tag_video(id):
     return redirect(url_for('admin.tag_video'))
 
 # ---------------- DOWNLOAD AREA----------------
-@admin.route('/download_area')
+
+
+@admin_bp.route('/download_area')
 def download_area():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
     cursor.execute('SELECT * FROM download_area ORDER BY No ASC')
     daftar_file = cursor.fetchall()
-    
+
     # Format tanggal untuk tampilan
     for file in daftar_file:
         if file['Tanggal']:
@@ -645,43 +691,46 @@ def download_area():
             except:
                 # Jika format tidak sesuai, biarkan aslinya
                 pass
-    
+
     cursor.close()
     conn.close()
     return render_template('admin/download_area.html', daftar_file=daftar_file)
 
-@admin.route('/tambah_download', methods=['POST'])
+
+@admin_bp.route('/tambah_download', methods=['POST'])
 def tambah_download():
     judul = request.form['judul']
     link = request.form['link']
     hits = request.form['hits']
     tanggal = request.form['tanggal']  # Format: YYYY-MM-DD
-    
+
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute('INSERT INTO download_area (Judul, Link, Hits, Tanggal) VALUES (%s, %s, %s, %s)', 
+    cursor.execute('INSERT INTO download_area (Judul, Link, Hits, Tanggal) VALUES (%s, %s, %s, %s)',
                    (judul, link, hits, tanggal))
     conn.commit()
     cursor.close()
     conn.close()
     return redirect(url_for('admin.download_area'))
 
-@admin.route('/edit_download/<int:no>', methods=['POST'])
+
+@admin_bp.route('/edit_download/<int:no>', methods=['POST'])
 def edit_download(no):
     judul = request.form['judul']
     link = request.form['link']
     tanggal = request.form['tanggal']  # Format: YYYY-MM-DD
-    
+
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute('UPDATE download_area SET Judul=%s, Link=%s, Tanggal=%s WHERE No=%s', 
+    cursor.execute('UPDATE download_area SET Judul=%s, Link=%s, Tanggal=%s WHERE No=%s',
                    (judul, link, tanggal, no))
     conn.commit()
     cursor.close()
     conn.close()
     return redirect(url_for('admin.download_area'))
 
-@admin.route('/hapus_download/<int:no>', methods=['POST'])
+
+@admin_bp.route('/hapus_download/<int:no>', methods=['POST'])
 def hapus_download(no):
     conn = get_db()
     cursor = conn.cursor()
@@ -692,9 +741,9 @@ def hapus_download(no):
     return redirect(url_for('admin.download_area'))
 
 
-
 # ---------------- AGENDA----------------
-@admin.route('/agenda_admin', endpoint='agenda_admin')
+@admin_bp.route('/agenda_admin')
+@role_required(['Admin', 'Operator'])
 def agenda_admin():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -708,7 +757,8 @@ def agenda_admin():
 
     return render_template('admin/agenda_admin.html', data=data)
 
-@admin.route('/tambah_agenda', methods=['POST'])
+
+@admin_bp.route('/tambah_agenda', methods=['POST'])
 def tambah_agenda():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -734,7 +784,8 @@ def tambah_agenda():
     flash('Agenda berhasil ditambahkan!', 'success')
     return redirect(url_for('admin.agenda_admin'))
 
-@admin.route('/edit_agenda/<int:id>', methods=['POST'])
+
+@admin_bp.route('/edit_agenda/<int:id>', methods=['POST'])
 def edit_agenda(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -760,7 +811,8 @@ def edit_agenda(id):
     flash('Agenda berhasil diubah!', 'success')
     return redirect(url_for('admin.agenda_admin'))
 
-@admin.route('/hapus_agenda/<int:id>')
+
+@admin_bp.route('/hapus_agenda/<int:id>')
 def hapus_agenda(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -775,7 +827,10 @@ def hapus_agenda(id):
     return redirect(url_for('admin.agenda_admin'))
 
 # ---------------- IDENTITAS WEBSITE----------------
-@admin.route('/identitas_website', methods=['GET', 'POST'])
+
+
+@admin_bp.route('/identitas_website', methods=['GET', 'POST'])
+@role_required(['Admin', 'Operator'])  # Identitas website sebagai tampilan
 def identitas_website():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -785,15 +840,15 @@ def identitas_website():
 
     if request.method == 'POST':
         # Ambil data form
-        nama_website   = request.form.get('nama_website', '').strip()
-        email          = request.form.get('email', '').strip()
-        domain         = request.form.get('domain', '').strip()
+        nama_website = request.form.get('nama_website', '').strip()
+        email = request.form.get('email', '').strip()
+        domain = request.form.get('domain', '').strip()
         sosial_network = request.form.get('sosial_network', '').strip()
-        no_rekening    = request.form.get('no_rekening', '').strip()
-        no_telpon      = request.form.get('no_telpon', '').strip()
+        no_rekening = request.form.get('no_rekening', '').strip()
+        no_telpon = request.form.get('no_telpon', '').strip()
         meta_deskripsi = request.form.get('meta_deskripsi', '').strip()
-        meta_keyword   = request.form.get('meta_keyword', '').strip()
-        google_maps    = request.form.get('google_maps', '').strip()
+        meta_keyword = request.form.get('meta_keyword', '').strip()
+        google_maps = request.form.get('google_maps', '').strip()
 
         # Upload favicon jika ada
         favicon_file = request.files.get('favicon')
@@ -865,7 +920,11 @@ def identitas_website():
 # ------------------- ROUTES BERITA -------------------
 
 # Halaman daftar berita
-@admin.route('/berita')
+
+
+# --- RUTE BERITA (EDITOR & KONTRIBUTOR) ---
+@admin_bp.route('/berita')
+@role_required(['Admin', 'Editor', 'Kontributor'])
 def berita():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -881,7 +940,8 @@ def berita():
 
 
 # Tambah berita
-@admin.route('/berita/tambah', methods=['POST'])
+@admin_bp.route('/berita/tambah', methods=['POST'])
+@role_required(['Admin', 'Editor', 'Kontributor'])
 def tambah_berita():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -896,7 +956,17 @@ def tambah_berita():
     tag = request.form.get('tag')
     tanggal = request.form['tanggal']
     waktu_posting = request.form['waktu_posting']
-    status = request.form['status']   # <-- langsung ambil dari form, ga fallback
+    # <-- langsung ambil dari form, ga fallback
+    status = request.form['status']
+
+    # Kontributor hanya boleh menyimpan sebagai 'draft'
+    if session['user_level'] == 'Kontributor' and status == 'publish':
+        flash('Anda tidak memiliki izin untuk mempublikasikan berita.', 'danger')
+        return redirect(url_for('admin.berita'))
+
+    # Lanjutkan proses penambahan berita
+    flash("Berita berhasil ditambahkan!", "success")
+    return redirect(url_for('admin.berita'))
 
     # Upload gambar
     gambar = None
@@ -929,7 +999,8 @@ def tambah_berita():
 
 
 # Edit berita
-@admin.route('/berita/edit/<int:id>', methods=['POST'])
+@admin_bp.route('/berita/edit/<int:id>', methods=['POST'])
+@role_required(['Admin', 'Editor'])  # Hanya Admin dan Editor yang bisa edit
 def edit_berita(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -988,7 +1059,8 @@ def edit_berita(id):
 
 
 # Hapus berita
-@admin.route('/berita/hapus/<int:id>', methods=['POST'])
+@admin_bp.route('/berita/hapus/<int:id>', methods=['POST'])
+@role_required(['Admin', 'Editor'])  # Hanya Admin dan Editor yang bisa hapus
 def hapus_berita(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1004,14 +1076,18 @@ def hapus_berita(id):
     return redirect(url_for('admin.berita'))
 # ---------------- HALAMAN BARU ----------------
 # Route untuk menampilkan halaman_baru
-@admin.route('/halaman_baru')
+
+
+@admin_bp.route('/halaman_baru')
+@role_required(['Admin']) # Kategori dipegang Admin
 def halaman_baru():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
-    
+
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute('SELECT id, judul, link, tanggal_posting FROM halaman_baru ORDER BY tanggal_posting DESC')
+    cursor.execute(
+        'SELECT id, judul, link, tanggal_posting FROM halaman_baru ORDER BY tanggal_posting DESC')
     daftar_halaman = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -1020,7 +1096,8 @@ def halaman_baru():
 
 
 # Tambah halaman baru
-@admin.route('/tambah_halaman', methods=['POST'])
+@admin_bp.route('/tambah_halaman', methods=['POST'])
+@role_required(['Admin']) # Kategori dipegang Admin
 def tambah_halaman():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1044,7 +1121,8 @@ def tambah_halaman():
 
 
 # Edit halaman
-@admin.route('/edit_halaman/<int:id>', methods=['POST'])
+@admin_bp.route('/edit_halaman/<int:id>', methods=['POST'])
+@role_required(['Admin']) # Kategori dipegang Admin
 def edit_halaman(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1069,7 +1147,8 @@ def edit_halaman(id):
 
 
 # Hapus halaman
-@admin.route('/hapus_halaman/<int:id>', methods=['POST'])
+@admin_bp.route('/hapus_halaman/<int:id>', methods=['POST'])
+@role_required(['Admin']) # Kategori dipegang Admin
 def hapus_halaman(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1085,7 +1164,10 @@ def hapus_halaman(id):
     return redirect(url_for('admin.halaman_baru'))
 
 # ---------------- ALAMAT KONTAK  ----------------
-@admin.route('/alamat_kontak')
+
+
+@admin_bp.route('/alamat_kontak')
+@role_required(['Admin']) # Kategori dipegang Admin
 def alamat_kontak():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1099,7 +1181,9 @@ def alamat_kontak():
 
     return render_template('admin/alamat_kontak.html', daftar_kontak=daftar_kontak)
 
-@admin.route('/tambah_kontak', methods=['POST'])
+
+@admin_bp.route('/tambah_kontak', methods=['POST'])
+@role_required(['Admin']) # Kategori dipegang Admin
 def tambah_kontak():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1122,7 +1206,9 @@ def tambah_kontak():
     flash("Alamat kontak berhasil ditambahkan!", "success")
     return redirect(url_for('admin.alamat_kontak'))
 
-@admin.route('/edit_kontak/<int:id>', methods=['POST'])
+
+@admin_bp.route('/edit_kontak/<int:id>', methods=['POST'])
+@role_required(['Admin']) # Kategori dipegang Admin
 def edit_kontak(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1144,7 +1230,9 @@ def edit_kontak(id):
     flash("Alamat kontak berhasil diperbarui!", "success")
     return redirect(url_for('admin.alamat_kontak'))
 
-@admin.route('/hapus_kontak/<int:id>', methods=['POST'])
+
+@admin_bp.route('/hapus_kontak/<int:id>', methods=['POST'])
+@role_required(['Admin']) # Kategori dipegang Admin
 def hapus_kontak(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1160,21 +1248,27 @@ def hapus_kontak(id):
     return redirect(url_for('admin.alamat_kontak'))
 
 # ---------------- KOMENTAR BERITA  ----------------
-@admin.route('/komentar_berita')
+
+
+@admin_bp.route('/komentar_berita')
+@role_required(['Admin']) # Kategori dipegang Admin
 def komentar_berita():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
 
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM komentar_berita ORDER BY tanggal_komentar DESC")
+    cursor.execute(
+        "SELECT * FROM komentar_berita ORDER BY tanggal_komentar DESC")
     daftar_komentar = cursor.fetchall()
     cursor.close()
     conn.close()
 
     return render_template('admin/komentar_berita.html', daftar_komentar=daftar_komentar)
 
-@admin.route('/tambah_komentar', methods=['POST'])
+
+@admin_bp.route('/tambah_komentar', methods=['POST'])
+@role_required(['Admin']) # Kategori dipegang Admin
 def tambah_komentar():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1195,7 +1289,9 @@ def tambah_komentar():
 
     return redirect(url_for('admin.komentar_berita'))
 
-@admin.route('/edit_komentar/<int:id>', methods=['POST'])
+
+@admin_bp.route('/edit_komentar/<int:id>', methods=['POST'])
+@role_required(['Admin']) # Kategori dipegang Admin
 def edit_komentar(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1216,7 +1312,9 @@ def edit_komentar(id):
 
     return redirect(url_for('admin.komentar_berita'))
 
-@admin.route('/hapus_komentar/<int:id>', methods=['POST'])
+
+@admin_bp.route('/hapus_komentar/<int:id>', methods=['POST'])
+@role_required(['Admin']) # Kategori dipegang Admin
 def hapus_komentar(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1232,7 +1330,8 @@ def hapus_komentar(id):
 
 
 # ---------------- SEKILAS INFO   ----------------
-@admin.route('/sekilas_info')
+@admin_bp.route('/sekilas_info')
+@role_required(['Admin', 'Operator'])  # Sekilas info sebagai pengumuman
 def sekilas_info():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1247,7 +1346,8 @@ def sekilas_info():
     return render_template('admin/sekilas_info.html', sekilas=data)
 
 
-@admin.route('/tambah_sekilas', methods=['POST'])
+@admin_bp.route('/tambah_sekilas', methods=['POST'])
+@role_required(['Admin', 'Operator'])  # Sekilas info sebagai pengumuman
 def tambah_sekilas():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1263,12 +1363,14 @@ def tambah_sekilas():
     filename = None
     if foto and allowed_file(foto.filename):
         filename = secure_filename(foto.filename)
-        upload_path = os.path.join(current_app.root_path, 'static/uploads/sekilas_info', filename)
+        upload_path = os.path.join(
+            current_app.root_path, 'static/uploads/sekilas_info', filename)
         # rename jika sudah ada
         if os.path.exists(upload_path):
             name, ext = os.path.splitext(filename)
             filename = f"{name}_{int(time.time())}{ext}"
-            upload_path = os.path.join(current_app.root_path, 'static/uploads/sekilas_info', filename)
+            upload_path = os.path.join(
+                current_app.root_path, 'static/uploads/sekilas_info', filename)
         foto.save(upload_path)
 
     conn = get_db()
@@ -1285,7 +1387,8 @@ def tambah_sekilas():
     return redirect(url_for('admin.sekilas_info'))
 
 
-@admin.route('/edit_sekilas/<int:id>', methods=['POST'])
+@admin_bp.route('/edit_sekilas/<int:id>', methods=['POST'])
+@role_required(['Admin', 'Operator'])  # Sekilas info sebagai pengumuman
 def edit_sekilas(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1306,11 +1409,13 @@ def edit_sekilas(id):
 
     if foto and allowed_file(foto.filename):
         filename = secure_filename(foto.filename)
-        upload_path = os.path.join(current_app.root_path, 'static/uploads/sekilas_info', filename)
+        upload_path = os.path.join(
+            current_app.root_path, 'static/uploads/sekilas_info', filename)
         if os.path.exists(upload_path):
             name, ext = os.path.splitext(filename)
             filename = f"{name}_{int(time.time())}{ext}"
-            upload_path = os.path.join(current_app.root_path, 'static/uploads/sekilas_info', filename)
+            upload_path = os.path.join(
+                current_app.root_path, 'static/uploads/sekilas_info', filename)
         foto.save(upload_path)
 
     cursor.execute(
@@ -1325,7 +1430,8 @@ def edit_sekilas(id):
     return redirect(url_for('admin.sekilas_info'))
 
 
-@admin.route('/hapus_sekilas/<int:id>')
+@admin_bp.route('/hapus_sekilas/<int:id>')
+@role_required(['Admin', 'Operator'])  # Sekilas info sebagai pengumuman
 def hapus_sekilas(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1337,7 +1443,8 @@ def hapus_sekilas(id):
 
     # hapus file foto
     if row and row['foto']:
-        file_path = os.path.join(current_app.root_path, 'static/uploads/sekilas_info', row['foto'])
+        file_path = os.path.join(
+            current_app.root_path, 'static/uploads/sekilas_info', row['foto'])
         if os.path.exists(file_path):
             os.remove(file_path)
 
@@ -1350,7 +1457,10 @@ def hapus_sekilas(id):
     return redirect(url_for('admin.sekilas_info'))
 
 # ---------------- BERITA FOTO ----------------
-@admin.route('/berita_foto')
+
+
+@admin_bp.route('/berita_foto')
+@role_required(['Admin', 'Editor'])  # Kategori dipegang admin dan editor
 def berita_foto():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -1360,96 +1470,105 @@ def berita_foto():
     conn.close()
     return render_template('admin/berita_foto.html', berita_foto=berita_foto)
 
-@admin.route('/tambah_berita_foto', methods=['POST'])
+
+@admin_bp.route('/tambah_berita_foto', methods=['POST'])
+@role_required(['Admin', 'Editor'])  # Kategori dipegang admin dan editor
 def tambah_berita_foto():
     # Buat folder uploads jika belum ada
     if not os.path.exists('static/uploads'):
         os.makedirs('static/uploads')
-    
+
     cover = request.files['cover']
     judul_berita_foto = request.form['judul_berita_foto']
     url_album = request.form['url']
     aktif = request.form['aktif']
-    
+
     cover_path = ''
     if cover and cover.filename:
         # Secure filename untuk menghindari masalah keamanan
         filename = secure_filename(cover.filename)
         cover_path = f"uploads/{filename}"
         cover.save(os.path.join('static', cover_path))
-    
+
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute('INSERT INTO berita_foto (cover, judul_berita_foto, url, aktif) VALUES (%s, %s, %s, %s)', 
+    cursor.execute('INSERT INTO berita_foto (cover, judul_berita_foto, url, aktif) VALUES (%s, %s, %s, %s)',
                    (cover_path, judul_berita_foto, url_album, aktif))
     conn.commit()
     cursor.close()
     conn.close()
-    
+
     flash('Berita foto berhasil ditambahkan', 'success')
     return redirect(url_for('admin.berita_foto'))
 
-@admin.route('/edit_berita_foto/<int:id>', methods=['POST'])
+
+@admin_bp.route('/edit_berita_foto/<int:id>', methods=['POST'])
+@role_required(['Admin', 'Editor'])  # Kategori dipegang admin dan editor
 def edit_berita_foto(id):
     judul_berita_foto = request.form['judul_berita_foto']
     url_album = request.form['url']
     aktif = request.form['aktif']
     cover = request.files.get('cover')
-    
+
     conn = get_db()
     cursor = conn.cursor()
-    
+
     if cover and cover.filename:
         # Buat folder uploads jika belum ada
         if not os.path.exists('static/uploads'):
             os.makedirs('static/uploads')
-        
+
         # Secure filename untuk menghindari masalah keamanan
         filename = secure_filename(cover.filename)
         cover_path = f"uploads/{filename}"
         cover.save(os.path.join('static', cover_path))
-        
-        cursor.execute('UPDATE berita_foto SET cover=%s, judul_berita_foto=%s, url=%s, aktif=%s WHERE id=%s', 
+
+        cursor.execute('UPDATE berita_foto SET cover=%s, judul_berita_foto=%s, url=%s, aktif=%s WHERE id=%s',
                        (cover_path, judul_berita_foto, url_album, aktif, id))
     else:
-        cursor.execute('UPDATE berita_foto SET judul_berita_foto=%s, url=%s, aktif=%s WHERE id=%s', 
+        cursor.execute('UPDATE berita_foto SET judul_berita_foto=%s, url=%s, aktif=%s WHERE id=%s',
                        (judul_berita_foto, url_album, aktif, id))
-    
+
     conn.commit()
     cursor.close()
     conn.close()
-    
+
     flash('Berita foto berhasil diperbarui', 'success')
     return redirect(url_for('admin.berita_foto'))
 
-@admin.route('/hapus_berita_foto/<int:id>', methods=['POST'])
+
+@admin_bp.route('/hapus_berita_foto/<int:id>', methods=['POST'])
+@role_required(['Admin', 'Editor'])  # Kategori dipegang admin dan editor
 def hapus_berita_foto(id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    
+
     # Dapatkan path cover untuk dihapus dari sistem file
     cursor.execute('SELECT cover FROM berita_foto WHERE id=%s', (id,))
     result = cursor.fetchone()
-    
+
     if result and result['cover'] and os.path.exists(os.path.join('static', result['cover'])):
         os.remove(os.path.join('static', result['cover']))
-    
+
     cursor.execute('DELETE FROM berita_foto WHERE id=%s', (id,))
     conn.commit()
     cursor.close()
     conn.close()
-    
+
     flash('Berita foto berhasil dihapus', 'success')
     return redirect(url_for('admin.berita_foto'))
 
 # ---------------- PESAN MASUK ----------------
-@admin.route('/pesan_masuk')
+
+
+@admin_bp.route('/pesan_masuk')
+@role_required(['Admin'])  # Pesan masuk hanya untuk Admin
 def pesan_masuk():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
     cursor.execute('SELECT * FROM pesan_masuk ORDER BY id ASC')
     pesan_masuk = cursor.fetchall()
-    
+
     # Format tanggal untuk tampilan
     for pesan in pesan_masuk:
         if pesan['tanggal']:
@@ -1460,44 +1579,50 @@ def pesan_masuk():
             except:
                 # Jika format tidak sesuai, biarkan aslinya
                 pass
-    
+
     cursor.close()
     conn.close()
     return render_template('admin/pesan_masuk.html', pesan_masuk=pesan_masuk)
 
-@admin.route('/tambah_pesan_masuk', methods=['POST'])
+
+@admin_bp.route('/tambah_pesan_masuk', methods=['POST'])
+@role_required(['Admin'])  # Kategori dipegang Admin
 def tambah_pesan_masuk():
     nama = request.form['nama']
     email = request.form['email']
     subjek = request.form['subjek']
     tanggal = request.form['tanggal']  # Format: YYYY-MM-DD
-    
+
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute('INSERT INTO pesan_masuk (nama, email, subjek, tanggal) VALUES (%s, %s, %s, %s)', 
+    cursor.execute('INSERT INTO pesan_masuk (nama, email, subjek, tanggal) VALUES (%s, %s, %s, %s)',
                    (nama, email, subjek, tanggal))
     conn.commit()
     cursor.close()
     conn.close()
     return redirect(url_for('admin.pesan_masuk'))
 
-@admin.route('/edit_pesan_masuk/<int:id>', methods=['POST'])
+
+@admin_bp.route('/edit_pesan_masuk/<int:id>', methods=['POST'])
+@role_required(['Admin'])  # Kategori dipegang Admin
 def edit_pesan_masuk(id):
     nama = request.form['nama']
     email = request.form['email']
     subjek = request.form['subjek']
     tanggal = request.form['tanggal']  # Format: YYYY-MM-DD
-    
+
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute('UPDATE pesan_masuk SET nama=%s, email=%s, subjek=%s, tanggal=%s WHERE id=%s', 
+    cursor.execute('UPDATE pesan_masuk SET nama=%s, email=%s, subjek=%s, tanggal=%s WHERE id=%s',
                    (nama, email, subjek, tanggal, id))
     conn.commit()
     cursor.close()
     conn.close()
     return redirect(url_for('admin.pesan_masuk'))
 
-@admin.route('/hapus_pesan_masuk/<int:id>', methods=['POST'])
+
+@admin_bp.route('/hapus_pesan_masuk/<int:id>', methods=['POST'])
+@role_required(['Admin'])  # Kategori dipegang Admin
 def hapus_pesan_masuk(id):
     conn = get_db()
     cursor = conn.cursor()
@@ -1510,18 +1635,25 @@ def hapus_pesan_masuk(id):
 # ---------------- SEKILAS INFO  ----------------
 # ========== Helper untuk upload ==========
 
+
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 def ensure_upload_folder():
     """Ensure the upload folder for sekilas_info exists and return its path."""
-    upload_dir = os.path.join(current_app.root_path, 'static/uploads/sekilas_info')
+    upload_dir = os.path.join(current_app.root_path,
+                              'static/uploads/sekilas_info')
     os.makedirs(upload_dir, exist_ok=True)
     return upload_dir
 
-@admin.route('/sekilas_info')
+
+@admin_bp.route('/sekilas_info')
+@role_required(['Admin'])  # Kategori dipegang Admin
 def sekilas_info_index():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1536,7 +1668,8 @@ def sekilas_info_index():
     return render_template('admin/sekilas_info.html', sekilas=data)
 
 
-@admin.route('/tambah_sekilas', methods=['POST'])
+@admin_bp.route('/tambah_sekilas', methods=['POST'])
+@role_required(['Admin'])  # Kategori dipegang Admin
 def sekilas_tambah():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1575,7 +1708,8 @@ def sekilas_tambah():
     return redirect(url_for('admin.sekilas_info_index'))
 
 
-@admin.route('/edit_sekilas/<int:id>', methods=['POST'])
+@admin_bp.route('/edit_sekilas/<int:id>', methods=['POST'])
+@role_required(['Admin'])  # Kategori dipegang Admin
 def sekilas_edit(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1634,7 +1768,8 @@ def sekilas_edit(id):
     return redirect(url_for('admin.sekilas_info_index'))
 
 
-@admin.route('/hapus_sekilas/<int:id>')
+@admin_bp.route('/hapus_sekilas/<int:id>')
+@role_required(['Admin'])  # Kategori dipegang Admin
 def sekilas_hapus(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1660,14 +1795,19 @@ def sekilas_hapus(id):
 
 # ---------------- PLAYLIST VIDEO  ----------------
 
-UPLOAD_FOLDER = os.path.join(os.getcwd(), "app", "static", "uploads", "playlist")
+
+UPLOAD_FOLDER = os.path.join(
+    os.getcwd(), "app", "static", "uploads", "playlist")
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 # ================================
 # ROUTE: Daftar Playlist Video
 # ================================
-@admin.route('/playlist_video')
+
+
+@admin_bp.route('/playlist_video')
+@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
 def playlist_video():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1689,7 +1829,10 @@ def playlist_video():
 # ================================
 # ROUTE: Tambah Playlist
 # ================================
-@admin.route('/tambah_playlist', methods=['POST'])
+
+
+@admin_bp.route('/tambah_playlist', methods=['POST'])
+@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
 def tambah_playlist():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1719,7 +1862,10 @@ def tambah_playlist():
 # ================================
 # ROUTE: Edit Playlist
 # ================================
-@admin.route('/edit_playlist/<int:id>', methods=['POST'])
+
+
+@admin_bp.route('/edit_playlist/<int:id>', methods=['POST'])
+@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
 def edit_playlist(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1756,7 +1902,10 @@ def edit_playlist(id):
 # ================================
 # ROUTE: Hapus Playlist
 # ================================
-@admin.route('/hapus_playlist/<int:id>', methods=['POST'])
+
+
+@admin_bp.route('/hapus_playlist/<int:id>', methods=['POST'])
+@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
 def playlist_delete(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1774,7 +1923,10 @@ def playlist_delete(id):
 # ================================
 # ROUTE: Komentar Video
 # ================================
-@admin.route('/komentar_video_list')
+
+
+@admin_bp.route('/komentar_video_list')
+@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
 def komentar_video_list():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -1794,7 +1946,8 @@ def komentar_video_list():
 
 
 # ----------------  GALERI BERITA ----------------
-@admin.route('/galeri_berita_foto')
+@admin_bp.route('/galeri_berita_foto')
+@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
 def galeri_berita_foto():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -1805,94 +1958,100 @@ def galeri_berita_foto():
     conn.close()
     return render_template('admin/galeri_berita_foto.html', galeri=galeri)
 
-@admin.route('/tambah_galeri_berita_foto', methods=['POST'])
+
+@admin_bp.route('/tambah_galeri_berita_foto', methods=['POST'])
+@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
 def tambah_galeri_berita_foto():
     if not os.path.exists('static/uploads'):
         os.makedirs('static/uploads')
-    
+
     foto = request.files['foto']
     judul_foto = request.form['judul_foto']
     nama_album = request.form['nama_album']
-    
+
     foto_path = ''
     if foto and foto.filename:
         filename = secure_filename(foto.filename)
         foto_path = f"uploads/{filename}"
         foto.save(os.path.join('static', foto_path))
-    
+
     conn = get_db()
     cursor = conn.cursor()
     # Perbaikan: sesuaikan nama kolom dengan database
-    cursor.execute('INSERT INTO gallery_berita_foto (Foto, Judul_Foto, Nama_Album) VALUES (%s, %s, %s)', 
+    cursor.execute('INSERT INTO gallery_berita_foto (Foto, Judul_Foto, Nama_Album) VALUES (%s, %s, %s)',
                    (foto_path, judul_foto, nama_album))
     conn.commit()
     cursor.close()
     conn.close()
-    
+
     flash('Foto gallery berhasil ditambahkan', 'success')
     return redirect(url_for('admin.galeri_berita_foto'))
 
-@admin.route('/edit_galeri_berita_foto/<int:id>', methods=['POST'])
+
+@admin_bp.route('/edit_galeri_berita_foto/<int:id>', methods=['POST'])
+@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
 def edit_galeri_berita_foto(id):
     judul_foto = request.form['judul_foto']
     nama_album = request.form['nama_album']
     foto = request.files.get('foto')
-    
+
     conn = get_db()
     cursor = conn.cursor()
-    
+
     if foto and foto.filename:
         if not os.path.exists('static/uploads'):
             os.makedirs('static/uploads')
-        
+
         filename = secure_filename(foto.filename)
         foto_path = f"uploads/{filename}"
         foto.save(os.path.join('static', foto_path))
-        
+
         # Perbaikan: sesuaikan nama kolom dengan database
-        cursor.execute('UPDATE gallery_berita_foto SET Foto=%s, Judul_Foto=%s, Nama_Album=%s WHERE Id=%s', 
+        cursor.execute('UPDATE gallery_berita_foto SET Foto=%s, Judul_Foto=%s, Nama_Album=%s WHERE Id=%s',
                        (foto_path, judul_foto, nama_album, id))
     else:
         # Perbaikan: sesuaikan nama kolom dengan database
-        cursor.execute('UPDATE gallery_berita_foto SET Judul_Foto=%s, Nama_Album=%s WHERE Id=%s', 
+        cursor.execute('UPDATE gallery_berita_foto SET Judul_Foto=%s, Nama_Album=%s WHERE Id=%s',
                        (judul_foto, nama_album, id))
-    
+
     conn.commit()
     cursor.close()
     conn.close()
-    
+
     flash('Foto gallery berhasil diperbarui', 'success')
     return redirect(url_for('admin.galeri_berita_foto'))
 
-@admin.route('/hapus_galeri_berita_foto/<int:id>', methods=['POST'])
+
+@admin_bp.route('/hapus_galeri_berita_foto/<int:id>', methods=['POST'])
+@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
 def hapus_galeri_berita_foto(id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    
+
     # Perbaikan: sesuaikan nama kolom dengan database
     cursor.execute('SELECT Foto FROM gallery_berita_foto WHERE Id=%s', (id,))
     result = cursor.fetchone()
-    
+
     if result and result['Foto'] and os.path.exists(os.path.join('static', result['Foto'])):
         os.remove(os.path.join('static', result['Foto']))
-    
+
     # Perbaikan: sesuaikan nama kolom dengan database
     cursor.execute('DELETE FROM gallery_berita_foto WHERE Id=%s', (id,))
     conn.commit()
     cursor.close()
     conn.close()
-    
+
     flash('Foto gallery berhasil dihapus', 'success')
     return redirect(url_for('admin.galeri_berita_foto'))
 
 # ---------------- HALAMAN BERITA ----------------
 
-from flask import render_template, request, redirect, url_for, flash
-from werkzeug.utils import secure_filename
-import os
 
 # Route tampil daftar berita
-@admin.route('/halaman_berita')
+
+
+@admin_bp.route('/halaman_berita')
+@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
 def halaman_berita():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -1903,7 +2062,10 @@ def halaman_berita():
     return render_template('admin/halaman_berita.html', berita=berita)
 
 # Route tambah berita
-@admin.route('/tambah_halaman_berita', methods=['POST'])
+
+
+@admin_bp.route('/tambah_halaman_berita', methods=['POST'])
+@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
 def tambah_halaman_berita():
     if not os.path.exists('static/uploads'):
         os.makedirs('static/uploads')
@@ -1932,7 +2094,10 @@ def tambah_halaman_berita():
     return redirect(url_for('admin.halaman_berita'))
 
 # Route edit berita
-@admin.route('/edit_halaman_berita/<int:id>', methods=['POST'])
+
+
+@admin_bp.route('/edit_halaman_berita/<int:id>', methods=['POST'])
+@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
 def edit_halaman_berita(id):
     judul = request.form['judul']
     isi = request.form['isi']
@@ -1966,7 +2131,10 @@ def edit_halaman_berita(id):
     return redirect(url_for('admin.halaman_berita'))
 
 # Route hapus berita
-@admin.route('/hapus_halaman_berita/<int:id>', methods=['POST'])
+
+
+@admin_bp.route('/hapus_halaman_berita/<int:id>', methods=['POST'])
+@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
 def hapus_halaman_berita(id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -1988,7 +2156,10 @@ def hapus_halaman_berita(id):
 # ---------------- MENU WEBSITE --------------
 # --
 # Tampilkan daftar menu website
-@admin.route('/menu_website')
+
+
+@admin_bp.route('/menu_website')
+@role_required(['Admin'])  # Menu website hanya untuk Admin
 def menu_website():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -2004,7 +2175,8 @@ def menu_website():
 
 
 # Tambah menu website
-@admin.route('/tambah_menu', methods=['POST'])
+@admin_bp.route('/tambah_menu', methods=['POST'])
+@role_required(['Admin'])  # Menu website hanya untuk Admin
 def tambah_menu():
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -2028,7 +2200,8 @@ def tambah_menu():
 
 
 # Edit menu website
-@admin.route('/edit_menu/<int:id>', methods=['POST'])
+@admin_bp.route('/edit_menu/<int:id>', methods=['POST'])
+@role_required(['Admin'])  # Menu website hanya untuk Admin
 def edit_menu(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))
@@ -2053,7 +2226,8 @@ def edit_menu(id):
 
 
 # Hapus menu website
-@admin.route('/hapus_menu/<int:id>', methods=['GET'])
+@admin_bp.route('/hapus_menu/<int:id>', methods=['GET'])
+@role_required(['Admin'])  # Menu website hanya untuk Admin
 def hapus_menu(id):
     if 'user' not in session:
         return redirect(url_for('admin.login'))

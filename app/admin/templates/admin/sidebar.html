@@ -233,13 +233,11 @@
   </style>
 </head>
 <body class="flex min-h-screen bg-gray-100 font-sans">
-  <!-- Sidebar -->
-<aside class="w-64 sidebar-gradient text-white flex-shrink-0 flex flex-col shadow-2xl animate-slideInLeft h-screen overflow-y-auto custom-scrollbar">
-    <div class="sidebar-content">
-      <!-- Header -->
-      <div class="p-6 flex items-center gap-4 border-b border-white/20 animate-fadeIn delay-100">
+  <aside class="w-64 h-screen sidebar-gradient text-white flex-shrink-0 flex flex-col shadow-2xl animate-slideInLeft">
+    <div class="sidebar-content h-full flex flex-col">
+      <div class="p-6 flex items-center gap-4 border-b border-white/20 animate-fadeIn delay-100 flex-shrink-0">
         <div class="logo-container relative">
-        <img src="{{ url_for('static', filename='img/Logo_Kementerian_Kominfo_Purworejo.png') }}">
+          <img src="{{ url_for('static', filename='img/Logo_Kementerian_Kominfo_Purworejo.png') }}">
         </div>
         <div class="flex-1">
           <div class="font-bold text-l tracking-wide animate-shimmer bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent">
@@ -251,22 +249,17 @@
         </div>
       </div>
 
-      <!-- Navigation Menu -->
       <nav class="mt-6 text-sm flex-1 overflow-y-auto custom-scrollbar px-3">
         <ul class="space-y-2">
-          <!-- Dashboard -->
           <li class="animate-fadeIn delay-200">
             <a href="{{ url_for('admin.dashboard') }}" 
                class="menu-item menu-item-active flex items-center px-4 py-3 rounded-xl transition-all duration-300 group">
               <i class="bi bi-speedometer2 mr-3 text-lg group-hover:scale-110 transition-transform"></i>
               <span class="font-medium">Dashboard</span>
-              <span class="ml-auto notification-badge text-xs text-white rounded-full px-2 py-1 animate-bounce-custom">
-                New
-              </span>
             </a>
           </li>
 
-                           <!-- Menu Utama -->
+          {% if session.user_level in ['Admin', 'Operator'] %}
           <li class="animate-fadeIn delay-300">
             <button
               onclick="toggleSubmenu('menuUtamaSub', 'icon-menuUtamaSub')"
@@ -289,205 +282,153 @@
               </li>
             </ul>
           </li>
+          {% endif %}
 
-          <!-- Berita -->
-<li class="animate-fadeIn delay-400">
-  <button
-    onclick="toggleSubmenu('beritaSub', 'icon-beritaSub')"
-    class="menu-item w-full flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition-all duration-300 group"
-  >
-    <i class="bi bi-newspaper mr-3 text-lg group-hover:scale-110 transition-transform"></i>
-    <span class="font-medium">Berita</span>
-    <i class="bi bi-chevron-down ml-auto transition-transform duration-300 group-hover:scale-110" id="icon-beritaSub"></i>
-  </button>
-  <ul id="beritaSub" class="submenu submenu-closed pl-6 mt-2 space-y-1 text-purple-200">
-    <li>
-      <a href="{{ url_for('admin.berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
-        <i class="bi bi-upload mr-2"></i> Upload Berita
-      </a>
-    </li>
-    <li>
-      <a href="{{ url_for('admin.kategori_berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
-        <i class="bi bi-folder mr-2"></i> Kategori Berita
-      </a>
-    </li>
-    <li>
-      <a href="{{ url_for('admin.komentar_berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
-        <i class="bi bi-chat-left-text mr-2"></i> Komentar Berita
-      </a>
-    </li>
-    <li>
-      <a href="{{ url_for('admin.tag_berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
-        <i class="bi bi-tags mr-2"></i> Tag Berita
-      </a>
-    </li>
-    <li>
-      <a href="{{ url_for('admin.sensor_komentar') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
-        <i class="bi bi-shield-lock mr-2"></i> Sensor Komentar
-      </a>
-    </li>
-  </ul>
-</li>
-
-
-          <!-- Media -->
-          <li class="animate-fadeIn delay-500">
+          {% if session.user_level in ['Admin', 'Editor', 'Kontributor'] %}
+          <li class="animate-fadeIn delay-400">
             <button
-              onclick="toggleSubmenu('mediaSub', 'icon-mediaSub')"
+              onclick="toggleSubmenu('beritaSub', 'icon-beritaSub')"
               class="menu-item w-full flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition-all duration-300 group"
             >
-              <i class="bi bi-collection-play mr-3 text-lg group-hover:scale-110 transition-transform"></i>
-              <span class="font-medium">Media</span>
-              <i class="bi bi-chevron-down ml-auto transition-transform duration-300 group-hover:scale-110" id="icon-mediaSub"></i>
+              <i class="bi bi-newspaper mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+              <span class="font-medium">Berita</span>
+              <i class="bi bi-chevron-down ml-auto transition-transform duration-300 group-hover:scale-110" id="icon-beritaSub"></i>
             </button>
-            <ul id="mediaSub" class="submenu submenu-closed pl-6 mt-2 space-y-1 text-purple-200">
+            <ul id="beritaSub" class="submenu submenu-closed pl-6 mt-2 space-y-1 text-purple-200">
               <li>
-                <a href="{{ url_for('admin.playlist_video') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
-                  <i class="bi bi-collection-play mr-2"></i> Playlist Video
+                <a href="{{ url_for('admin.berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-upload mr-2"></i> Kelola Berita
+                </a>
+              </li>
+              {% if session.user_level in ['Admin', 'Editor'] %}
+              <li>
+                <a href="{{ url_for('admin.kategori_berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-folder mr-2"></i> Kategori Berita
                 </a>
               </li>
               <li>
-                <a href="{{ url_for('admin.video') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
-                  <i class="bi bi-play-btn mr-2"></i> Video
+                <a href="{{ url_for('admin.tag_berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-tags mr-2"></i> Tag Berita
+                </a>
+              </li>
+              {% endif %}
+              {% if session.user_level == 'Admin' %}
+              <li>
+                <a href="{{ url_for('admin.komentar_berita') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-chat-left-text mr-2"></i> Komentar Berita
                 </a>
               </li>
               <li>
-                <a href="{{ url_for('admin.tag_video') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
-                  <i class="bi bi-tags-fill mr-2"></i> Tag Video
+                <a href="{{ url_for('admin.sensor_komentar') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                  <i class="bi bi-shield-lock mr-2"></i> Sensor Komentar
                 </a>
               </li>
+              {% endif %}
             </ul>
           </li>
-
-          <!-- Lainnya -->
+          {% endif %}
+          
+          {% if session.user_level in ['Admin', 'Operator'] %}
           <li class="animate-fadeIn delay-600">
             <button
-              onclick="toggleSubmenu('lainnyaSub', 'icon-lainnyaSub')"
+              onclick="toggleSubmenu('operatorSub', 'icon-operatorSub')"
               class="menu-item w-full flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition-all duration-300 group"
             >
               <i class="bi bi-grid-1x2 mr-3 text-lg group-hover:scale-110 transition-transform"></i>
-              <span class="font-medium">Lainnya</span>
-              <i class="bi bi-chevron-down ml-auto transition-transform duration-300 group-hover:scale-110" id="icon-lainnyaSub"></i>
+              <span class="font-medium">Operasional</span>
+              <i class="bi bi-chevron-down ml-auto transition-transform duration-300 group-hover:scale-110" id="icon-operatorSub"></i>
             </button>
-            <ul id="lainnyaSub" class="submenu submenu-closed pl-6 mt-2 space-y-1 text-purple-200">
-              <li>
-                <a href="{{ url_for('admin.sekilas_info') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
-                  <i class="bi bi-info-circle mr-2"></i> Sekilas Info
-                </a>
-              </li>
-              <li>
-                <a href="{{ url_for('admin.pesan_masuk') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
-                  <i class="bi bi-envelope mr-2"></i> Pesan Masuk
-                </a>
-              </li>
+            <ul id="operatorSub" class="submenu submenu-closed pl-6 mt-2 space-y-1 text-purple-200">
+                <li>
+                    <a href="{{ url_for('admin.agenda_admin') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                      <i class="bi bi-calendar-event mr-2"></i> Agenda
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin.sekilas_info_index') }}" class="flex items-center py-2 px-4 hover:text-white hover:bg-white/10 rounded-lg transition">
+                      <i class="bi bi-info-circle mr-2"></i> Pengumuman
+                    </a>
+                </li>
             </ul>
           </li>
+          {% endif %}
 
-    <!-- User Management -->
-<li class="animate-fadeIn delay-700">
-  <a href="{{ url_for('admin.manajemen_users') }}" 
-     class="menu-item flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition group">
-    <i class="bi bi-people mr-3 text-lg group-hover:scale-110 transition-transform"></i>
-    <span class="font-medium">Manajemen Users</span>
-    <span class="ml-auto bg-yellow-500 text-xs text-white rounded-full px-2 py-1">
-      {{ total_user }}
-    </span>
-  </a>
-</li>
-
-
-
-
-          <!-- Analytics -->
-          <li class="animate-fadeIn delay-800">
-            <a href="#" class="menu-item flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition group">
-              <i class="bi bi-graph-up mr-3 text-lg group-hover:scale-110 transition-transform"></i>
-              <span class="font-medium">Analytics</span>
-              <i class="bi bi-arrow-right ml-auto opacity-0 group-hover:opacity-100 transition-opacity"></i>
+          {% if session.user_level == 'Admin' %}
+          <li class="animate-fadeIn delay-700">
+            <a href="{{ url_for('admin.manajemen_users') }}" 
+               class="menu-item flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition group">
+              <i class="bi bi-people mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+              <span class="font-medium">Manajemen Users</span>
             </a>
           </li>
+          {% endif %}
 
-          <!-- Settings -->
-          <li class="animate-fadeIn delay-900">
-            <a href="#" class="menu-item flex items-center px-4 py-3 hover:bg-white/10 rounded-xl transition group">
-              <i class="bi bi-gear mr-3 text-lg group-hover:scale-110 transition-transform animate-pulse-custom"></i>
-              <span class="font-medium">Pengaturan</span>
-              <i class="bi bi-arrow-right ml-auto opacity-0 group-hover:opacity-100 transition-opacity"></i>
-            </a>
-          </li>
         </ul>
-
-        <!-- Logout Section -->
-        <div class="border-t border-white/20 mt-6 pt-4 animate-fadeIn delay-1000">
-          <a href="{{ url_for('admin.logout') }}" onclick="return confirm('Apakah Anda yakin ingin logout?')" 
-             class="logout-btn menu-item flex items-center px-4 py-3 text-red-300 hover:text-white rounded-xl transition group">
-            <i class="bi bi-box-arrow-right mr-3 text-lg group-hover:scale-110 transition-transform"></i>
-            <span class="font-medium">Logout</span>
-            <i class="bi bi-arrow-right ml-auto opacity-0 group-hover:opacity-100 transition-opacity"></i>
-          </a>
-        </div>
-
-        <!-- Footer Info -->
-        <div class="mt-4 p-3 bg-white/10 rounded-xl text-center animate-fadeIn delay-1100">
-          <div class="text-xs text-purple-200 mb-1">Admin Panel</div>
-          <div class="text-xs text-purple-300 font-semibold">v3.0.0</div>
-          <div class="w-full h-1 bg-white/20 rounded-full mt-2 overflow-hidden">
-            <div class="h-full bg-gradient-to-r from-green-400 to-blue-500 rounded-full animate-pulse" style="width: 85%"></div>
-          </div>
-          <div class="text-xs text-green-300 mt-1">System Health: Good</div>
-        </div>
       </nav>
+
+      <div class="mt-auto p-3 flex-shrink-0">
+          <div class="border-t border-white/20 pt-4 animate-fadeIn delay-1000">
+              <a href="{{ url_for('admin.logout') }}" onclick="return confirm('Apakah Anda yakin ingin logout?')" 
+                 class="logout-btn menu-item flex items-center px-4 py-3 text-red-300 hover:text-white rounded-xl transition group">
+                <i class="bi bi-box-arrow-right mr-3 text-lg group-hover:scale-110 transition-transform"></i>
+                <span class="font-medium">Logout</span>
+              </a>
+          </div>
+          <div class="mt-4 p-3 bg-white/10 rounded-xl text-center animate-fadeIn delay-1100">
+            <div class="text-xs text-purple-200 mb-1">Admin Panel v3.0.0</div>
+            <div class="text-xs text-green-300 mt-1">System Health: Good</div>
+          </div>
+      </div>
     </div>
-  </aside>
+</aside>
 
+    <!-- Enhanced JavaScript -->
+    <script>
+      function toggleSubmenu(submenuId, iconId) {
+        const submenu = document.getElementById(submenuId);
+        const icon = document.getElementById(iconId);
+        const isOpen = submenu.classList.contains("submenu-open");
 
-  <!-- Enhanced JavaScript -->
-  <script>
-    function toggleSubmenu(submenuId, iconId) {
-      const submenu = document.getElementById(submenuId);
-      const icon = document.getElementById(iconId);
-      const isOpen = submenu.classList.contains('submenu-open');
+        // Close all other submenus
+        document.querySelectorAll(".submenu").forEach((menu) => {
+          if (menu.id !== submenuId) {
+            menu.classList.remove("submenu-open");
+            menu.classList.add("submenu-closed");
+          }
+        });
 
-      // Close all other submenus
-      document.querySelectorAll('.submenu').forEach(menu => {
-        if (menu.id !== submenuId) {
-          menu.classList.remove('submenu-open');
-          menu.classList.add('submenu-closed');
+        // Reset all icons
+        document.querySelectorAll('[id^="icon-"]').forEach((ic) => {
+          if (ic.id !== iconId) {
+            ic.classList.remove("rotate-180");
+          }
+        });
+
+        // Toggle current submenu
+        if (isOpen) {
+          submenu.classList.remove("submenu-open");
+          submenu.classList.add("submenu-closed");
+          icon.classList.remove("rotate-180");
+        } else {
+          submenu.classList.remove("submenu-closed");
+          submenu.classList.add("submenu-open");
+          icon.classList.add("rotate-180");
         }
-      });
 
-      // Reset all icons
-      document.querySelectorAll('[id^="icon-"]').forEach(ic => {
-        if (ic.id !== iconId) {
-          ic.classList.remove('rotate-180');
-        }
-      });
-
-      // Toggle current submenu
-      if (isOpen) {
-        submenu.classList.remove('submenu-open');
-        submenu.classList.add('submenu-closed');
-        icon.classList.remove('rotate-180');
-      } else {
-        submenu.classList.remove('submenu-closed');
-        submenu.classList.add('submenu-open');
-        icon.classList.add('rotate-180');
+        // Add ripple effect
+        const button = icon.closest("button");
+        createRipple(button, event);
       }
 
-      // Add ripple effect
-      const button = icon.closest('button');
-      createRipple(button, event);
-    }
+      // Ripple effect function
+      function createRipple(element, event) {
+        const ripple = document.createElement("div");
+        const rect = element.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = event.clientX - rect.left - size / 2;
+        const y = event.clientY - rect.top - size / 2;
 
-    // Ripple effect function
-    function createRipple(element, event) {
-      const ripple = document.createElement('div');
-      const rect = element.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height);
-      const x = event.clientX - rect.left - size / 2;
-      const y = event.clientY - rect.top - size / 2;
-      
-      ripple.style.cssText = `
+        ripple.style.cssText = `
         position: absolute;
         width: ${size}px;
         height: ${size}px;
@@ -499,51 +440,51 @@
         animation: ripple 0.6s ease-out;
         z-index: 1000;
       `;
-      
-      element.style.position = 'relative';
-      element.style.overflow = 'hidden';
-      element.appendChild(ripple);
-      
-      setTimeout(() => {
-        ripple.remove();
-      }, 600);
-    }
 
-    // Add click listeners to all menu items for ripple effect
-    document.addEventListener('DOMContentLoaded', function() {
-      const menuItems = document.querySelectorAll('.menu-item');
-      menuItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-          if (!this.querySelector('.submenu')) {
-            createRipple(this, e);
-          }
+        element.style.position = "relative";
+        element.style.overflow = "hidden";
+        element.appendChild(ripple);
+
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      }
+
+      // Add click listeners to all menu items for ripple effect
+      document.addEventListener("DOMContentLoaded", function () {
+        const menuItems = document.querySelectorAll(".menu-item");
+        menuItems.forEach((item) => {
+          item.addEventListener("click", function (e) {
+            if (!this.querySelector(".submenu")) {
+              createRipple(this, e);
+            }
+          });
+        });
+
+        // Animate menu items on load
+        const items = document.querySelectorAll("nav li");
+        items.forEach((item, index) => {
+          item.style.opacity = "0";
+          item.style.transform = "translateX(-20px)";
+          setTimeout(() => {
+            item.style.transition = "all 0.3s ease";
+            item.style.opacity = "1";
+            item.style.transform = "translateX(0)";
+          }, index * 100);
         });
       });
 
-      // Animate menu items on load
-      const items = document.querySelectorAll('nav li');
-      items.forEach((item, index) => {
-        item.style.opacity = '0';
-        item.style.transform = 'translateX(-20px)';
-        setTimeout(() => {
-          item.style.transition = 'all 0.3s ease';
-          item.style.opacity = '1';
-          item.style.transform = 'translateX(0)';
-        }, index * 100);
-      });
-    });
+      // Auto-highlight active menu based on current URL
+      document.addEventListener("DOMContentLoaded", function () {
+        const currentPath = window.location.pathname;
+        const menuLinks = document.querySelectorAll("nav a[href]");
 
-    // Auto-highlight active menu based on current URL
-    document.addEventListener('DOMContentLoaded', function() {
-      const currentPath = window.location.pathname;
-      const menuLinks = document.querySelectorAll('nav a[href]');
-      
-      menuLinks.forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
-          link.parentElement.classList.add('animate-glow');
-        }
+        menuLinks.forEach((link) => {
+          if (link.getAttribute("href") === currentPath) {
+            link.parentElement.classList.add("animate-glow");
+          }
+        });
       });
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>

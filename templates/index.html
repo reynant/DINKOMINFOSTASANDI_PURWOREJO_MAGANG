@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-A" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dinas Kominfo Purworejo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
     <style>
-        body { font-family: "Poppins", sans-serif; }
+        body { font-family: "Poppins", sans-serif; transition: background-color 0.3s, color 0.3s; }
         .animated-gradient { background-size: 200% 200%; animation: gradient-animation 10s ease infinite; }
         @keyframes gradient-animation { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
         .dropdown-menu { transition:opacity .2s ease,transform .2s ease; opacity:0; transform:translateY(10px); pointer-events:none; max-height:320px; overflow-y:auto; }
@@ -40,30 +40,53 @@
             @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         }
 
-        /* CSS untuk Tombol Baca Suara */
-        #tombol-baca-suara { position: fixed; bottom: 90px; right: 20px; z-index: 1000; background-color: #007bff; color: white; border: none; border-radius: 50px; padding: 12px 18px; font-size: 15px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: background-color 0.3s ease, transform 0.2s ease; display: flex; align-items: center; gap: 8px; }
-        #tombol-baca-suara:hover { background-color: #0056b3; transform: scale(1.05); }
-        #tombol-baca-suara.sedang-membaca { background-color: #dc3545; }
-        #tombol-baca-suara.sedang-membaca:hover { background-color: #a71d2a; }
+        /* === CSS UNTUK FITUR AKSESIBILITAS & MODE MALAM === */
+        .accessibility-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background-color: #1f2937; color: white; z-index: 1050; transition: right 0.3s ease-in-out; box-shadow: -4px 0 15px rgba(0,0,0,0.2); }
+        .accessibility-sidebar.open { right: 0; }
+        .backdrop { position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); z-index: 1040; opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in-out; }
+        .backdrop.active { opacity: 1; pointer-events: auto; }
+        
+        #accessibility-button { position: fixed; bottom: 80px; right: 20px; z-index: 1000; }
+        
+        /* Dark Mode Styles */
+        .dark body { background-color: #111827; color: #d1d5db; }
+        .dark #main-header { background-image: none; background-color: #1f2937; }
+        .dark #main-nav ul { background-color: #374151; }
+        .dark #main-nav a:hover { background-color: #4b5563; }
+        .dark .mobile-menu { background-color: #111827; }
+        .dark .bg-white { background-color: #1f2937; }
+        .dark .text-gray-800 { color: #f9fafb; }
+        .dark .text-gray-700 { color: #e5e7eb; }
+        .dark .text-gray-600 { color: #9ca3af; }
+        .dark .text-gray-500 { color: #6b7280; }
+        .dark .border-gray-200 { border-color: #4b5563; }
+        .dark .selection\:bg-teal-300::selection { background-color: #5eead4; color: #1f2937; }
+        .dark footer { background-color: #111827; }
+        .dark .dropdown-menu { background-color: #1f2937; color: #e5e7eb; }
+        .dark .dropdown-menu a:hover { background-color: #374151; }
+
+        /* Toggle Switch Dark Mode */
+        .toggle-checkbox:checked { right: 0; border-color: #68d391; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #68d391; }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 selection:bg-teal-300 selection:text-white">
 
-   <header id="main-header" class="relative flex flex-col items-center justify-center w-full h-72 md:h-80 pt-12 pb-12 text-white bg-gradient-to-r from-blue-800 via-teal-600 to-blue-900 animated-gradient">
-    <div class="flex items-center gap-4 text-center mb-6">
-        <img src="static/img/logo kabupaten pwr.png" alt="Logo Kabupaten Purworejo" class="w-14 h-auto object-contain" onerror="this.style.display='none'" />
-        <div>
-            <h1 class="text-xl md:text-2xl font-bold tracking-wide uppercase">Dinas Kominfo Purworejo</h1>
-            <p class="text-xs md:text-sm opacity-80">Statistik dan Persandian Kabupaten Purworejo</p>
+    <header id="main-header" class="relative flex flex-col items-center justify-center w-full h-72 md:h-80 pt-12 pb-12 text-white bg-gradient-to-r from-blue-800 via-teal-600 to-blue-900 animated-gradient">
+        <div class="flex items-center gap-4 text-center mb-6">
+            <img src="static/img/logo kabupaten pwr.png" alt="Logo Kabupaten Purworejo" class="w-14 h-auto object-contain" onerror="this.style.display='none'" />
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold tracking-wide uppercase">Dinas Kominfo Purworejo</h1>
+                <p class="text-xs md:text-sm opacity-80">Statistik dan Persandian Kabupaten Purworejo</p>
+            </div>
         </div>
-    </div>
-    <div class="w-full max-w-2xl px-4 z-20">
-        <form role="search" action="{{ url_for('public.search') }}" method="get" class="relative flex">
-            <input id="search-input" type="search" name="q" placeholder="Cari berita, layanan, atau informasi publik..." class="flex-grow py-4 px-6 text-md text-gray-900 rounded-l-full border-2 border-gray-300 focus:outline-none focus:border-teal-500 shadow-md" required />
-            <button type="submit" class="px-6 bg-blue-700 hover:bg-teal-500 text-white font-semibold rounded-r-full">Cari</button>
-        </form>
-    </div>
-</header>
+        <div class="w-full max-w-2xl px-4 z-20">
+            <form role="search" action="{{ url_for('public.search') }}" method="get" class="relative flex">
+                <input id="search-input" type="search" name="q" placeholder="Cari berita, layanan, atau informasi publik..." class="flex-grow py-4 px-6 text-md text-gray-900 rounded-l-full border-2 border-gray-300 focus:outline-none focus:border-teal-500 shadow-md" required />
+                <button type="submit" class="px-6 bg-blue-700 hover:bg-teal-500 text-white font-semibold rounded-r-full">Cari</button>
+            </form>
+        </div>
+    </header>
     <br>
     <nav id="main-nav" class="sticky top-0 z-50 w-full transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -190,414 +213,379 @@
         <h2 class="text-3xl font-bold text-blue-800 mb-4">Konten Utama Halaman</h2>
         <p class="text-gray-600 leading-relaxed mb-12">Tinggal Diisi Konten.</p>
 
+        <section class="relative w-full py-28 bg-gray-900 overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src="https://picsum.photos/1920/700?random=300" alt="Background" class="w-full h-full object-cover opacity-40">
+            </div>
 
-    
+            <div class="relative z-10 flex items-center justify-center">
+                <div id="bannerCarousel" class="flex transition-transform duration-700 ease-in-out items-center">
+                    <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60">
+                        <img src="https://picsum.photos/1200/300?random=301" class="w-full h-[220px] object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <div class="text-white text-center px-6">
+                                <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 1</h2>
+                                <p class="text-base md:text-lg">Deskripsi singkat banner pertama.</p>
+                            </div>
+                        </div>
+                    </div>
 
-<!-- Banner Slide Compact & Centered -->
-<section class="relative w-full py-28 bg-gray-900 overflow-hidden">
-  <!-- Background Image -->
-  <div class="absolute inset-0 z-0">
-    <img src="https://picsum.photos/1920/700?random=300" alt="Background" class="w-full h-full object-cover opacity-40">
-  </div>
+                    <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60">
+                        <img src="https://picsum.photos/1200/300?random=302" class="w-full h-[220px] object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <div class="text-white text-center px-6">
+                                <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 2</h2>
+                                <p class="text-base md:text-lg">Deskripsi singkat banner kedua.</p>
+                            </div>
+                        </div>
+                    </div>
 
-  <!-- Carousel Wrapper -->
-  <div class="relative z-10 flex items-center justify-center">
-    <div id="bannerCarousel" class="flex transition-transform duration-700 ease-in-out items-center">
-      <!-- Banner 1 -->
-      <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60">
-        <img src="https://picsum.photos/1200/300?random=301" class="w-full h-[220px] object-cover">
-        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-          <div class="text-white text-center px-6">
-            <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 1</h2>
-            <p class="text-base md:text-lg">Deskripsi singkat banner pertama.</p>
-          </div>
-        </div>
-      </div>
+                    <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60">
+                        <img src="https://picsum.photos/1200/300?random=303" class="w-full h-[220px] object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <div class="text-white text-center px-6">
+                                <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 3</h2>
+                                <p class="text-base md:text-lg">Deskripsi singkat banner ketiga.</p>
+                            </div>
+                        </div>
+                    </div>
 
-      <!-- Banner 2 -->
-      <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60">
-        <img src="https://picsum.photos/1200/300?random=302" class="w-full h-[220px] object-cover">
-        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-          <div class="text-white text-center px-6">
-            <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 2</h2>
-            <p class="text-base md:text-lg">Deskripsi singkat banner kedua.</p>
-          </div>
-        </div>
-      </div>
+                    <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60">
+                        <img src="https://picsum.photos/1200/300?random=304" class="w-full h-[220px] object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <div class="text-white text-center px-6">
+                                <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 4</h2>
+                                <p class="text-base md:text-lg">Deskripsi singkat banner keempat.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-      <!-- Banner 3 -->
-      <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60">
-        <img src="https://picsum.photos/1200/300?random=303" class="w-full h-[220px] object-cover">
-        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-          <div class="text-white text-center px-6">
-            <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 3</h2>
-            <p class="text-base md:text-lg">Deskripsi singkat banner ketiga.</p>
-          </div>
-        </div>
-      </div>
+            <button onclick="moveBannerSlide(-1)" class="absolute left-12 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white px-6 py-4 rounded-full text-3xl z-20">‹</button>
+            <button onclick="moveBannerSlide(1)" class="absolute right-12 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white px-6 py-4 rounded-full text-3xl z-20">›</button>
 
-      <!-- Banner 4 -->
-      <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60">
-        <img src="https://picsum.photos/1200/300?random=304" class="w-full h-[220px] object-cover">
-        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-          <div class="text-white text-center px-6">
-            <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 4</h2>
-            <p class="text-base md:text-lg">Deskripsi singkat banner keempat.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+            <div id="bannerIndicators" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-3 z-20"></div>
+        </section>
 
-  <!-- Tombol Navigasi -->
-  <button onclick="moveBannerSlide(-1)" class="absolute left-12 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white px-6 py-4 rounded-full text-3xl z-20">‹</button>
-  <button onclick="moveBannerSlide(1)" class="absolute right-12 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white px-6 py-4 rounded-full text-3xl z-20">›</button>
+        <div class="h-12"></div>
 
-  <!-- Indikator (Dots) -->
-  <div id="bannerIndicators" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-3 z-20"></div>
-</section>
+        <script>
+            const bannerWrapper = document.getElementById('bannerCarousel');
+            const bannerSlides = bannerWrapper.getElementsByClassName('banner-slide');
+            const bannerIndicators = document.getElementById('bannerIndicators');
+            let bannerIndex = 0;
+            let bannerAuto = setInterval(() => moveBannerSlide(1), 5000);
 
-<!-- Jarak tambahan -->
-<div class="h-12"></div>
+            // Buat indikator titik sesuai jumlah banner
+            for (let i = 0; i < bannerSlides.length; i++) {
+                const dot = document.createElement('button');
+                dot.className = "w-3 h-3 rounded-full bg-white/40 transform scale-100 transition-all duration-300";
+                dot.addEventListener('click', () => {
+                    bannerIndex = i;
+                    updateBannerCarousel();
+                    resetBannerAuto();
+                });
+                bannerIndicators.appendChild(dot);
+            }
 
-<script>
-  const bannerWrapper = document.getElementById('bannerCarousel');
-  const bannerSlides = bannerWrapper.getElementsByClassName('banner-slide');
-  const bannerIndicators = document.getElementById('bannerIndicators');
-  let bannerIndex = 0;
-  let bannerAuto = setInterval(() => moveBannerSlide(1), 5000);
+            function updateBannerCarousel() {
+                for (let i = 0; i < bannerSlides.length; i++) {
+                    bannerSlides[i].classList.remove('scale-100', 'opacity-100', 'z-10');
+                    bannerSlides[i].classList.add('scale-75', 'opacity-60');
 
-  // Buat indikator titik sesuai jumlah banner
-  for (let i = 0; i < bannerSlides.length; i++) {
-    const dot = document.createElement('button');
-    dot.className = "w-3 h-3 rounded-full bg-white/40 transform scale-100 transition-all duration-300";
-    dot.addEventListener('click', () => {
-      bannerIndex = i;
-      updateBannerCarousel();
-      resetBannerAuto();
-    });
-    bannerIndicators.appendChild(dot);
-  }
+                    // update indikator
+                    bannerIndicators.children[i].classList.remove("bg-white", "scale-125");
+                    bannerIndicators.children[i].classList.add("bg-white/40", "scale-100");
+                }
 
-  function updateBannerCarousel() {
-    for (let i = 0; i < bannerSlides.length; i++) {
-      bannerSlides[i].classList.remove('scale-100', 'opacity-100', 'z-10');
-      bannerSlides[i].classList.add('scale-75', 'opacity-60');
+                // Banner aktif
+                bannerSlides[bannerIndex].classList.remove('scale-75', 'opacity-60');
+                bannerSlides[bannerIndex].classList.add('scale-100', 'opacity-100', 'z-10');
 
-      // update indikator
-      bannerIndicators.children[i].classList.remove("bg-white", "scale-125");
-      bannerIndicators.children[i].classList.add("bg-white/40", "scale-100");
-    }
+                // Indikator aktif → zoom + putih solid
+                bannerIndicators.children[bannerIndex].classList.remove("bg-white/40", "scale-100");
+                bannerIndicators.children[bannerIndex].classList.add("bg-white", "scale-125");
 
-    // Banner aktif
-    bannerSlides[bannerIndex].classList.remove('scale-75', 'opacity-60');
-    bannerSlides[bannerIndex].classList.add('scale-100', 'opacity-100', 'z-10');
+                // Hitung posisi
+                const offset = -(bannerIndex * (bannerSlides[0].offsetWidth + 32)) + 
+                                (bannerWrapper.parentElement.offsetWidth / 2 - bannerSlides[0].offsetWidth / 2);
+                bannerWrapper.style.transform = `translateX(${offset}px)`;
+            }
 
-    // Indikator aktif → zoom + putih solid
-    bannerIndicators.children[bannerIndex].classList.remove("bg-white/40", "scale-100");
-    bannerIndicators.children[bannerIndex].classList.add("bg-white", "scale-125");
+            function moveBannerSlide(direction) {
+                bannerIndex = (bannerIndex + direction + bannerSlides.length) % bannerSlides.length;
+                updateBannerCarousel();
+                resetBannerAuto();
+            }
 
-    // Hitung posisi
-    const offset = -(bannerIndex * (bannerSlides[0].offsetWidth + 32)) + 
-                   (bannerWrapper.parentElement.offsetWidth / 2 - bannerSlides[0].offsetWidth / 2);
-    bannerWrapper.style.transform = `translateX(${offset}px)`;
-  }
+            function resetBannerAuto() {
+                clearInterval(bannerAuto);
+                bannerAuto = setInterval(() => moveBannerSlide(1), 5000);
+            }
 
-  function moveBannerSlide(direction) {
-    bannerIndex = (bannerIndex + direction + bannerSlides.length) % bannerSlides.length;
-    updateBannerCarousel();
-    resetBannerAuto();
-  }
+            window.addEventListener('load', updateBannerCarousel);
+            window.addEventListener('resize', updateBannerCarousel);
+        </script>
 
-  function resetBannerAuto() {
-    clearInterval(bannerAuto);
-    bannerAuto = setInterval(() => moveBannerSlide(1), 5000);
-  }
+        <div class="h-12"></div>
 
-  window.addEventListener('load', updateBannerCarousel);
-  window.addEventListener('resize', updateBannerCarousel);
-</script>
+        <section class="px-2 sm:px-6 py-4">
+            <h2 class="text-2xl font-bold mb-4 text-blue-700 text-center">Layanan Kami</h2>
+            <div class="relative overflow-hidden">
+                <div id="layananCarousel" class="flex transition-transform duration-500 ease-in-out">
+                    
+                    <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+                        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+                            <div class="overflow-hidden">
+                                <img src="https://picsum.photos/400/250?random=1" 
+                                    class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                                    alt="Layanan 1">
+                            </div>
+                            <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+                                <img src="https://picsum.photos/50?random=11" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+                                <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 1</h3>
+                            </div>
+                        </a>
+                    </div>
 
+                    <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+                        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+                            <div class="overflow-hidden">
+                                <img src="https://picsum.photos/400/250?random=2" 
+                                    class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                                    alt="Layanan 2">
+                            </div>
+                            <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+                                <img src="https://picsum.photos/50?random=12" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+                                <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 2</h3>
+                            </div>
+                        </a>
+                    </div>
 
+                    <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+                        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+                            <div class="overflow-hidden">
+                                <img src="https://picsum.photos/400/250?random=3" 
+                                    class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                                    alt="Layanan 3">
+                            </div>
+                            <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+                                <img src="https://picsum.photos/50?random=13" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+                                <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 3</h3>
+                            </div>
+                        </a>
+                    </div>
 
+                    <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+                        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+                            <div class="overflow-hidden">
+                                <img src="https://picsum.photos/400/250?random=4" 
+                                    class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                                    alt="Layanan 4">
+                            </div>
+                            <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+                                <img src="https://picsum.photos/50?random=14" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+                                <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 4</h3>
+                            </div>
+                        </a>
+                    </div>
 
-<!-- Jarak tambahan -->
-<div class="h-12"></div>
+                    <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+                        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+                            <div class="overflow-hidden">
+                                <img src="https://picsum.photos/400/250?random=5" 
+                                    class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                                    alt="Layanan 5">
+                            </div>
+                            <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+                                <img src="https://picsum.photos/50?random=15" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+                                <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 5</h3>
+                            </div>
+                        </a>
+                    </div>
 
+                    <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+                        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+                            <div class="overflow-hidden">
+                                <img src="https://picsum.photos/400/250?random=6" 
+                                    class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                                    alt="Layanan 6">
+                            </div>
+                            <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+                                <img src="https://picsum.photos/50?random=16" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+                                <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 6</h3>
+                            </div>
+                        </a>
+                    </div>
 
-<!-- 🔹 Layanan (Section Baru dengan Slider + Hover Sinkron) -->
-<section class="px-2 sm:px-6 py-4">
-  <h2 class="text-2xl font-bold mb-4 text-blue-700 text-center">Layanan Kami</h2>
-  <div class="relative overflow-hidden">
-    <div id="layananCarousel" class="flex transition-transform duration-500 ease-in-out">
-      
-      <!-- Layanan 1 -->
-      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
-        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
-          <div class="overflow-hidden">
-            <img src="https://picsum.photos/400/250?random=1" 
-                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
-                 alt="Layanan 1">
-          </div>
-          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
-            <img src="https://picsum.photos/50?random=11" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
-            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 1</h3>
-          </div>
-        </a>
-      </div>
+                    <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+                        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+                            <div class="overflow-hidden">
+                                <img src="https://picsum.photos/400/250?random=7" 
+                                    class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                                    alt="Layanan 7">
+                            </div>
+                            <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+                                <img src="https://picsum.photos/50?random=17" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+                                <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 7</h3>
+                            </div>
+                        </a>
+                    </div>
 
-      <!-- Layanan 2 -->
-      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
-        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
-          <div class="overflow-hidden">
-            <img src="https://picsum.photos/400/250?random=2" 
-                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
-                 alt="Layanan 2">
-          </div>
-          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
-            <img src="https://picsum.photos/50?random=12" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
-            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 2</h3>
-          </div>
-        </a>
-      </div>
+                    <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+                        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+                            <div class="overflow-hidden">
+                                <img src="https://picsum.photos/400/250?random=8" 
+                                    class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                                    alt="Layanan 8">
+                            </div>
+                            <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+                                <img src="https://picsum.photos/50?random=18" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+                                <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 8</h3>
+                            </div>
+                        </a>
+                    </div>
 
-      <!-- Layanan 3 -->
-      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
-        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
-          <div class="overflow-hidden">
-            <img src="https://picsum.photos/400/250?random=3" 
-                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
-                 alt="Layanan 3">
-          </div>
-          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
-            <img src="https://picsum.photos/50?random=13" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
-            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 3</h3>
-          </div>
-        </a>
-      </div>
+                    <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+                        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+                            <div class="overflow-hidden">
+                                <img src="https://picsum.photos/400/250?random=9" 
+                                    class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                                    alt="Layanan 9">
+                            </div>
+                            <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+                                <img src="https://picsum.photos/50?random=19" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+                                <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 9</h3>
+                            </div>
+                        </a>
+                    </div>
 
-      <!-- Layanan 4 -->
-      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
-        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
-          <div class="overflow-hidden">
-            <img src="https://picsum.photos/400/250?random=4" 
-                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
-                 alt="Layanan 4">
-          </div>
-          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
-            <img src="https://picsum.photos/50?random=14" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
-            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 4</h3>
-          </div>
-        </a>
-      </div>
+                    <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+                        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+                            <div class="overflow-hidden">
+                                <img src="https://picsum.photos/400/250?random=10" 
+                                    class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                                    alt="Layanan 10">
+                            </div>
+                            <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+                                <img src="https://picsum.photos/50?random=20" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+                                <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 10</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+                        <a href="layanan-skpd.html" class="block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+                            <div class="overflow-hidden">
+                                <img src="https://picsum.photos/400/250?random=9" 
+                                    alt="Selengkapnya" 
+                                    class="w-full h-40 object-cover transform transition duration-500 hover:scale-110" />
+                            </div>
+                            <div class="bg-blue-600 text-white text-center p-4 transition duration-300 hover:bg-[#14b8a6]">
+                                <img src="https://picsum.photos/50?random=19" class="mx-auto mb-2 rounded-full" alt="icon">
+                                <h3 class="font-semibold">Selengkapnya</h3>
+                            </div>
+                        </a>
+                    </div>
+                </div>
 
-      <!-- Layanan 5 -->
-      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
-        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
-          <div class="overflow-hidden">
-            <img src="https://picsum.photos/400/250?random=5" 
-                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
-                 alt="Layanan 5">
-          </div>
-          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
-            <img src="https://picsum.photos/50?random=15" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
-            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 5</h3>
-          </div>
-        </a>
-      </div>
+                <button onclick="prevLayananSlide()" 
+                    class="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-700/50 text-white px-3 py-2 sm:px-5 sm:py-4 rounded-r-xl text-3xl sm:text-5xl hover:bg-gray-900 z-10">
+                    ‹
+                </button>
+                <button onclick="nextLayananSlide()" 
+                    class="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-700/50 text-white px-3 py-2 sm:px-5 sm:py-4 rounded-l-xl text-3xl sm:text-5xl hover:bg-gray-900 z-10">
+                    ›
+                </button>
+            </div>
+        </section>
 
-      <!-- Layanan 6 -->
-      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
-        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
-          <div class="overflow-hidden">
-            <img src="https://picsum.photos/400/250?random=6" 
-                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
-                 alt="Layanan 6">
-          </div>
-          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
-            <img src="https://picsum.photos/50?random=16" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
-            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 6</h3>
-          </div>
-        </a>
-      </div>
+        <script>
+            const layananCarousel = document.getElementById("layananCarousel");
+            const totalLayananItems = layananCarousel.children.length;
+            let currentLayananIndex = 0;
+            let visibleLayananItems = 4;
+            let layananSlideInterval;
 
-      <!-- Layanan 7 -->
-      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
-        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
-          <div class="overflow-hidden">
-            <img src="https://picsum.photos/400/250?random=7" 
-                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
-                 alt="Layanan 7">
-          </div>
-          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
-            <img src="https://picsum.photos/50?random=17" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
-            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 7</h3>
-          </div>
-        </a>
-      </div>
+            function setupLayananCarousel() {
+                if (layananSlideInterval) clearInterval(layananSlideInterval);
+                const screenWidth = window.innerWidth;
+                if (screenWidth < 640) visibleLayananItems = 1;
+                else if (screenWidth < 1024) visibleLayananItems = 2;
+                else visibleLayananItems = 4;
 
-      <!-- Layanan 8 -->
-      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
-        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
-          <div class="overflow-hidden">
-            <img src="https://picsum.photos/400/250?random=8" 
-                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
-                 alt="Layanan 8">
-          </div>
-          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
-            <img src="https://picsum.photos/50?random=18" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
-            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 8</h3>
-          </div>
-        </a>
-      </div>
+                if (currentLayananIndex > totalLayananItems - visibleLayananItems) {
+                    currentLayananIndex = Math.max(0, totalLayananItems - visibleLayananItems);
+                }
+                updateLayananCarouselPosition();
+                layananSlideInterval = setInterval(nextLayananSlide, 4000);
+            }
 
-      <!-- Layanan 9 -->
-      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
-        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
-          <div class="overflow-hidden">
-            <img src="https://picsum.photos/400/250?random=9" 
-                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
-                 alt="Layanan 9">
-          </div>
-          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
-            <img src="https://picsum.photos/50?random=19" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
-            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 9</h3>
-          </div>
-        </a>
-      </div>
+            function updateLayananCarouselPosition() {
+                const slideWidth = 100 / visibleLayananItems;
+                layananCarousel.style.transform = `translateX(-${currentLayananIndex * slideWidth}%)`;
+            }
 
-      <!-- Layanan 10 -->
-      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
-        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
-          <div class="overflow-hidden">
-            <img src="https://picsum.photos/400/250?random=10" 
-                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
-                 alt="Layanan 10">
-          </div>
-          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
-            <img src="https://picsum.photos/50?random=20" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
-            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 10</h3>
-          </div>
-        </a>
-      </div>
-       <!-- Selengkapnya -->
-      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
-        <a href="layanan-skpd.html" class="block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
-          <div class="overflow-hidden">
-            <img src="https://picsum.photos/400/250?random=9" 
-                 alt="Selengkapnya" 
-                 class="w-full h-40 object-cover transform transition duration-500 hover:scale-110" />
-          </div>
-          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 hover:bg-[#14b8a6]">
-            <img src="https://picsum.photos/50?random=19" class="mx-auto mb-2 rounded-full" alt="icon">
-            <h3 class="font-semibold">Selengkapnya</h3>
-          </div>
-        </a>
-      </div>
+            function nextLayananSlide() {
+                if (currentLayananIndex >= totalLayananItems - visibleLayananItems) currentLayananIndex = 0;
+                else currentLayananIndex++;
+                updateLayananCarouselPosition();
+            }
 
+            function prevLayananSlide() {
+                if (currentLayananIndex <= 0) currentLayananIndex = totalLayananItems - visibleLayananItems;
+                else currentLayananIndex--;
+                updateLayananCarouselPosition();
+            }
 
-    </div>
+            window.addEventListener('load', setupLayananCarousel);
+            window.addEventListener('resize', setupLayananCarousel);
 
-    <!-- Tombol navigasi -->
-    <button onclick="prevSlide()" 
-      class="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-700/50 text-white px-3 py-2 sm:px-5 sm:py-4 rounded-r-xl text-3xl sm:text-5xl hover:bg-gray-900 z-10">
-      ‹
-    </button>
-    <button onclick="nextSlide()" 
-      class="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-700/50 text-white px-3 py-2 sm:px-5 sm:py-4 rounded-l-xl text-3xl sm:text-5xl hover:bg-gray-900 z-10">
-      ›
-    </button>
-  </div>
-</section>
+            // Swipe support
+            let startX = 0;
+            let isDragging = false;
 
-<script>
-  const carousel = document.getElementById("layananCarousel");
-  const totalItems = carousel.children.length;
-  let currentIndex = 0;
-  let visibleItems = 4;
-  let slideInterval;
+            layananCarousel.addEventListener("touchstart", (e) => {
+                startX = e.touches[0].clientX;
+                isDragging = true;
+            });
 
-  function setupCarousel() {
-    if (slideInterval) clearInterval(slideInterval);
-    const screenWidth = window.innerWidth;
-    if (screenWidth < 640) visibleItems = 1;
-    else if (screenWidth < 1024) visibleItems = 2;
-    else visibleItems = 4;
+            layananCarousel.addEventListener("touchend", (e) => {
+                if (!isDragging) return;
+                const endX = e.changedTouches[0].clientX;
+                handleSwipe(startX, endX);
+                isDragging = false;
+            });
 
-    if (currentIndex > totalItems - visibleItems) {
-      currentIndex = Math.max(0, totalItems - visibleItems);
-    }
-    updateCarouselPosition();
-    slideInterval = setInterval(nextSlide, 4000);
-  }
+            layananCarousel.addEventListener("mousedown", (e) => {
+                if (e.buttons === 1) {
+                    startX = e.clientX;
+                    isDragging = true;
+                }
+            });
 
-  function updateCarouselPosition() {
-    const slideWidth = 100 / visibleItems;
-    carousel.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
-  }
+            layananCarousel.addEventListener("mouseup", (e) => {
+                if (!isDragging) return;
+                const endX = e.clientX;
+                handleSwipe(startX, endX);
+                isDragging = false;
+            });
 
-  function nextSlide() {
-    if (currentIndex >= totalItems - visibleItems) currentIndex = 0;
-    else currentIndex++;
-    updateCarouselPosition();
-  }
-
-  function prevSlide() {
-    if (currentIndex <= 0) currentIndex = totalItems - visibleItems;
-    else currentIndex--;
-    updateCarouselPosition();
-  }
-
-  window.addEventListener('load', setupCarousel);
-  window.addEventListener('resize', setupCarousel);
-
-  // 🔹 Swipe support
-  let startX = 0;
-  let isDragging = false;
-
-  carousel.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
-    isDragging = true;
-  });
-
-  carousel.addEventListener("touchend", (e) => {
-    if (!isDragging) return;
-    const endX = e.changedTouches[0].clientX;
-    handleSwipe(startX, endX);
-    isDragging = false;
-  });
-
-  carousel.addEventListener("mousedown", (e) => {
-    if (e.buttons === 1) {
-      startX = e.clientX;
-      isDragging = true;
-    }
-  });
-
-  carousel.addEventListener("mouseup", (e) => {
-    if (!isDragging) return;
-    const endX = e.clientX;
-    handleSwipe(startX, endX);
-    isDragging = false;
-  });
-
-  function handleSwipe(start, end) {
-    const threshold = 50;
-    if (end - start > threshold) prevSlide();
-    else if (start - end > threshold) nextSlide();
-  }
-</script>
-
-
+            function handleSwipe(start, end) {
+                const threshold = 50;
+                if (end - start > threshold) prevLayananSlide();
+                else if (start - end > threshold) nextLayananSlide();
+            }
+        </script>
 
         <section aria-labelledby="pengumuman-heading" class="mb-14">
             <h2 id="pengumuman-heading" class="text-xl font-semibold mb-4 text-center">PENGUMUMAN</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <article class="p-4 border border-gray-300 rounded-md shadow-sm min-h-[200px] flex flex-col items-start">
+                <article class="p-4 border border-gray-300 rounded-md shadow-sm min-h-[200px] flex flex-col items-start bg-white">
                     <a href="#" class="text-blue-600 hover:underline font-semibold block mb-1">Surat Edaran pelaksanaan Pembentukan Dewan Pendidikan Kabupaten Purworejo 2025–2030</a>
                     <time datetime="2025-04-22" class="text-sm text-gray-500 mb-2">22 Apr 2025</time>
                 </article>
-                <article class="p-4 border border-gray-300 rounded-md shadow-sm min-h-[200px] flex flex-col items-start">
+                <article class="p-4 border border-gray-300 rounded-md shadow-sm min-h-[200px] flex flex-col items-start bg-white">
                     <a href="#" class="text-blue-600 hover:underline font-semibold block mb-1">Perda 15 Tahun 2025 tentang Anggaran Pendapatan dan Belanja Daerah Tahun Anggaran 2025</a>
                     <time datetime="2025-01-06" class="text-sm text-gray-500 mb-2">06 Jan 2025</time>
                 </article>
@@ -623,13 +611,40 @@
                 </article>
             </div>
         </section>
-
     </main>
 
-    <button id="tombol-baca-suara" aria-label="Baca Halaman dengan Suara">
-        <span>🔊</span>
-        <span>Baca Halaman</span>
+    <button id="accessibility-button" class="bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" aria-label="Buka Menu Aksesibilitas">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 1025 1024" fill="currentColor">
+            <path d="m1006 875l-63 64q-1 0-1 .5t-1 1.5l-1.5 1l-2.5 1q-4 4-7 5q-18 12-40.5 10.5T851 941L678 767H384q-26 0-45-18.5T320 704V384q0-27 19-45.5t45.5-18.5t45 18.5T448 384v256h249q7-1 16 1q4 0 7 1q7 2 9 3q12 5 22 15l145 145l20-20q19-19 45.5-19t45 19t18.5 45.5t-19 44.5zM384 256q-53 0-90-37.5T257 128t37-90.5T384 0t90.5 37.5T512 128t-37.5 90.5T384 256zm146 593l3 3q19-18 45.5-18t45 18.5t18.5 45t-18 45.5q-10 10-26 15q-74 50-161.5 62t-173-16T113 911T20 760.5t-16-173T66 426q5-16 15-26q19-19 45.5-19t45 19t18.5 45.5t-18 45.5l3 3q-53 74-45.5 167t74 159.5t159.5 74T530 849z"/>
+        </svg>
     </button>
+    <div id="accessibility-sidebar" class="accessibility-sidebar p-4">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-lg font-bold">Menu Aksesibilitas</h3>
+            <button id="close-accessibility-sidebar" class="text-2xl font-bold" aria-label="Tutup Menu Aksesibilitas">×</button>
+        </div>
+        <ul class="space-y-3">
+            <li>
+                <button id="tombol-baca-suara" class="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                    <span>🔊</span>
+                    <span>Baca Halaman</span>
+                </button>
+            </li>
+            <li>
+                <div class="w-full flex items-center justify-between gap-3 p-3 rounded-lg">
+                    <label for="dark-mode-toggle" class="flex items-center gap-3 cursor-pointer">
+                        <span>🌙</span>
+                        <span>Mode Malam</span>
+                    </label>
+                    <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                        <input type="checkbox" name="dark-mode-toggle" id="dark-mode-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                        <label for="dark-mode-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div id="backdrop" class="backdrop"></div>
 
     <footer class="bg-blue-900 text-blue-200 relative pt-20">
         <div class="absolute top-0 left-0 w-full overflow-hidden leading-[0] -mt-1">
@@ -700,7 +715,9 @@
             </ul>
         </div>
     </div>
+    
 <script src="{{ url_for('static', filename='js/baca-suara.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
 
 <script>
     // Script untuk menu, navigasi, dan pencarian
@@ -778,37 +795,6 @@
         if (e.key === "Enter" && firstMatch) { window.location.href = firstMatch.href; }
     });
 
-    // Script untuk slider layanan
-    const carousel = document.getElementById("layananCarousel");
-    if(carousel){
-        const totalItems = carousel.children.length;
-        let currentIndex = 0;
-        let visibleItems = 4;
-        let slideInterval;
-        function setupCarousel() {
-            if (slideInterval) { clearInterval(slideInterval); }
-            const screenWidth = window.innerWidth;
-            if (screenWidth < 640) { visibleItems = 1; } else if (screenWidth < 1024) { visibleItems = 2; } else { visibleItems = 4; }
-            if (currentIndex > totalItems - visibleItems) { currentIndex = Math.max(0, totalItems - visibleItems); }
-            updateCarouselPosition();
-            slideInterval = setInterval(nextSlide, 4000);
-        }
-        function updateCarouselPosition() {
-            const slideWidth = 100 / visibleItems;
-            carousel.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
-        }
-        window.prevSlide = function() {
-            if (currentIndex <= 0) { currentIndex = totalItems - visibleItems; } else { currentIndex--; }
-            updateCarouselPosition();
-        }
-        window.nextSlide = function() {
-            if (currentIndex >= totalItems - visibleItems) { currentIndex = 0; } else { currentIndex++; }
-            updateCarouselPosition();
-        }
-        window.addEventListener('load', setupCarousel);
-        window.addEventListener('resize', setupCarousel);
-    }
-    
     // Script untuk popup kanal aduan
     document.getElementById('copyright-year').textContent = new Date().getFullYear();
     const aduanButton = document.getElementById('kanalAduanButton');
@@ -832,6 +818,21 @@
     popup.addEventListener('click', (event) => {
         if (event.target === popup) { closePopup(); }
     });
+    
+    // Script untuk sidebar aksesibilitas
+    const accessibilityButton = document.getElementById('accessibility-button');
+    const accessibilitySidebar = document.getElementById('accessibility-sidebar');
+    const closeAccessibilitySidebar = document.getElementById('close-accessibility-sidebar');
+    const backdrop = document.getElementById('backdrop');
+
+    const toggleSidebar = () => {
+        accessibilitySidebar.classList.toggle('open');
+        backdrop.classList.toggle('active');
+    };
+
+    accessibilityButton.addEventListener('click', toggleSidebar);
+    closeAccessibilitySidebar.addEventListener('click', toggleSidebar);
+    backdrop.addEventListener('click', toggleSidebar);
 </script>
 </body>
 </html>

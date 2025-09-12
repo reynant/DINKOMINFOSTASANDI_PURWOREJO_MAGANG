@@ -6,8 +6,9 @@
   <title>Layanan SKPD - Dinas Kominfo Purworejo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <style>
-    body { font-family: "Poppins", sans-serif; }
+    body { font-family: "Poppins", sans-serif; transition: background-color 0.3s, color 0.3s; }
     .animated-gradient { background-size: 200% 200%; animation: gradient-animation 10s ease infinite; }
     @keyframes gradient-animation { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
     .dropdown-menu { transition:opacity .2s ease,transform .2s ease; opacity:0; transform:translateY(10px); pointer-events:none; max-height:320px; overflow-y:auto; }
@@ -40,11 +41,39 @@
       @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     }
 
-    /* === CSS UNTUK TOMBOL BACA SUARA === */
-    #tombol-baca-suara { position: fixed; bottom: 90px; right: 20px; z-index: 1000; background-color: #007bff; color: white; border: none; border-radius: 50px; padding: 12px 18px; font-size: 15px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: background-color 0.3s ease, transform 0.2s ease; display: flex; align-items: center; gap: 8px; }
-    #tombol-baca-suara:hover { background-color: #0056b3; transform: scale(1.05); }
-    #tombol-baca-suara.sedang-membaca { background-color: #dc3545; }
-    #tombol-baca-suara.sedang-membaca:hover { background-color: #a71d2a; }
+    /* === CSS UNTUK FITUR AKSESIBILITAS & MODE MALAM === */
+    .accessibility-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background-color: #1f2937; color: white; z-index: 1050; transition: right 0.3s ease-in-out; box-shadow: -4px 0 15px rgba(0,0,0,0.2); }
+    .accessibility-sidebar.open { right: 0; }
+    .backdrop { position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); z-index: 1040; opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in-out; }
+    .backdrop.active { opacity: 1; pointer-events: auto; }
+    
+    #accessibility-button { position: fixed; bottom: 90px; right: 20px; z-index: 1000; }
+
+    #tombol-baca-suara.sedang-membaca { background-color: #dc3545 !important; }
+    #tombol-baca-suara.sedang-membaca:hover { background-color: #a71d2a !important; }
+    
+    /* Dark Mode Styles */
+    .dark body { background-color: #111827; color: #d1d5db; }
+    .dark #main-header { background-image: none; background-color: #1f2937; }
+    .dark #main-nav ul { background-color: #374151; }
+    .dark #main-nav a:hover { background-color: #4b5563; }
+    .dark .mobile-menu { background-color: #111827; }
+    .dark .bg-white { background-color: #1f2937; }
+    .dark .text-gray-800 { color: #f9fafb; }
+    .dark .text-gray-700 { color: #e5e7eb; }
+    .dark .text-gray-600 { color: #9ca3af; }
+    .dark .text-gray-500 { color: #6b7280; }
+    .dark .border-gray-200 { border-color: #4b5563; }
+    .dark .selection\:bg-teal-300::selection { background-color: #5eead4; color: #1f2937; }
+    .dark footer { background-color: #111827; }
+    .dark .dropdown-menu { background-color: #1f2937; color: #e5e7eb; }
+    .dark .dropdown-menu a:hover { background-color: #374151; }
+    .dark .bg-gray-100 { background-color: #111827; }
+    .dark .bg-gray-200 { background-color: #374151; }
+    
+    /* Toggle Switch Dark Mode */
+    .toggle-checkbox:checked { right: 0; border-color: #68d391; }
+    .toggle-checkbox:checked + .toggle-label { background-color: #68d391; }
   </style>
 </head>
 <body class="bg-gray-100 text-gray-800 selection:bg-teal-300 selection:text-white">
@@ -58,7 +87,7 @@
         </div>
     </div>
     <div class="w-full max-w-2xl px-4 z-20">
-        <form role="search" action="{{ url_for('public.search') }}" method="get" class="relative flex">
+        <form role="search" action="#" method="get" class="relative flex">
             <input id="search-input" type="search" name="q" placeholder="Cari berita, layanan, atau informasi publik..." class="flex-grow py-4 px-6 text-md text-gray-900 rounded-l-full border-2 border-gray-300 focus:outline-none focus:border-teal-500 shadow-md" required />
             <button type="submit" class="px-6 bg-blue-700 hover:bg-teal-500 text-white font-semibold rounded-r-full">Cari</button>
         </form>
@@ -122,7 +151,7 @@
               <form action="#" method="get" class="relative">
                 <input type="search" name="q" placeholder="Cari..." class="w-48 py-2 pl-4 pr-10 text-sm text-gray-900 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-400" />
                 <button type="submit" class="absolute top-1/2 right-2 -translate-y-1/2 p-1 text-gray-500 hover:text-blue-600">
-                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                 </button>
               </form>
             </div>
@@ -417,10 +446,39 @@
   </div>
 </main>
 
-<button id="tombol-baca-suara" aria-label="Baca Halaman dengan Suara">
-    <span>🔊</span>
-    <span>Baca Halaman</span>
+<button id="accessibility-button" class="bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" aria-label="Buka Menu Aksesibilitas">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 1025 1024" fill="currentColor">
+        <path d="m1006 875l-63 64q-1 0-1 .5t-1 1.5l-1.5 1l-2.5 1q-4 4-7 5q-18 12-40.5 10.5T851 941L678 767H384q-26 0-45-18.5T320 704V384q0-27 19-45.5t45.5-18.5t45 18.5T448 384v256h249q7-1 16 1q4 0 7 1q7 2 9 3q12 5 22 15l145 145l20-20q19-19 45.5-19t45 19t18.5 45.5t-19 44.5zM384 256q-53 0-90-37.5T257 128t37-90.5T384 0t90.5 37.5T512 128t-37.5 90.5T384 256zm146 593l3 3q19-18 45.5-18t45 18.5t18.5 45t-18 45.5q-10 10-26 15q-74 50-161.5 62t-173-16T113 911T20 760.5t-16-173T66 426q5-16 15-26q19-19 45.5-19t45 19t18.5 45.5t-18 45.5l3 3q-53 74-45.5 167t74 159.5t159.5 74T530 849z"/>
+    </svg>
 </button>
+
+<div id="accessibility-sidebar" class="accessibility-sidebar p-4">
+    <div class="flex justify-between items-center mb-6">
+        <h3 class="text-lg font-bold">Menu Aksesibilitas</h3>
+        <button id="close-accessibility-sidebar" class="text-2xl font-bold" aria-label="Tutup Menu Aksesibilitas">×</button>
+    </div>
+    <ul class="space-y-3">
+        <li>
+            <button id="tombol-baca-suara" class="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <span>🔊</span>
+                <span>Baca Halaman</span>
+            </button>
+        </li>
+        <li>
+            <div class="w-full flex items-center justify-between gap-3 p-3 rounded-lg">
+                <label for="dark-mode-toggle" class="flex items-center gap-3 cursor-pointer">
+                    <span>🌙</span>
+                    <span>Mode Malam</span>
+                </label>
+                <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                    <input type="checkbox" name="dark-mode-toggle" id="dark-mode-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                    <label for="dark-mode-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+<div id="backdrop" class="backdrop"></div>
 
 <footer class="bg-blue-900 text-blue-200 relative pt-20">
       <div class="absolute top-0 left-0 w-full overflow-hidden leading-[0] -mt-1">
@@ -473,10 +531,10 @@
           </div>
         </div>
         <div class="text-center text-sm border-t border-blue-800 pt-6 mt-10">
-          © <span id="copyright-year">2025</span> Dinas Komunikasi, Informatika, Statistik dan Persandian Kabupaten Purworejo.
+          © <span id="copyright-year"></span> Dinas Komunikasi, Informatika, Statistik dan Persandian Kabupaten Purworejo.
         </div>
       </div>
-  </footer>
+</footer>
 
   <button id="kanalAduanButton" class="fixed bottom-5 right-5 z-50 w-14 h-14 bg-teal-500 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-teal-600 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all duration-300" aria-label="Buka Kanal Aduan">
     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
@@ -493,8 +551,9 @@
         </ul>
     </div>
   </div>
-  
-<script src="{{ url_for('static', filename='js/baca-suara.js') }}"></script>
+
+<script src="js/baca-suara.js"></script>
+<script src="js/dark-mode.js"></script>
 
 <script>
   // Script untuk menu, navigasi, dan pencarian
@@ -595,6 +654,21 @@
   popup.addEventListener('click', (event) => {
     if (event.target === popup) { closePopup(); }
   });
+  
+  // Script untuk sidebar aksesibilitas
+  const accessibilityButton = document.getElementById('accessibility-button');
+  const accessibilitySidebar = document.getElementById('accessibility-sidebar');
+  const closeAccessibilitySidebar = document.getElementById('close-accessibility-sidebar');
+  const backdrop = document.getElementById('backdrop');
+
+  const toggleSidebar = () => {
+      accessibilitySidebar.classList.toggle('open');
+      backdrop.classList.toggle('active');
+  };
+
+  accessibilityButton.addEventListener('click', toggleSidebar);
+  closeAccessibilitySidebar.addEventListener('click', toggleSidebar);
+  backdrop.addEventListener('click', toggleSidebar);
 </script>
 </body>
 </html>

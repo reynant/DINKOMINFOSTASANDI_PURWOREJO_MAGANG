@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 21, 2025 at 10:02 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Waktu pembuatan: 11 Sep 2025 pada 10.59
+-- Versi server: 10.4.32-MariaDB
+-- Versi PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `web_kominfo`
+-- Database: `db_dinkominfostasandi_dummy`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `agenda_admin`
+-- Struktur dari tabel `agenda_admin`
 --
 
 CREATE TABLE `agenda_admin` (
@@ -38,7 +38,7 @@ CREATE TABLE `agenda_admin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `agenda_admin`
+-- Dumping data untuk tabel `agenda_admin`
 --
 
 INSERT INTO `agenda_admin` (`id`, `tema`, `tgl_mulai`, `tgl_selesai`, `jam`, `created_at`, `updated_at`) VALUES
@@ -49,7 +49,7 @@ INSERT INTO `agenda_admin` (`id`, `tema`, `tgl_mulai`, `tgl_selesai`, `jam`, `cr
 -- --------------------------------------------------------
 
 --
--- Table structure for table `alamat_kontak`
+-- Struktur dari tabel `alamat_kontak`
 --
 
 CREATE TABLE `alamat_kontak` (
@@ -61,7 +61,7 @@ CREATE TABLE `alamat_kontak` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `berita`
+-- Struktur dari tabel `berita`
 --
 
 CREATE TABLE `berita` (
@@ -81,7 +81,7 @@ CREATE TABLE `berita` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `berita`
+-- Dumping data untuk tabel `berita`
 --
 
 INSERT INTO `berita` (`id`, `judul`, `sub_judul`, `video_youtube`, `kategori`, `headline`, `berita_utama`, `isi_berita`, `gambar`, `tag`, `waktu_posting`, `tanggal`, `status`) VALUES
@@ -92,7 +92,7 @@ INSERT INTO `berita` (`id`, `judul`, `sub_judul`, `video_youtube`, `kategori`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `berita_foto`
+-- Struktur dari tabel `berita_foto`
 --
 
 CREATE TABLE `berita_foto` (
@@ -104,7 +104,7 @@ CREATE TABLE `berita_foto` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `berita_foto`
+-- Dumping data untuk tabel `berita_foto`
 --
 
 INSERT INTO `berita_foto` (`id`, `cover`, `judul_berita_foto`, `url`, `aktif`) VALUES
@@ -113,7 +113,7 @@ INSERT INTO `berita_foto` (`id`, `cover`, `judul_berita_foto`, `url`, `aktif`) V
 -- --------------------------------------------------------
 
 --
--- Table structure for table `download_area`
+-- Struktur dari tabel `download_area`
 --
 
 CREATE TABLE `download_area` (
@@ -125,7 +125,7 @@ CREATE TABLE `download_area` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `download_area`
+-- Dumping data untuk tabel `download_area`
 --
 
 INSERT INTO `download_area` (`No`, `Judul`, `Link`, `Hits`, `Tanggal`) VALUES
@@ -143,7 +143,7 @@ INSERT INTO `download_area` (`No`, `Judul`, `Link`, `Hits`, `Tanggal`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `halaman_baru`
+-- Struktur dari tabel `halaman_baru`
 --
 
 CREATE TABLE `halaman_baru` (
@@ -154,7 +154,7 @@ CREATE TABLE `halaman_baru` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `halaman_baru`
+-- Dumping data untuk tabel `halaman_baru`
 --
 
 INSERT INTO `halaman_baru` (`id`, `judul`, `link`, `tanggal_posting`) VALUES
@@ -164,7 +164,7 @@ INSERT INTO `halaman_baru` (`id`, `judul`, `link`, `tanggal_posting`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `identitas_website`
+-- Struktur dari tabel `identitas_website`
 --
 
 CREATE TABLE `identitas_website` (
@@ -182,7 +182,7 @@ CREATE TABLE `identitas_website` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `identitas_website`
+-- Dumping data untuk tabel `identitas_website`
 --
 
 INSERT INTO `identitas_website` (`id`, `nama_website`, `email`, `domain`, `sosial_network`, `no_rekening`, `no_telpon`, `meta_deskripsi`, `meta_keyword`, `google_maps`, `favicon`) VALUES
@@ -191,7 +191,7 @@ INSERT INTO `identitas_website` (`id`, `nama_website`, `email`, `domain`, `sosia
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jejak_pendapat`
+-- Struktur dari tabel `jejak_pendapat`
 --
 
 CREATE TABLE `jejak_pendapat` (
@@ -203,7 +203,7 @@ CREATE TABLE `jejak_pendapat` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `jejak_pendapat`
+-- Dumping data untuk tabel `jejak_pendapat`
 --
 
 INSERT INTO `jejak_pendapat` (`id`, `pilihan`, `status`, `rating`, `aktif`) VALUES
@@ -212,7 +212,7 @@ INSERT INTO `jejak_pendapat` (`id`, `pilihan`, `status`, `rating`, `aktif`) VALU
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kategori_berita`
+-- Struktur dari tabel `kategori_berita`
 --
 
 CREATE TABLE `kategori_berita` (
@@ -225,7 +225,7 @@ CREATE TABLE `kategori_berita` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `kategori_berita`
+-- Dumping data untuk tabel `kategori_berita`
 --
 
 INSERT INTO `kategori_berita` (`id`, `nama_kategori`, `link`, `artikel`, `posisi`, `aktif`) VALUES
@@ -241,7 +241,7 @@ INSERT INTO `kategori_berita` (`id`, `nama_kategori`, `link`, `artikel`, `posisi
 -- --------------------------------------------------------
 
 --
--- Table structure for table `komentar_berita`
+-- Struktur dari tabel `komentar_berita`
 --
 
 CREATE TABLE `komentar_berita` (
@@ -252,7 +252,7 @@ CREATE TABLE `komentar_berita` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `komentar_berita`
+-- Dumping data untuk tabel `komentar_berita`
 --
 
 INSERT INTO `komentar_berita` (`id`, `nama_komentator`, `isi_komentar`, `tanggal_komentar`) VALUES
@@ -265,7 +265,7 @@ INSERT INTO `komentar_berita` (`id`, `nama_komentator`, `isi_komentar`, `tanggal
 -- --------------------------------------------------------
 
 --
--- Table structure for table `komentar_video`
+-- Struktur dari tabel `komentar_video`
 --
 
 CREATE TABLE `komentar_video` (
@@ -278,7 +278,7 @@ CREATE TABLE `komentar_video` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pesan_masuk`
+-- Struktur dari tabel `pesan_masuk`
 --
 
 CREATE TABLE `pesan_masuk` (
@@ -290,7 +290,7 @@ CREATE TABLE `pesan_masuk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `pesan_masuk`
+-- Dumping data untuk tabel `pesan_masuk`
 --
 
 INSERT INTO `pesan_masuk` (`id`, `nama`, `email`, `subjek`, `tanggal`) VALUES
@@ -299,7 +299,7 @@ INSERT INTO `pesan_masuk` (`id`, `nama`, `email`, `subjek`, `tanggal`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `playlist_video`
+-- Struktur dari tabel `playlist_video`
 --
 
 CREATE TABLE `playlist_video` (
@@ -311,7 +311,7 @@ CREATE TABLE `playlist_video` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `playlist_video`
+-- Dumping data untuk tabel `playlist_video`
 --
 
 INSERT INTO `playlist_video` (`id`, `cover`, `judul_playlist`, `aktif`, `action`) VALUES
@@ -323,7 +323,7 @@ INSERT INTO `playlist_video` (`id`, `cover`, `judul_playlist`, `aktif`, `action`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sekilas_info`
+-- Struktur dari tabel `sekilas_info`
 --
 
 CREATE TABLE `sekilas_info` (
@@ -335,17 +335,17 @@ CREATE TABLE `sekilas_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `sekilas_info`
+-- Dumping data untuk tabel `sekilas_info`
 --
 
 INSERT INTO `sekilas_info` (`id`, `isi_info`, `aktif`, `posting`, `foto`) VALUES
-(1, 'athalia', 'Y', '2025-08-20 02:46:30', NULL),
-(2, 'monica', 'Y', '2025-08-20 02:46:30', NULL);
+(1, 'Nant', 'Y', '2025-08-20 02:46:30', NULL),
+(2, 'Rey', 'Y', '2025-08-20 02:46:30', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sensor_komentar`
+-- Struktur dari tabel `sensor_komentar`
 --
 
 CREATE TABLE `sensor_komentar` (
@@ -355,7 +355,7 @@ CREATE TABLE `sensor_komentar` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `sensor_komentar`
+-- Dumping data untuk tabel `sensor_komentar`
 --
 
 INSERT INTO `sensor_komentar` (`id`, `kata_jelek`, `ganti_menjadi`) VALUES
@@ -370,7 +370,7 @@ INSERT INTO `sensor_komentar` (`id`, `kata_jelek`, `ganti_menjadi`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tag_berita`
+-- Struktur dari tabel `tag_berita`
 --
 
 CREATE TABLE `tag_berita` (
@@ -380,7 +380,7 @@ CREATE TABLE `tag_berita` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tag_berita`
+-- Dumping data untuk tabel `tag_berita`
 --
 
 INSERT INTO `tag_berita` (`id`, `nama_tag`, `link`) VALUES
@@ -389,7 +389,7 @@ INSERT INTO `tag_berita` (`id`, `nama_tag`, `link`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tag_video`
+-- Struktur dari tabel `tag_video`
 --
 
 CREATE TABLE `tag_video` (
@@ -403,7 +403,7 @@ CREATE TABLE `tag_video` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tag_video`
+-- Dumping data untuk tabel `tag_video`
 --
 
 INSERT INTO `tag_video` (`id`, `nama_tag`, `link_video`, `posisi`, `aktif`, `created_at`, `updated_at`) VALUES
@@ -413,43 +413,37 @@ INSERT INTO `tag_video` (`id`, `nama_tag`, `link_video`, `posisi`, `aktif`, `cre
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Struktur dari tabel `users`
 --
 
 CREATE TABLE `users` (
-  `Username` varchar(100) NOT NULL,
+  `username` varchar(100) DEFAULT NULL,
   `Nama_Lengkap` varchar(100) DEFAULT NULL,
   `Email` varchar(100) DEFAULT NULL,
   `Foto` varchar(255) DEFAULT NULL,
   `Blokir` varchar(5) DEFAULT NULL,
-  `level` varchar(20) DEFAULT NULL,
   `Kiriman` int(11) DEFAULT 0,
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `id` int(10) UNSIGNED NOT NULL,
-  `password` varchar(255) NOT NULL
+  `password` varchar(255) NOT NULL,
+  `level` enum('Admin','Editor','Operator','Kontributor') NOT NULL DEFAULT 'Kontributor'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
+-- Dumping data untuk tabel `users`
 --
 
-INSERT INTO `users` (`Username`, `Nama_Lengkap`, `Email`, `Foto`, `Blokir`, `level`, `Kiriman`, `created_at`, `updated_at`, `id`, `password`) VALUES
-('monica', 'Elly Monica Munthe', 'ellymonica@gmail.com', 'coba.pdf', 'aktif', 'Admin', 0, '2025-08-19 14:23:27', '2025-08-19 14:23:27', 2, ''),
-('admin', 'Admin Utama', 'admin@contoh.com', NULL, 'N', 'admin', 0, '2025-08-21 13:14:32', '2025-08-21 13:19:10', 3, 'b986415c93241513d33d01fcf532a6c47ac4f3ee'),
-('admin', 'Administrator', 'admin@example.com', NULL, 'N', 'admin', 0, '2025-08-21 13:14:32', '2025-08-21 13:19:10', 4, 'admin123');
-
---
--- Update the password for the admin user
---
-UPDATE users 
-SET password = SHA1('admin123') 
-WHERE Username = 'admin';
+INSERT INTO `users` (`username`, `Nama_Lengkap`, `Email`, `Foto`, `Blokir`, `Kiriman`, `created_at`, `updated_at`, `id`, `password`, `level`) VALUES
+('admin', 'admin ganteng', 'adminganteng@gmail.com', NULL, NULL, 0, '2025-09-11 10:52:57', '2025-09-11 11:13:19', 5, 'f865b53623b121fd34ee5426c792e5c33af8c227', 'Admin'),
+('editor', 'editor ganteng', 'editorganteng@gmail.com', NULL, NULL, 0, '2025-09-11 10:54:25', '2025-09-11 11:14:09', 6, 'ef2ea8f0684b26279444be0cfc7ac395cc75df89', 'Editor'),
+('operator', 'operator ganteng', 'operatorganteng@gmail.com', NULL, NULL, 0, '2025-09-11 10:55:07', '2025-09-11 11:17:02', 7, '4aed7fb4eed446796c59ab3fd911e359f063ec83', 'Operator'),
+('kontributor', 'kontributor ganteng', 'kontributorganteng@gmail.com', NULL, NULL, 0, '2025-09-11 10:55:56', '2025-09-11 11:17:33', 8, 'abc54325e0a1a51e3166e47b33893c0af6c9c0b4', 'Kontributor');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `video`
+-- Struktur dari tabel `video`
 --
 
 CREATE TABLE `video` (
@@ -460,7 +454,7 @@ CREATE TABLE `video` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `video`
+-- Dumping data untuk tabel `video`
 --
 
 INSERT INTO `video` (`id`, `judul_video`, `tanggal_video`, `playlist`) VALUES
@@ -475,188 +469,188 @@ INSERT INTO `video` (`id`, `judul_video`, `tanggal_video`, `playlist`) VALUES
 --
 
 --
--- Indexes for table `agenda_admin`
+-- Indeks untuk tabel `agenda_admin`
 --
 ALTER TABLE `agenda_admin`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `alamat_kontak`
+-- Indeks untuk tabel `alamat_kontak`
 --
 ALTER TABLE `alamat_kontak`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `berita`
+-- Indeks untuk tabel `berita`
 --
 ALTER TABLE `berita`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `berita_foto`
+-- Indeks untuk tabel `berita_foto`
 --
 ALTER TABLE `berita_foto`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `download_area`
+-- Indeks untuk tabel `download_area`
 --
 ALTER TABLE `download_area`
   ADD PRIMARY KEY (`No`);
 
 --
--- Indexes for table `halaman_baru`
+-- Indeks untuk tabel `halaman_baru`
 --
 ALTER TABLE `halaman_baru`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `identitas_website`
+-- Indeks untuk tabel `identitas_website`
 --
 ALTER TABLE `identitas_website`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `komentar_berita`
+-- Indeks untuk tabel `komentar_berita`
 --
 ALTER TABLE `komentar_berita`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `komentar_video`
+-- Indeks untuk tabel `komentar_video`
 --
 ALTER TABLE `komentar_video`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `pesan_masuk`
+-- Indeks untuk tabel `pesan_masuk`
 --
 ALTER TABLE `pesan_masuk`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `playlist_video`
+-- Indeks untuk tabel `playlist_video`
 --
 ALTER TABLE `playlist_video`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sekilas_info`
+-- Indeks untuk tabel `sekilas_info`
 --
 ALTER TABLE `sekilas_info`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sensor_komentar`
+-- Indeks untuk tabel `sensor_komentar`
 --
 ALTER TABLE `sensor_komentar`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `tag_video`
+-- Indeks untuk tabel `tag_video`
 --
 ALTER TABLE `tag_video`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `users`
+-- Indeks untuk tabel `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `agenda_admin`
+-- AUTO_INCREMENT untuk tabel `agenda_admin`
 --
 ALTER TABLE `agenda_admin`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `alamat_kontak`
+-- AUTO_INCREMENT untuk tabel `alamat_kontak`
 --
 ALTER TABLE `alamat_kontak`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `berita`
+-- AUTO_INCREMENT untuk tabel `berita`
 --
 ALTER TABLE `berita`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
--- AUTO_INCREMENT for table `berita_foto`
+-- AUTO_INCREMENT untuk tabel `berita_foto`
 --
 ALTER TABLE `berita_foto`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `download_area`
+-- AUTO_INCREMENT untuk tabel `download_area`
 --
 ALTER TABLE `download_area`
   MODIFY `No` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT for table `halaman_baru`
+-- AUTO_INCREMENT untuk tabel `halaman_baru`
 --
 ALTER TABLE `halaman_baru`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `identitas_website`
+-- AUTO_INCREMENT untuk tabel `identitas_website`
 --
 ALTER TABLE `identitas_website`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `komentar_berita`
+-- AUTO_INCREMENT untuk tabel `komentar_berita`
 --
 ALTER TABLE `komentar_berita`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `komentar_video`
+-- AUTO_INCREMENT untuk tabel `komentar_video`
 --
 ALTER TABLE `komentar_video`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `pesan_masuk`
+-- AUTO_INCREMENT untuk tabel `pesan_masuk`
 --
 ALTER TABLE `pesan_masuk`
   MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `playlist_video`
+-- AUTO_INCREMENT untuk tabel `playlist_video`
 --
 ALTER TABLE `playlist_video`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `sekilas_info`
+-- AUTO_INCREMENT untuk tabel `sekilas_info`
 --
 ALTER TABLE `sekilas_info`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `sensor_komentar`
+-- AUTO_INCREMENT untuk tabel `sensor_komentar`
 --
 ALTER TABLE `sensor_komentar`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT for table `tag_video`
+-- AUTO_INCREMENT untuk tabel `tag_video`
 --
 ALTER TABLE `tag_video`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

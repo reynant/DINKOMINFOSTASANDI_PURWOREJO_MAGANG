@@ -49,21 +49,21 @@
 </head>
 <body class="bg-gray-100 text-gray-800 selection:bg-teal-300 selection:text-white">
 
-    <header id="main-header" class="relative flex flex-col items-center justify-center w-full h-72 md:h-80 pt-12 pb-12 text-white bg-gradient-to-r from-blue-800 via-teal-600 to-blue-900 animated-gradient">
-        <div class="flex items-center gap-4 text-center mb-6">
-            <img src="static/img/logo kabupaten pwr.png" alt="Logo Kabupaten Purworejo" class="w-14 h-auto object-contain" onerror="this.style.display='none'"/>
-            <div>
-                <h1 class="text-xl md:text-2xl font-bold tracking-wide uppercase">Dinas Kominfo Purworejo</h1>
-                <p class="text-xs md:text-sm opacity-80">Statistik dan Persandian Kabupaten Purworejo</p>
-            </div>
+   <header id="main-header" class="relative flex flex-col items-center justify-center w-full h-72 md:h-80 pt-12 pb-12 text-white bg-gradient-to-r from-blue-800 via-teal-600 to-blue-900 animated-gradient">
+    <div class="flex items-center gap-4 text-center mb-6">
+        <img src="static/img/logo kabupaten pwr.png" alt="Logo Kabupaten Purworejo" class="w-14 h-auto object-contain" onerror="this.style.display='none'" />
+        <div>
+            <h1 class="text-xl md:text-2xl font-bold tracking-wide uppercase">Dinas Kominfo Purworejo</h1>
+            <p class="text-xs md:text-sm opacity-80">Statistik dan Persandian Kabupaten Purworejo</p>
         </div>
-        <div class="w-full max-w-2xl px-4 z-20">
-            <form role="search" action="#" method="get" class="relative flex">
-                <input id="search-input" type="search" name="q" placeholder="Cari berita, layanan, atau informasi publik..." class="flex-grow py-4 px-6 text-md text-gray-900 rounded-l-full border-2 border-gray-300 focus:outline-none focus:border-teal-500 shadow-md" required />
-                <button type="submit" class="px-6 bg-blue-700 hover:bg-teal-500 text-white font-semibold rounded-r-full">Cari</button>
-            </form>
-        </div>
-    </header>
+    </div>
+    <div class="w-full max-w-2xl px-4 z-20">
+        <form role="search" action="{{ url_for('public.search') }}" method="get" class="relative flex">
+            <input id="search-input" type="search" name="q" placeholder="Cari berita, layanan, atau informasi publik..." class="flex-grow py-4 px-6 text-md text-gray-900 rounded-l-full border-2 border-gray-300 focus:outline-none focus:border-teal-500 shadow-md" required />
+            <button type="submit" class="px-6 bg-blue-700 hover:bg-teal-500 text-white font-semibold rounded-r-full">Cari</button>
+        </form>
+    </div>
+</header>
     <br>
     <nav id="main-nav" class="sticky top-0 z-50 w-full transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

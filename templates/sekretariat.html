@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    body { font-family: "Poppins", sans-serif; }
+    body { font-family: "Poppins", sans-serif; transition: background-color 0.3s, color 0.3s; }
     .animated-gradient { background-size: 200% 200%; animation: gradient-animation 10s ease infinite; }
     @keyframes gradient-animation { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
     .dropdown-menu { transition:opacity .2s ease,transform .2s ease; opacity:0; transform:translateY(10px); pointer-events:none; max-height:320px; overflow-y:auto; }
@@ -39,12 +39,32 @@
       .mobile-menu .dropdown-content.active { display: block; animation: slideDown 0.3s ease; }
       @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     }
+    
+    /* === CSS UNTUK FITUR AKSESIBILITAS & MODE MALAM === */
+    .accessibility-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background-color: #1f2937; color: white; z-index: 1050; transition: right 0.3s ease-in-out; box-shadow: -4px 0 15px rgba(0,0,0,0.2); }
+    .accessibility-sidebar.open { right: 0; }
+    .backdrop { position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); z-index: 1040; opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in-out; }
+    .backdrop.active { opacity: 1; pointer-events: auto; }
+    
+    #accessibility-button { position: fixed; bottom: 80px; right: 20px; z-index: 1000; }
+    
+    /* Dark Mode Styles */
+    .dark body { background-color: #111827; color: #d1d5db; }
+    .dark #main-header { background-image: none; background-color: #1f2937; }
+    .dark #main-nav ul { background-color: #374151; }
+    .dark #main-nav a:hover { background-color: #4b5563; }
+    .dark .mobile-menu { background-color: #111827; }
+    .dark .bg-white { background-color: #1f2937; }
+    .dark .text-gray-800 { color: #f9fafb; }
+    .dark .text-gray-700 { color: #e5e7eb; }
+    .dark .bg-gray-100 { background-color: #111827; }
+    .dark .border-gray-200 { border-color: #4b5563; }
+    .dark .selection\:bg-teal-300::selection { background-color: #5eead4; color: #1f2937; }
+    .dark footer { background-color: #111827; }
 
-    /* === CSS UNTUK TOMBOL BACA SUARA (DITAMBAHKAN) === */
-    #tombol-baca-suara { position: fixed; bottom: 90px; right: 20px; z-index: 1000; background-color: #007bff; color: white; border: none; border-radius: 50px; padding: 12px 18px; font-size: 15px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: background-color 0.3s ease, transform 0.2s ease; display: flex; align-items: center; gap: 8px; }
-    #tombol-baca-suara:hover { background-color: #0056b3; transform: scale(1.05); }
-    #tombol-baca-suara.sedang-membaca { background-color: #dc3545; }
-    #tombol-baca-suara.sedang-membaca:hover { background-color: #a71d2a; }
+    /* Toggle Switch Dark Mode */
+    .toggle-checkbox:checked { right: 0; border-color: #68d391; }
+    .toggle-checkbox:checked + .toggle-label { background-color: #68d391; }
   </style>
 </head>
 <body class="bg-gray-100 text-gray-800 selection:bg-teal-300 selection:text-white">
@@ -63,7 +83,7 @@
             <button type="submit" class="px-6 bg-blue-700 hover:bg-teal-500 text-white font-semibold rounded-r-full">Cari</button>
         </form>
     </div>
-</header>
+  </header>
   <br>
   <nav id="main-nav" class="sticky top-0 z-50 w-full transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -119,7 +139,7 @@
         <div id="nav-search-container" class="flex-shrink-0 flex items-center transition-opacity duration-300 opacity-0 pointer-events-none">
           <div class="relative flex items-center">
             <div id="search-input-wrapper" class="absolute top-1/2 right-10 -translate-y-1/2 transition-all duration-300 opacity-0 -translate-x-4 pointer-events-none">
-              <form action="#" method="get" class="relative">
+              <form action="{{ url_for('public.search') }}" method="get" class="relative">
                 <input type="search" name="q" placeholder="Cari..." class="w-48 py-2 pl-4 pr-10 text-sm text-gray-900 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-400" />
                 <button type="submit" class="absolute top-1/2 right-2 -translate-y-1/2 p-1 text-gray-500 hover:text-blue-600">
                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -140,7 +160,9 @@
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
     <div class="p-3">
-      <input type="text" id="menu-search" placeholder="Cari menu..." class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+        <form action="{{ url_for('public.search') }}" method="get">
+            <input type="text" id="menu-search" name="q" placeholder="Cari menu..." class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+        </form>
     </div>
     <ul id="menu-list">
       <li><a href="index.html">Beranda</a></li>
@@ -181,39 +203,71 @@
     </ul>
   </div>
 
-<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12" id="konten-utama">
-    <section class="py-10 bg-gray-100">
-        <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-md overflow-hidden">
-          <div class="text-center text-xl sm:text-2xl font-bold text-gray-800 py-4">
-            Sekretariat
-          </div>
-          <div class="px-6 py-4 text-justify text-gray-800 text-sm sm:text-base leading-relaxed space-y-4">
-            <p class="text-center font-bold">Pasal 8</p>
-            <p>
-              Sekretariat sebagaimana dimaksud pada Pasal 7 ayat (1), mempunyai tugas melaksanakan koordinasi dalam menyiapkan perumusan kebijakan teknis dan menyelenggarakan tugas bidang, serta memberikan dukungan administrasi pada seluruh unit organisasi di lingkungan DINKOMINFOSTASANDI.
-            </p>
-            <p class="text-center font-bold">Pasal 9</p>
-            <p>
-              Dalam melaksanakan tugas pokok sebagaimana dimaksud dalam Pasal 8, Sekretariat menyelenggarakan fungsi:
-            </p>
-            <div class="space-y-2">
-              <p>a. pengoordinasian penyiapan perumusan kebijakan teknis;</p>
-              <p>b. pengoordinasian penyelenggaraan tugas bidang secara terpadu;</p>
-              <p>c. pengoordinasian penyelenggaraan pelayanan dan pengendalian administrasi perencanaan dan keuangan;</p>
-              <p>d. pengoordinasian penyelenggaraan pelayanan dan pengendalian administrasi umum dan kepegawaian; dan</p>
-              <p>e. pelaksanaan tugas kedinasan lain yang diberikan oleh Kepala DINKOMINFOSTASANDI sesuai dengan tugas dan fungsi.</p>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12" id="konten-utama">
+    <section class="py-10 bg-white">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 bg-white rounded-xl shadow-md border border-gray-200">
+        <div class="py-8 px-6 sm:px-10">
+          <h2 class="text-center text-xl sm:text-2xl font-bold mb-8 text-gray-800">Sekretariat</h2>
+            <div class="text-justify text-gray-700 text-sm sm:text-base leading-relaxed space-y-4">
+              <p class="text-center font-bold">Pasal 8</p>
+              <p>
+                Sekretariat sebagaimana dimaksud pada Pasal 7 ayat (1), mempunyai tugas melaksanakan koordinasi dalam menyiapkan perumusan kebijakan teknis dan menyelenggarakan tugas bidang, serta memberikan dukungan administrasi pada seluruh unit organisasi di lingkungan DINKOMINFOSTASANDI.
+              </p>
+              <p class="text-center font-bold">Pasal 9</p>
+              <p>
+                Dalam melaksanakan tugas pokok sebagaimana dimaksud dalam Pasal 8, Sekretariat menyelenggarakan fungsi:
+              </p>
+              <div class="space-y-2 pl-4">
+                <p>a. pengoordinasian penyiapan perumusan kebijakan teknis;</p>
+                <p>b. pengoordinasian penyelenggaraan tugas bidang secara terpadu;</p>
+                <p>c. pengoordinasian penyelenggaraan pelayanan dan pengendalian administrasi perencanaan dan keuangan;</p>
+                <p>d. pengoordinasian penyelenggaraan pelayanan dan pengendalian administrasi umum dan kepegawaian; dan</p>
+                <p>e. pelaksanaan tugas kedinasan lain yang diberikan oleh Kepala DINKOMINFOSTASANDI sesuai dengan tugas dan fungsi.</p>
+              </div>
             </div>
-          </div>
         </div>
-      </section>
-</main>
-
-<button id="tombol-baca-suara" aria-label="Baca Halaman dengan Suara">
-    <span>🔊</span>
-    <span>Baca Halaman</span>
-</button>
-
-<footer class="bg-blue-900 text-blue-200 relative pt-20">
+      </div>
+    </section>
+  </main>
+  
+  <button id="accessibility-button" class="bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" aria-label="Buka Menu Aksesibilitas">
+     <svg xmlns="http://www.w3.org/2000/svg" 
+     class="h-7 w-7" 
+     viewBox="0 0 1025 1024" 
+     fill="currentColor">
+  <path d="m1006 875l-63 64q-1 0-1 .5t-1 1.5l-1.5 1l-2.5 1q-4 4-7 5q-18 12-40.5 10.5T851 941L678 767H384q-26 0-45-18.5T320 704V384q0-27 19-45.5t45.5-18.5t45 18.5T448 384v256h249q7-1 16 1q4 0 7 1q7 2 9 3q12 5 22 15l145 145l20-20q19-19 45.5-19t45 19t18.5 45.5t-19 44.5zM384 256q-53 0-90-37.5T257 128t37-90.5T384 0t90.5 37.5T512 128t-37.5 90.5T384 256zm146 593l3 3q19-18 45.5-18t45 18.5t18.5 45t-18 45.5q-10 10-26 15q-74 50-161.5 62t-173-16T113 911T20 760.5t-16-173T66 426q5-16 15-26q19-19 45.5-19t45 19t18.5 45.5t-18 45.5l3 3q-53 74-45.5 167t74 159.5t159.5 74T530 849z"/>
+</svg>
+  </button>
+  
+  <div id="accessibility-sidebar" class="accessibility-sidebar p-4">
+    <div class="flex justify-between items-center mb-6">
+        <h3 class="text-lg font-bold">Menu Aksesibilitas</h3>
+        <button id="close-accessibility-sidebar" class="text-2xl font-bold" aria-label="Tutup Menu Aksesibilitas">×</button>
+    </div>
+    <ul class="space-y-3">
+        <li>
+            <button id="tombol-baca-suara" class="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <span>🔊</span>
+                <span>Baca Halaman</span>
+            </button>
+        </li>
+        <li>
+            <div class="w-full flex items-center justify-between gap-3 p-3 rounded-lg">
+                <label for="dark-mode-toggle" class="flex items-center gap-3 cursor-pointer">
+                    <span>🌙</span>
+                    <span>Mode Malam</span>
+                </label>
+                <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                    <input type="checkbox" name="dark-mode-toggle" id="dark-mode-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                    <label for="dark-mode-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                </div>
+            </div>
+        </li>
+    </ul>
+  </div>
+  <div id="backdrop" class="backdrop"></div>
+  
+  <footer class="bg-blue-900 text-blue-200 relative pt-20">
     <div class="absolute top-0 left-0 w-full overflow-hidden leading-[0] -mt-1">
         <svg class="relative block w-full h-[60px] md:h-[80px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
             <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31.74,904.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="fill-current text-gray-100"></path>
@@ -286,7 +340,7 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/baca-suara.js') }}"></script>
-
+<script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
 <script>
   // Script untuk menu, navigasi, dan pencarian
   const header = document.getElementById('main-header');
@@ -386,6 +440,22 @@
   popup.addEventListener('click', (event) => {
     if (event.target === popup) { closePopup(); }
   });
+
+  // Script untuk sidebar aksesibilitas (BARU)
+  const accessibilityButton = document.getElementById('accessibility-button');
+  const accessibilitySidebar = document.getElementById('accessibility-sidebar');
+  const closeAccessibilitySidebar = document.getElementById('close-accessibility-sidebar');
+  const backdrop = document.getElementById('backdrop');
+
+  const toggleSidebar = () => {
+    accessibilitySidebar.classList.toggle('open');
+    backdrop.classList.toggle('active');
+  };
+
+  accessibilityButton.addEventListener('click', toggleSidebar);
+  closeAccessibilitySidebar.addEventListener('click', toggleSidebar);
+  backdrop.addEventListener('click', toggleSidebar);
+
 </script>
 </body>
 </html>

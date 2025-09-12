@@ -190,42 +190,405 @@
         <h2 class="text-3xl font-bold text-blue-800 mb-4">Konten Utama Halaman</h2>
         <p class="text-gray-600 leading-relaxed mb-12">Tinggal Diisi Konten.</p>
 
-        <section class="px-2 sm:px-6 py-4">
-            <h2 class="text-2xl font-bold mb-4 text-blue-700 text-center">Layanan Kami</h2>
-            <div class="relative overflow-hidden">
-                <div id="layananCarousel" class="flex transition-transform duration-500 ease-in-out">
-                    <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
-                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
-                            <div class="overflow-hidden"><img src="https://picsum.photos/400/250?random=1" class="w-full h-40 object-cover transform transition duration-500 hover:scale-110" alt="Layanan 1"></div>
-                            <div class="bg-blue-600 text-white text-center p-4 transition duration-300 hover:bg-yellow-400">
-                                <img src="https://picsum.photos/50?random=11" class="mx-auto mb-2 rounded-full" alt="icon">
-                                <h3 class="font-semibold">Service Desk Operation</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
-                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
-                            <div class="overflow-hidden"><img src="https://picsum.photos/400/250?random=2" class="w-full h-40 object-cover transform transition duration-500 hover:scale-110" alt="Layanan 2"></div>
-                            <div class="bg-blue-600 text-white text-center p-4 transition duration-300 hover:bg-yellow-400">
-                                <img src="https://picsum.photos/50?random=12" class="mx-auto mb-2 rounded-full" alt="icon">
-                                <h3 class="font-semibold">PPID</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
-                        <a href="layanan-skpd.html" class="block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
-                            <div class="overflow-hidden"><img src="https://picsum.photos/400/250?random=9" alt="Selengkapnya" class="w-full h-40 object-cover transform transition duration-500 hover:scale-110" /></div>
-                            <div class="bg-blue-600 text-white text-center p-4 transition duration-300 hover:bg-yellow-400">
-                                <img src="https://picsum.photos/50?random=19" class="mx-auto mb-2 rounded-full" alt="icon">
-                                <h3 class="font-semibold">Selengkapnya</h3>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <button onclick="prevSlide()" class="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-700/50 text-white px-2 py-2 sm:px-4 sm:py-3 rounded-r-xl text-2xl sm:text-4xl hover:bg-gray-900 z-10">‹</button>
-                <button onclick="nextSlide()" class="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-700/50 text-white px-2 py-2 sm:px-4 sm:py-3 rounded-l-xl text-2xl sm:text-4xl hover:bg-gray-900 z-10">›</button>
-            </div>
-        </section>
+
+    
+
+<!-- Banner Slide Compact & Centered -->
+<section class="relative w-full py-28 bg-gray-900 overflow-hidden">
+  <!-- Background Image -->
+  <div class="absolute inset-0 z-0">
+    <img src="https://picsum.photos/1920/700?random=300" alt="Background" class="w-full h-full object-cover opacity-40">
+  </div>
+
+  <!-- Carousel Wrapper -->
+  <div class="relative z-10 flex items-center justify-center">
+    <div id="bannerCarousel" class="flex transition-transform duration-700 ease-in-out items-center">
+      <!-- Banner 1 -->
+      <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60">
+        <img src="https://picsum.photos/1200/300?random=301" class="w-full h-[220px] object-cover">
+        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+          <div class="text-white text-center px-6">
+            <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 1</h2>
+            <p class="text-base md:text-lg">Deskripsi singkat banner pertama.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Banner 2 -->
+      <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60">
+        <img src="https://picsum.photos/1200/300?random=302" class="w-full h-[220px] object-cover">
+        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+          <div class="text-white text-center px-6">
+            <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 2</h2>
+            <p class="text-base md:text-lg">Deskripsi singkat banner kedua.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Banner 3 -->
+      <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60">
+        <img src="https://picsum.photos/1200/300?random=303" class="w-full h-[220px] object-cover">
+        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+          <div class="text-white text-center px-6">
+            <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 3</h2>
+            <p class="text-base md:text-lg">Deskripsi singkat banner ketiga.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Banner 4 -->
+      <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60">
+        <img src="https://picsum.photos/1200/300?random=304" class="w-full h-[220px] object-cover">
+        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+          <div class="text-white text-center px-6">
+            <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 4</h2>
+            <p class="text-base md:text-lg">Deskripsi singkat banner keempat.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tombol Navigasi -->
+  <button onclick="moveBannerSlide(-1)" class="absolute left-12 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white px-6 py-4 rounded-full text-3xl z-20">‹</button>
+  <button onclick="moveBannerSlide(1)" class="absolute right-12 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white px-6 py-4 rounded-full text-3xl z-20">›</button>
+
+  <!-- Indikator (Dots) -->
+  <div id="bannerIndicators" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-3 z-20"></div>
+</section>
+
+<!-- Jarak tambahan -->
+<div class="h-12"></div>
+
+<script>
+  const bannerWrapper = document.getElementById('bannerCarousel');
+  const bannerSlides = bannerWrapper.getElementsByClassName('banner-slide');
+  const bannerIndicators = document.getElementById('bannerIndicators');
+  let bannerIndex = 0;
+  let bannerAuto = setInterval(() => moveBannerSlide(1), 5000);
+
+  // Buat indikator titik sesuai jumlah banner
+  for (let i = 0; i < bannerSlides.length; i++) {
+    const dot = document.createElement('button');
+    dot.className = "w-3 h-3 rounded-full bg-white/40 transform scale-100 transition-all duration-300";
+    dot.addEventListener('click', () => {
+      bannerIndex = i;
+      updateBannerCarousel();
+      resetBannerAuto();
+    });
+    bannerIndicators.appendChild(dot);
+  }
+
+  function updateBannerCarousel() {
+    for (let i = 0; i < bannerSlides.length; i++) {
+      bannerSlides[i].classList.remove('scale-100', 'opacity-100', 'z-10');
+      bannerSlides[i].classList.add('scale-75', 'opacity-60');
+
+      // update indikator
+      bannerIndicators.children[i].classList.remove("bg-white", "scale-125");
+      bannerIndicators.children[i].classList.add("bg-white/40", "scale-100");
+    }
+
+    // Banner aktif
+    bannerSlides[bannerIndex].classList.remove('scale-75', 'opacity-60');
+    bannerSlides[bannerIndex].classList.add('scale-100', 'opacity-100', 'z-10');
+
+    // Indikator aktif → zoom + putih solid
+    bannerIndicators.children[bannerIndex].classList.remove("bg-white/40", "scale-100");
+    bannerIndicators.children[bannerIndex].classList.add("bg-white", "scale-125");
+
+    // Hitung posisi
+    const offset = -(bannerIndex * (bannerSlides[0].offsetWidth + 32)) + 
+                   (bannerWrapper.parentElement.offsetWidth / 2 - bannerSlides[0].offsetWidth / 2);
+    bannerWrapper.style.transform = `translateX(${offset}px)`;
+  }
+
+  function moveBannerSlide(direction) {
+    bannerIndex = (bannerIndex + direction + bannerSlides.length) % bannerSlides.length;
+    updateBannerCarousel();
+    resetBannerAuto();
+  }
+
+  function resetBannerAuto() {
+    clearInterval(bannerAuto);
+    bannerAuto = setInterval(() => moveBannerSlide(1), 5000);
+  }
+
+  window.addEventListener('load', updateBannerCarousel);
+  window.addEventListener('resize', updateBannerCarousel);
+</script>
+
+
+
+
+<!-- Jarak tambahan -->
+<div class="h-12"></div>
+
+
+<!-- 🔹 Layanan (Section Baru dengan Slider + Hover Sinkron) -->
+<section class="px-2 sm:px-6 py-4">
+  <h2 class="text-2xl font-bold mb-4 text-blue-700 text-center">Layanan Kami</h2>
+  <div class="relative overflow-hidden">
+    <div id="layananCarousel" class="flex transition-transform duration-500 ease-in-out">
+      
+      <!-- Layanan 1 -->
+      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+          <div class="overflow-hidden">
+            <img src="https://picsum.photos/400/250?random=1" 
+                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                 alt="Layanan 1">
+          </div>
+          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+            <img src="https://picsum.photos/50?random=11" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 1</h3>
+          </div>
+        </a>
+      </div>
+
+      <!-- Layanan 2 -->
+      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+          <div class="overflow-hidden">
+            <img src="https://picsum.photos/400/250?random=2" 
+                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                 alt="Layanan 2">
+          </div>
+          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+            <img src="https://picsum.photos/50?random=12" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 2</h3>
+          </div>
+        </a>
+      </div>
+
+      <!-- Layanan 3 -->
+      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+          <div class="overflow-hidden">
+            <img src="https://picsum.photos/400/250?random=3" 
+                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                 alt="Layanan 3">
+          </div>
+          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+            <img src="https://picsum.photos/50?random=13" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 3</h3>
+          </div>
+        </a>
+      </div>
+
+      <!-- Layanan 4 -->
+      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+          <div class="overflow-hidden">
+            <img src="https://picsum.photos/400/250?random=4" 
+                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                 alt="Layanan 4">
+          </div>
+          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+            <img src="https://picsum.photos/50?random=14" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 4</h3>
+          </div>
+        </a>
+      </div>
+
+      <!-- Layanan 5 -->
+      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+          <div class="overflow-hidden">
+            <img src="https://picsum.photos/400/250?random=5" 
+                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                 alt="Layanan 5">
+          </div>
+          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+            <img src="https://picsum.photos/50?random=15" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 5</h3>
+          </div>
+        </a>
+      </div>
+
+      <!-- Layanan 6 -->
+      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+          <div class="overflow-hidden">
+            <img src="https://picsum.photos/400/250?random=6" 
+                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                 alt="Layanan 6">
+          </div>
+          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+            <img src="https://picsum.photos/50?random=16" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 6</h3>
+          </div>
+        </a>
+      </div>
+
+      <!-- Layanan 7 -->
+      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+          <div class="overflow-hidden">
+            <img src="https://picsum.photos/400/250?random=7" 
+                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                 alt="Layanan 7">
+          </div>
+          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+            <img src="https://picsum.photos/50?random=17" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 7</h3>
+          </div>
+        </a>
+      </div>
+
+      <!-- Layanan 8 -->
+      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+          <div class="overflow-hidden">
+            <img src="https://picsum.photos/400/250?random=8" 
+                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                 alt="Layanan 8">
+          </div>
+          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+            <img src="https://picsum.photos/50?random=18" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 8</h3>
+          </div>
+        </a>
+      </div>
+
+      <!-- Layanan 9 -->
+      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+          <div class="overflow-hidden">
+            <img src="https://picsum.photos/400/250?random=9" 
+                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                 alt="Layanan 9">
+          </div>
+          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+            <img src="https://picsum.photos/50?random=19" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 9</h3>
+          </div>
+        </a>
+      </div>
+
+      <!-- Layanan 10 -->
+      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+        <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+          <div class="overflow-hidden">
+            <img src="https://picsum.photos/400/250?random=10" 
+                 class="w-full h-40 object-cover transform transition duration-500 group-hover:scale-110" 
+                 alt="Layanan 10">
+          </div>
+          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 group-hover:bg-[#14b8a6] group-hover:scale-105">
+            <img src="https://picsum.photos/50?random=20" class="mx-auto mb-2 rounded-full transition-transform duration-300 group-hover:scale-110" alt="icon">
+            <h3 class="font-semibold transition-transform duration-300 group-hover:scale-105">Layanan 10</h3>
+          </div>
+        </a>
+      </div>
+       <!-- Selengkapnya -->
+      <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
+        <a href="layanan-skpd.html" class="block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
+          <div class="overflow-hidden">
+            <img src="https://picsum.photos/400/250?random=9" 
+                 alt="Selengkapnya" 
+                 class="w-full h-40 object-cover transform transition duration-500 hover:scale-110" />
+          </div>
+          <div class="bg-blue-600 text-white text-center p-4 transition duration-300 hover:bg-[#14b8a6]">
+            <img src="https://picsum.photos/50?random=19" class="mx-auto mb-2 rounded-full" alt="icon">
+            <h3 class="font-semibold">Selengkapnya</h3>
+          </div>
+        </a>
+      </div>
+
+
+    </div>
+
+    <!-- Tombol navigasi -->
+    <button onclick="prevSlide()" 
+      class="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-700/50 text-white px-3 py-2 sm:px-5 sm:py-4 rounded-r-xl text-3xl sm:text-5xl hover:bg-gray-900 z-10">
+      ‹
+    </button>
+    <button onclick="nextSlide()" 
+      class="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-700/50 text-white px-3 py-2 sm:px-5 sm:py-4 rounded-l-xl text-3xl sm:text-5xl hover:bg-gray-900 z-10">
+      ›
+    </button>
+  </div>
+</section>
+
+<script>
+  const carousel = document.getElementById("layananCarousel");
+  const totalItems = carousel.children.length;
+  let currentIndex = 0;
+  let visibleItems = 4;
+  let slideInterval;
+
+  function setupCarousel() {
+    if (slideInterval) clearInterval(slideInterval);
+    const screenWidth = window.innerWidth;
+    if (screenWidth < 640) visibleItems = 1;
+    else if (screenWidth < 1024) visibleItems = 2;
+    else visibleItems = 4;
+
+    if (currentIndex > totalItems - visibleItems) {
+      currentIndex = Math.max(0, totalItems - visibleItems);
+    }
+    updateCarouselPosition();
+    slideInterval = setInterval(nextSlide, 4000);
+  }
+
+  function updateCarouselPosition() {
+    const slideWidth = 100 / visibleItems;
+    carousel.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
+  }
+
+  function nextSlide() {
+    if (currentIndex >= totalItems - visibleItems) currentIndex = 0;
+    else currentIndex++;
+    updateCarouselPosition();
+  }
+
+  function prevSlide() {
+    if (currentIndex <= 0) currentIndex = totalItems - visibleItems;
+    else currentIndex--;
+    updateCarouselPosition();
+  }
+
+  window.addEventListener('load', setupCarousel);
+  window.addEventListener('resize', setupCarousel);
+
+  // 🔹 Swipe support
+  let startX = 0;
+  let isDragging = false;
+
+  carousel.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+    isDragging = true;
+  });
+
+  carousel.addEventListener("touchend", (e) => {
+    if (!isDragging) return;
+    const endX = e.changedTouches[0].clientX;
+    handleSwipe(startX, endX);
+    isDragging = false;
+  });
+
+  carousel.addEventListener("mousedown", (e) => {
+    if (e.buttons === 1) {
+      startX = e.clientX;
+      isDragging = true;
+    }
+  });
+
+  carousel.addEventListener("mouseup", (e) => {
+    if (!isDragging) return;
+    const endX = e.clientX;
+    handleSwipe(startX, endX);
+    isDragging = false;
+  });
+
+  function handleSwipe(start, end) {
+    const threshold = 50;
+    if (end - start > threshold) prevSlide();
+    else if (start - end > threshold) nextSlide();
+  }
+</script>
+
+
 
         <section aria-labelledby="pengumuman-heading" class="mb-14">
             <h2 id="pengumuman-heading" class="text-xl font-semibold mb-4 text-center">PENGUMUMAN</h2>

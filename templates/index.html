@@ -68,6 +68,86 @@
         /* Toggle Switch Dark Mode */
         .toggle-checkbox:checked { right: 0; border-color: #68d391; }
         .toggle-checkbox:checked + .toggle-label { background-color: #68d391; }
+
+        /* Efek hover banner */
+.banner-slide {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+.banner-slide .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.8);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s ease;
+}
+.banner-slide:hover .overlay {
+  opacity: 1;
+}
+.banner-slide .overlay button {
+  background-color: #1e3a8a;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+.banner-slide .overlay button:hover {
+  background-color: #2563eb;
+  transform: scale(1.05);
+}
+
+/* Popup */
+#bannerPopup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+#bannerPopup .popup-content {
+  background: white;
+  color: black;
+  padding: 2rem;
+  max-width: 600px;
+  width: 90%;
+  border-radius: 1rem;
+  position: relative;
+  animation: popupFade 0.3s ease;
+}
+#bannerPopup .popup-content h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+#bannerPopup .popup-content p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+#bannerPopup .close-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.2s;
+}
+#bannerPopup .close-btn:hover {
+  color: #e11d48;
+}
+
+@keyframes popupFade {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 selection:bg-teal-300 selection:text-white">
@@ -220,45 +300,68 @@
 
             <div class="relative z-10 flex items-center justify-center">
                 <div id="bannerCarousel" class="flex transition-transform duration-700 ease-in-out items-center">
-                    <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60">
-                        <img src="https://picsum.photos/1200/300?random=301" class="w-full h-[220px] object-cover">
-                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                            <div class="text-white text-center px-6">
-                                <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 1</h2>
-                                <p class="text-base md:text-lg">Deskripsi singkat banner pertama.</p>
-                            </div>
-                        </div>
-                    </div>
+                                   <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60" 
+     data-title="Banner 1" data-desc="Ini adalah deskripsi lengkap untuk Banner 1. Bisa diisi lebih panjang sesuai kebutuhan.">
+  <img src="https://picsum.photos/1200/300?random=302" class="w-[1200px] h-[350px] object-cover">
+  <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+    <div class="text-white text-center px-6">
+      <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 1</h2>
+      <p class="text-base md:text-lg">Deskripsi singkat banner pertama.</p>
+    </div>
+  </div>
+  <!-- Overlay tambahan -->
+  <div class="overlay">
+    <button class="selengkapnya">Selengkapnya</button>
+  </div>
+</div>
 
-                    <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60">
-                        <img src="https://picsum.photos/1200/300?random=302" class="w-full h-[220px] object-cover">
-                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                            <div class="text-white text-center px-6">
-                                <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 2</h2>
-                                <p class="text-base md:text-lg">Deskripsi singkat banner kedua.</p>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60" 
+     data-title="Banner 2" data-desc="Ini adalah deskripsi lengkap untuk Banner 2. Bisa diisi lebih panjang sesuai kebutuhan.">
+  <img src="https://picsum.photos/1200/300?random=302" class="w-[1200px] h-[350px] object-cover">
+  <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+    <div class="text-white text-center px-6">
+      <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 2</h2>
+      <p class="text-base md:text-lg">Deskripsi singkat banner keuda.</p>
+    </div>
+  </div>
+  <!-- Overlay tambahan -->
+  <div class="overlay">
+    <button class="selengkapnya">Selengkapnya</button>
+  </div>
+</div>
 
-                    <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60">
-                        <img src="https://picsum.photos/1200/300?random=303" class="w-full h-[220px] object-cover">
-                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                            <div class="text-white text-center px-6">
-                                <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 3</h2>
-                                <p class="text-base md:text-lg">Deskripsi singkat banner ketiga.</p>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60">
-                        <img src="https://picsum.photos/1200/300?random=304" class="w-full h-[220px] object-cover">
-                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                            <div class="text-white text-center px-6">
-                                <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 4</h2>
-                                <p class="text-base md:text-lg">Deskripsi singkat banner keempat.</p>
-                            </div>
-                        </div>
-                    </div>
+                                        <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60" 
+     data-title="Banner 3" data-desc="Ini adalah deskripsi lengkap untuk Banner 3. Bisa diisi lebih panjang sesuai kebutuhan.">
+  <img src="https://picsum.photos/1200/300?random=302" class="w-[1200px] h-[350px] object-cover">
+  <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+    <div class="text-white text-center px-6">
+      <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 3</h2>
+      <p class="text-base md:text-lg">Deskripsi singkat banner ketiga.</p>
+    </div>
+  </div>
+  <!-- Overlay tambahan -->
+  <div class="overlay">
+    <button class="selengkapnya">Selengkapnya</button>
+  </div>
+</div>
+
+
+                                                           <div class="banner-slide flex-shrink-0 w-[45%] mx-4 relative rounded-xl overflow-hidden shadow-2xl transition-all duration-500 scale-75 opacity-60" 
+     data-title="Banner 4" data-desc="Ini adalah deskripsi lengkap untuk Banner 4. Bisa diisi lebih panjang sesuai kebutuhan.">
+  <img src="https://picsum.photos/1200/300?random=302" class="w-[1200px] h-[350px] object-cover">
+  <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+    <div class="text-white text-center px-6">
+      <h2 class="text-2xl md:text-3xl font-bold mb-1">Banner 4</h2>
+      <p class="text-base md:text-lg">Deskripsi singkat banner keempat.</p>
+    </div>
+  </div>
+  <!-- Overlay tambahan -->
+  <div class="overlay">
+    <button class="selengkapnya">Selengkapnya</button>
+  </div>
+</div>
+
                 </div>
             </div>
 
@@ -271,62 +374,92 @@
         <div class="h-12"></div>
 
         <script>
-            const bannerWrapper = document.getElementById('bannerCarousel');
-            const bannerSlides = bannerWrapper.getElementsByClassName('banner-slide');
-            const bannerIndicators = document.getElementById('bannerIndicators');
-            let bannerIndex = 0;
-            let bannerAuto = setInterval(() => moveBannerSlide(1), 5000);
+    const bannerWrapper = document.getElementById('bannerCarousel');
+    const bannerSlides = bannerWrapper.getElementsByClassName('banner-slide');
+    const bannerIndicators = document.getElementById('bannerIndicators');
+    let bannerIndex = 0;
+    let bannerAuto = setInterval(() => moveBannerSlide(1), 5000);
 
-            // Buat indikator titik sesuai jumlah banner
-            for (let i = 0; i < bannerSlides.length; i++) {
-                const dot = document.createElement('button');
-                dot.className = "w-3 h-3 rounded-full bg-white/40 transform scale-100 transition-all duration-300";
-                dot.addEventListener('click', () => {
-                    bannerIndex = i;
-                    updateBannerCarousel();
-                    resetBannerAuto();
-                });
-                bannerIndicators.appendChild(dot);
-            }
+    // Buat indikator titik sesuai jumlah banner
+    for (let i = 0; i < bannerSlides.length; i++) {
+        const dot = document.createElement('button');
+        dot.className = "w-3 h-3 rounded-full bg-white/40 transform scale-100 transition-all duration-300";
+        dot.addEventListener('click', () => {
+            bannerIndex = i;
+            updateBannerCarousel();
+            resetBannerAuto();
+        });
+        bannerIndicators.appendChild(dot);
+    }
 
-            function updateBannerCarousel() {
-                for (let i = 0; i < bannerSlides.length; i++) {
-                    bannerSlides[i].classList.remove('scale-100', 'opacity-100', 'z-10');
-                    bannerSlides[i].classList.add('scale-75', 'opacity-60');
+    function updateBannerCarousel() {
+        for (let i = 0; i < bannerSlides.length; i++) {
+            bannerSlides[i].classList.remove('scale-125', 'opacity-100', 'z-10');
+            bannerSlides[i].classList.add('scale-75', 'opacity-60');
 
-                    // update indikator
-                    bannerIndicators.children[i].classList.remove("bg-white", "scale-125");
-                    bannerIndicators.children[i].classList.add("bg-white/40", "scale-100");
-                }
+            // update indikator
+            bannerIndicators.children[i].classList.remove("bg-white", "scale-125");
+            bannerIndicators.children[i].classList.add("bg-white/40", "scale-100");
+        }
 
-                // Banner aktif
-                bannerSlides[bannerIndex].classList.remove('scale-75', 'opacity-60');
-                bannerSlides[bannerIndex].classList.add('scale-100', 'opacity-100', 'z-10');
+        // Banner aktif → dibuat lebih besar (scale-125)
+        bannerSlides[bannerIndex].classList.remove('scale-75', 'opacity-60');
+        bannerSlides[bannerIndex].classList.add('scale-125', 'opacity-100', 'z-10');
 
-                // Indikator aktif → zoom + putih solid
-                bannerIndicators.children[bannerIndex].classList.remove("bg-white/40", "scale-100");
-                bannerIndicators.children[bannerIndex].classList.add("bg-white", "scale-125");
+        // Indikator aktif → zoom + putih solid
+        bannerIndicators.children[bannerIndex].classList.remove("bg-white/40", "scale-100");
+        bannerIndicators.children[bannerIndex].classList.add("bg-white", "scale-125");
 
-                // Hitung posisi
-                const offset = -(bannerIndex * (bannerSlides[0].offsetWidth + 32)) + 
-                                (bannerWrapper.parentElement.offsetWidth / 2 - bannerSlides[0].offsetWidth / 2);
-                bannerWrapper.style.transform = `translateX(${offset}px)`;
-            }
+        // Hitung posisi
+        const offset = -(bannerIndex * (bannerSlides[0].offsetWidth + 32)) + 
+                        (bannerWrapper.parentElement.offsetWidth / 2 - bannerSlides[0].offsetWidth / 2);
+        bannerWrapper.style.transform = `translateX(${offset}px)`;
+    }
 
-            function moveBannerSlide(direction) {
-                bannerIndex = (bannerIndex + direction + bannerSlides.length) % bannerSlides.length;
-                updateBannerCarousel();
-                resetBannerAuto();
-            }
+    function moveBannerSlide(direction) {
+        bannerIndex = (bannerIndex + direction + bannerSlides.length) % bannerSlides.length;
+        updateBannerCarousel();
+        resetBannerAuto();
+    }
 
-            function resetBannerAuto() {
-                clearInterval(bannerAuto);
-                bannerAuto = setInterval(() => moveBannerSlide(1), 5000);
-            }
+    function resetBannerAuto() {
+        clearInterval(bannerAuto);
+        bannerAuto = setInterval(() => moveBannerSlide(1), 5000);
+    }
 
-            window.addEventListener('load', updateBannerCarousel);
-            window.addEventListener('resize', updateBannerCarousel);
-        </script>
+    window.addEventListener('load', updateBannerCarousel);
+    window.addEventListener('resize', updateBannerCarousel);
+window.addEventListener('DOMContentLoaded', () => {
+  const popup = document.getElementById("bannerPopup");
+  const popupTitle = document.getElementById("popupTitle");
+  const popupDesc = document.getElementById("popupDesc");
+  const closeBtn = document.querySelector("#bannerPopup .close-btn");
+
+  document.querySelectorAll(".banner-slide .selengkapnya").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const slide = e.target.closest(".banner-slide");
+      const title = slide.getAttribute("data-title");
+      const desc = slide.getAttribute("data-desc");
+
+      popupTitle.textContent = title;
+      popupDesc.textContent = desc;
+      popup.style.display = "flex";
+    });
+  });
+
+  closeBtn.addEventListener("click", () => {
+    popup.style.display = "none";
+  });
+
+  popup.addEventListener("click", (e) => {
+    if (e.target === popup) popup.style.display = "none";
+  });
+});
+    
+</script>
+
+
+
 
         <div class="h-12"></div>
 
@@ -576,6 +709,8 @@
                 if (end - start > threshold) prevLayananSlide();
                 else if (start - end > threshold) nextLayananSlide();
             }
+
+            
         </script>
 
         <section aria-labelledby="pengumuman-heading" class="mb-14">
@@ -834,5 +969,14 @@
     closeAccessibilitySidebar.addEventListener('click', toggleSidebar);
     backdrop.addEventListener('click', toggleSidebar);
 </script>
+<!-- Popup -->
+<div id="bannerPopup">
+  <div class="popup-content">
+    <span class="close-btn">&times;</span>
+    <h2 id="popupTitle"></h2>
+    <p id="popupDesc"></p>
+  </div>
+</div>
+
 </body>
 </html>

@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dinas Kominfo Purworejo</title>
+  <title>Sekretariat - Dinas Kominfo Purworejo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <style>
     body { font-family: "Poppins", sans-serif; transition: background-color 0.3s, color 0.3s; }
     .animated-gradient { background-size: 200% 200%; animation: gradient-animation 10s ease infinite; }
@@ -40,16 +39,41 @@
       .mobile-menu .dropdown-content.active { display: block; animation: slideDown 0.3s ease; }
       @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     }
-
+    
     /* === CSS UNTUK FITUR AKSESIBILITAS & MODE MALAM === */
-    .accessibility-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background-color: #1f2937; color: white; z-index: 1050; transition: right 0.3s ease-in-out; box-shadow: -4px 0 15px rgba(0,0,0,0.2); }
+    .accessibility-sidebar { 
+        position: fixed; 
+        top: 0; 
+        right: -300px; 
+        width: 280px; 
+        height: 100%; 
+        background-color: #1f2937; 
+        color: white; 
+        z-index: 1050; 
+        transition: right 0.3s ease-in-out; 
+        box-shadow: -4px 0 15px rgba(0,0,0,0.2);
+        overflow-y: auto; 
+    }
+    .accessibility-sidebar::-webkit-scrollbar {
+        width: 8px;
+    }
+    .accessibility-sidebar::-webkit-scrollbar-track {
+        background: #1f2937;
+    }
+    .accessibility-sidebar::-webkit-scrollbar-thumb {
+        background-color: #4b5563;
+        border-radius: 10px;
+        border: 2px solid #1f2937;
+    }
+    .accessibility-sidebar::-webkit-scrollbar-thumb:hover {
+        background-color: #6b7280;
+    }
+    
     .accessibility-sidebar.open { right: 0; }
     .backdrop { position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); z-index: 1040; opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in-out; }
     .backdrop.active { opacity: 1; pointer-events: auto; }
     
-    #accessibility-button { position: fixed; bottom: 90px; right: 20px; z-index: 1000; }
-    #tombol-baca-suara.sedang-membaca { background-color: #dc3545 !important; }
-    #tombol-baca-suara.sedang-membaca:hover { background-color: #a71d2a !important; }
+    #accessibility-button { position: fixed; bottom: 80px; right: 20px; z-index: 1000; }
     
     /* Dark Mode Styles */
     .dark body { background-color: #111827; color: #d1d5db; }
@@ -60,19 +84,42 @@
     .dark .bg-white { background-color: #1f2937; }
     .dark .text-gray-800 { color: #f9fafb; }
     .dark .text-gray-700 { color: #e5e7eb; }
-    .dark .text-gray-600 { color: #9ca3af; }
-    .dark .text-gray-500 { color: #6b7280; }
+    .dark .bg-gray-100 { background-color: #111827; }
     .dark .border-gray-200 { border-color: #4b5563; }
     .dark .selection\:bg-teal-300::selection { background-color: #5eead4; color: #1f2937; }
     .dark footer { background-color: #111827; }
-    .dark .dropdown-menu { background-color: #1f2937; color: #e5e7eb; }
-    .dark .dropdown-menu a:hover { background-color: #374151; }
-    .dark .bg-gray-100 { background-color: #111827; }
-    .dark .bg-gray-200 { background-color: #374151; }
-    
+
     /* Toggle Switch Dark Mode */
     .toggle-checkbox:checked { right: 0; border-color: #68d391; }
     .toggle-checkbox:checked + .toggle-label { background-color: #68d391; }
+
+    /* CSS UNTUK KONTROL UKURAN TEKS */
+    .font-size-control {
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #4b5563;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.2s;
+        font-size: 16px;
+        line-height: 1;
+    }
+    .font-size-control:hover {
+        background-color: #6b7280;
+        transform: scale(1.1);
+    }
+    .font-size-control:active {
+        transform: scale(0.95);
+    }
+    #reset-font {
+        font-size: 14px;
+    }
   </style>
 </head>
 <body class="bg-gray-100 text-gray-800 selection:bg-teal-300 selection:text-white">
@@ -91,7 +138,7 @@
       </div>
     </div>
     <div class="w-full max-w-2xl px-4 z-20">
-      <form role="search" action="#" method="get" class="relative flex">
+      <form role="search" action="{{ url_for('public.search') }}" method="get" class="relative flex">
         <input id="search-input" type="search" name="q" placeholder="Cari berita, layanan, atau informasi publik..." class="flex-grow py-4 px-6 text-md text-gray-900 rounded-l-full border-2 border-gray-300 focus:outline-none focus:border-teal-500 shadow-md" required />
         <button type="submit" class="px-6 bg-blue-700 hover:bg-teal-500 text-white font-semibold rounded-r-full">Cari</button>
       </form>
@@ -327,26 +374,39 @@
           <h3 class="text-lg font-bold">Menu Aksesibilitas</h3>
           <button id="close-accessibility-sidebar" class="text-2xl font-bold" aria-label="Tutup Menu Aksesibilitas">×</button>
       </div>
-      <ul class="space-y-3">
-          <li>
-              <button id="tombol-baca-suara" class="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
-                  <span>🔊</span>
-                  <span>Baca Halaman</span>
-              </button>
-          </li>
-          <li>
-              <div class="w-full flex items-center justify-between gap-3 p-3 rounded-lg">
-                  <label for="dark-mode-toggle" class="flex items-center gap-3 cursor-pointer">
-                      <span>🌙</span>
-                      <span>Mode Malam</span>
-                  </label>
-                  <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-                      <input type="checkbox" name="dark-mode-toggle" id="dark-mode-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
-                      <label for="dark-mode-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
-                  </div>
-              </div>
-          </li>
-      </ul>
+       <ul class="space-y-3">
+        <li>
+            <button id="tombol-baca-suara" class="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <span>🔊</span>
+                <span>Baca Halaman</span>
+            </button>
+        </li>
+        <li>
+            <div class="w-full flex items-center justify-between gap-3 p-3 rounded-lg">
+                <label for="dark-mode-toggle" class="flex items-center gap-3 cursor-pointer">
+                    <span>🌙</span>
+                    <span>Mode Malam</span>
+                </label>
+                <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                    <input type="checkbox" name="dark-mode-toggle" id="dark-mode-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                    <label for="dark-mode-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="w-full flex items-center justify-between gap-2 p-3 rounded-lg">
+                <span class="flex items-center gap-3">
+                    <span>📝</span>
+                    <span>Ukuran Teks</span>
+                </span>
+                <div class="flex items-center gap-1">
+                    <button id="decrease-font" class="font-size-control" aria-label="Perkecil Teks">-</button>
+                    <button id="reset-font" class="font-size-control" aria-label="Reset Ukuran Teks">A</button>
+                    <button id="increase-font" class="font-size-control" aria-label="Perbesar Teks">+</button>
+                </div>
+            </div>
+        </li>
+        </ul>
   </div>
   <div id="backdrop" class="backdrop"></div>
   <script src="js/baca-suara.js"></script>
@@ -464,6 +524,6 @@
     closeAccessibilitySidebar.addEventListener('click', toggleSidebar);
     backdrop.addEventListener('click', toggleSidebar);
   </script>
-
+<script src="{{ url_for('static', filename='js/text.js') }}"></script>
 </body>
 </html>

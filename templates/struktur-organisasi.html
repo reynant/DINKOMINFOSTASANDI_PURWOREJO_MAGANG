@@ -42,7 +42,36 @@
     }
     
     /* === CSS UNTUK FITUR AKSESIBILITAS & MODE MALAM === */
-    .accessibility-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background-color: #1f2937; color: white; z-index: 1050; transition: right 0.3s ease-in-out; box-shadow: -4px 0 15px rgba(0,0,0,0.2); }
+    /* ▼▼▼ KODE BARU UNTUK SCROLLBAR SIDEBAR ▼▼▼ */
+    .accessibility-sidebar { 
+      position: fixed; 
+      top: 0; 
+      right: -300px; 
+      width: 280px; 
+      height: 100%; 
+      background-color: #1f2937; 
+      color: white; 
+      z-index: 1050; 
+      transition: right 0.3s ease-in-out; 
+      box-shadow: -4px 0 15px rgba(0,0,0,0.2);
+      overflow-y: auto; /* Tambahkan ini agar bisa scroll jika kontennya panjang */
+    }
+    .accessibility-sidebar::-webkit-scrollbar {
+      width: 8px;
+    }
+    .accessibility-sidebar::-webkit-scrollbar-track {
+      background: #1f2937;
+    }
+    .accessibility-sidebar::-webkit-scrollbar-thumb {
+      background-color: #4b5563;
+      border-radius: 10px;
+      border: 2px solid #1f2937;
+    }
+    .accessibility-sidebar::-webkit-scrollbar-thumb:hover {
+      background-color: #6b7280;
+    }
+    /* ▲▲▲ BATAS AKHIR KODE SCROLLBAR ▲▲▲ */
+    
     .accessibility-sidebar.open { right: 0; }
     .backdrop { position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); z-index: 1040; opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in-out; }
     .backdrop.active { opacity: 1; pointer-events: auto; }
@@ -68,6 +97,35 @@
     /* Toggle Switch Dark Mode */
     .toggle-checkbox:checked { right: 0; border-color: #68d391; }
     .toggle-checkbox:checked + .toggle-label { background-color: #68d391; }
+
+    /* ▼▼▼ KODE BARU UNTUK KONTROL UKURAN TEKS ▼▼▼ */
+    .font-size-control {
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #4b5563;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.2s;
+        font-size: 16px;
+        line-height: 1;
+    }
+    .font-size-control:hover {
+        background-color: #6b7280;
+        transform: scale(1.1);
+    }
+    .font-size-control:active {
+        transform: scale(0.95);
+    }
+    #reset-font {
+        font-size: 14px;
+    }
+    /* ▲▲▲ BATAS AKHIR KODE KONTROL UKURAN TEKS ▲▲▲ */
   </style>
 </head>
 <body class="bg-gray-100 text-gray-800 selection:bg-teal-300 selection:text-white">
@@ -225,9 +283,9 @@
 
 <button id="accessibility-button" class="bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" aria-label="Buka Menu Aksesibilitas">
     <svg xmlns="http://www.w3.org/2000/svg" 
-     class="h-7 w-7" 
-     viewBox="0 0 1025 1024" 
-     fill="currentColor">
+      class="h-7 w-7" 
+      viewBox="0 0 1025 1024" 
+      fill="currentColor">
   <path d="m1006 875l-63 64q-1 0-1 .5t-1 1.5l-1.5 1l-2.5 1q-4 4-7 5q-18 12-40.5 10.5T851 941L678 767H384q-26 0-45-18.5T320 704V384q0-27 19-45.5t45.5-18.5t45 18.5T448 384v256h249q7-1 16 1q4 0 7 1q7 2 9 3q12 5 22 15l145 145l20-20q19-19 45.5-19t45 19t18.5 45.5t-19 44.5zM384 256q-53 0-90-37.5T257 128t37-90.5T384 0t90.5 37.5T512 128t-37.5 90.5T384 256zm146 593l3 3q19-18 45.5-18t45 18.5t18.5 45t-18 45.5q-10 10-26 15q-74 50-161.5 62t-173-16T113 911T20 760.5t-16-173T66 426q5-16 15-26q19-19 45.5-19t45 19t18.5 45.5t-18 45.5l3 3q-53 74-45.5 167t74 159.5t159.5 74T530 849z"/>
 </svg>
 
@@ -236,7 +294,7 @@
 <div id="accessibility-sidebar" class="accessibility-sidebar p-4">
     <div class="flex justify-between items-center mb-6">
         <h3 class="text-lg font-bold">Menu Aksesibilitas</h3>
-        <button id="close-accessibility-sidebar" class="text-2xl font-bold" aria-label="Tutup Menu Aksesibilitas">&times;</button>
+        <button id="close-accessibility-sidebar" class="text-2xl font-bold" aria-label="Tutup Menu Aksesibilitas">×</button>
     </div>
     <ul class="space-y-3">
         <li>
@@ -257,7 +315,20 @@
                 </div>
             </div>
         </li>
-    </ul>
+        <li>
+            <div class="w-full flex items-center justify-between gap-2 p-3 rounded-lg">
+                <span class="flex items-center gap-3">
+                    <span>📝</span>
+                    <span>Ukuran Teks</span>
+                </span>
+                <div class="flex items-center gap-1">
+                    <button id="decrease-font" class="font-size-control" aria-label="Perkecil Teks">-</button>
+                    <button id="reset-font" class="font-size-control" aria-label="Reset Ukuran Teks">A</button>
+                    <button id="increase-font" class="font-size-control" aria-label="Perbesar Teks">+</button>
+                </div>
+            </div>
+        </li>
+        </ul>
 </div>
 <div id="backdrop" class="backdrop"></div>
 
@@ -451,5 +522,6 @@
   backdrop.addEventListener('click', toggleSidebar);
 
 </script>
+<script src="{{ url_for('static', filename='js/text.js') }}"></script>
 </body>
 </html>

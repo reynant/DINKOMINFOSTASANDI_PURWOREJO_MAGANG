@@ -65,6 +65,35 @@
         .dark .dropdown-menu { background-color: #1f2937; color: #e5e7eb; }
         .dark .dropdown-menu a:hover { background-color: #374151; }
 
+        /* CSS UNTUK KONTROL UKURAN TEKS */
+        .font-size-control {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #4b5563;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            font-size: 16px;
+            line-height: 1;
+        }
+        .font-size-control:hover {
+            background-color: #6b7280;
+            transform: scale(1.1);
+        }
+        .font-size-control:active {
+            transform: scale(0.95);
+        }
+        #reset-font {
+            font-size: 14px;
+        }
+    
+        
         /* Toggle Switch Dark Mode */
         .toggle-checkbox:checked { right: 0; border-color: #68d391; }
         .toggle-checkbox:checked + .toggle-label { background-color: #68d391; }
@@ -148,7 +177,7 @@
   to { transform: scale(1); opacity: 1; }
 }
 
-    </style>
+</style>
 </head>
 <body class="bg-gray-100 text-gray-800 selection:bg-teal-300 selection:text-white">
 
@@ -777,6 +806,19 @@ window.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             </li>
+            <li>
+            <div class="w-full flex items-center justify-between gap-2 p-3 rounded-lg">
+                <span class="flex items-center gap-3">
+                    <span>📝</span>
+                    <span>Ukuran Teks</span>
+                </span>
+                <div class="flex items-center gap-1">
+                    <button id="decrease-font" class="font-size-control" aria-label="Perkecil Teks">-</button>
+                    <button id="reset-font" class="font-size-control" aria-label="Reset Ukuran Teks">A</button>
+                    <button id="increase-font" class="font-size-control" aria-label="Perbesar Teks">+</button>
+                </div>
+            </div>
+        </li>
         </ul>
     </div>
     <div id="backdrop" class="backdrop"></div>
@@ -851,9 +893,6 @@ window.addEventListener('DOMContentLoaded', () => {
         </div>
     </div>
     
-<script src="{{ url_for('static', filename='js/baca-suara.js') }}"></script>
-<script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
-
 <script>
     // Script untuk menu, navigasi, dan pencarian
     const header = document.getElementById('main-header');
@@ -969,6 +1008,10 @@ window.addEventListener('DOMContentLoaded', () => {
     closeAccessibilitySidebar.addEventListener('click', toggleSidebar);
     backdrop.addEventListener('click', toggleSidebar);
 </script>
+
+<script src="{{ url_for('static', filename='js/baca-suara.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
+<script src="{{ url_for('static', filename='js/text.js') }}"></script>
 <!-- Popup -->
 <div id="bannerPopup">
   <div class="popup-content">

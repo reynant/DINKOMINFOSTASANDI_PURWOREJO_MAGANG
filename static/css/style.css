@@ -1,0 +1,281 @@
+/* FONT UTAMA */
+body { 
+    font-family: "Poppins", sans-serif; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+
+/* ANIMASI GRADIENT HEADER */
+.animated-gradient { 
+    background-size: 200% 200%; 
+    animation: gradient-animation 10s ease infinite; 
+}
+@keyframes gradient-animation { 
+    0%{background-position:0% 50%} 
+    50%{background-position:100% 50%} 
+    100%{background-position:0% 50%} 
+}
+
+/* DROPDOWN MENU NAVIGASI */
+.dropdown-menu { 
+    transition:opacity .2s ease,transform .2s ease; 
+    opacity:0; 
+    transform:translateY(10px); 
+    pointer-events:none; 
+    max-height:320px; 
+    overflow-y:auto; 
+}
+.group:hover .dropdown-menu { 
+    opacity:1; 
+    transform:translateY(0); 
+    pointer-events:auto; 
+}
+.dropdown-menu::-webkit-scrollbar { 
+    width:5px; 
+}
+.dropdown-menu::-webkit-scrollbar-thumb { 
+    background-color:#14b8a6; 
+}
+.dropdown-menu::-webkit-scrollbar-track { 
+    background-color:#f1f5f9; 
+}
+
+/* HAMBURGER MENU (MOBILE) */
+.mobile-menu-button { 
+    display: none; 
+    position: fixed; 
+    top: 1rem; 
+    left: 1rem; 
+    z-index: 1000; 
+    padding: 0.75rem; 
+    background-color: #1d4ed8; 
+    color: white; 
+    border-radius: 0.5rem; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    transition: all 0.3s ease; 
+}
+.mobile-menu-button:hover { 
+    background-color: #2563eb; 
+    transform: scale(1.05); 
+}
+.mobile-menu { 
+    position: fixed; 
+    top: 0; 
+    left: -100%; 
+    width: 300px; 
+    height: 100%; 
+    background-color: #1e293b; 
+    padding: 2rem 1.5rem; 
+    overflow-y: auto; 
+    transition: left 1s cubic-bezier(0.4, 0, 0.2, 1); 
+    z-index: 999; 
+}
+.mobile-menu.active { 
+    left: 0; 
+}
+
+@media (max-width: 1024px) {
+    .flex-1.flex.flex-wrap.items-center.justify-center { display: none; }
+    #nav-search-container { display: none; }
+    #main-nav ul { border: none; box-shadow: none; }
+    #main-nav ul.flex { background-color: transparent; border-radius: 0; }
+    .mobile-menu-button { display: flex; align-items: center; justify-content: center; }
+    .mobile-menu { box-shadow: 2px 0 8px rgba(0,0,0,0.1); }
+    .mobile-menu .close-button { position: absolute; top: 1rem; right: 1rem; color: white; padding: 0.5rem; cursor: pointer; transition: transform 0.3s ease; }
+    .mobile-menu .close-button:hover { transform: rotate(90deg); }
+    .mobile-menu ul { margin-top: 3rem; }
+    .mobile-menu ul li { display: block; width: 100%; }
+    .mobile-menu li a { display: block; width: 100%; padding: 0.75rem 1rem; color: white; font-size: 1rem; transition: all 0.3s ease; }
+    .mobile-menu li a:hover { background: rgba(59, 130, 246, 0.5); padding-left: 1.5rem; }
+    .mobile-menu .dropdown-content { display: none; margin-left: 1rem; margin-top: 0.5rem; border-left: 2px solid rgba(59, 130, 246, 0.5); }
+    .mobile-menu .dropdown-content.active { display: block; animation: slideDown 0.3s ease; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+}
+
+/* === CSS UNTUK FITUR AKSESIBILITAS & MODE MALAM === */
+.accessibility-sidebar { 
+    position: fixed; 
+    top: 0; 
+    right: -300px; 
+    width: 280px; 
+    height: 100%; 
+    background-color: #1f2937; 
+    color: white; 
+    z-index: 1050; 
+    transition: right 0.3s ease-in-out; 
+    box-shadow: -4px 0 15px rgba(0,0,0,0.2); 
+}
+.accessibility-sidebar.open { 
+    right: 0; 
+}
+.backdrop { 
+    position: fixed; 
+    inset: 0; 
+    background-color: rgba(0,0,0,0.5); 
+    z-index: 1040; 
+    opacity: 0; 
+    pointer-events: none; 
+    transition: opacity 0.3s ease-in-out; 
+}
+.backdrop.active { 
+    opacity: 1; 
+    pointer-events: auto; 
+}
+
+#accessibility-button { 
+    position: fixed; 
+    bottom: 80px; 
+    right: 20px; 
+    z-index: 1000; 
+}
+
+/* DARK MODE STYLES */
+.dark body { background-color: #111827; color: #d1d5db; }
+.dark #main-header { background-image: none; background-color: #1f2937; }
+.dark #main-nav ul { background-color: #374151; }
+.dark #main-nav a:hover { background-color: #4b5563; }
+.dark .mobile-menu { background-color: #111827; }
+.dark .bg-white { background-color: #1f2937; }
+.dark .text-gray-800 { color: #f9fafb; }
+.dark .text-gray-700 { color: #e5e7eb; }
+.dark .text-gray-600 { color: #9ca3af; }
+.dark .text-gray-500 { color: #6b7280; }
+.dark .border-gray-200 { border-color: #4b5563; }
+.dark .selection\:bg-teal-300::selection { background-color: #5eead4; color: #1f2937; }
+.dark footer { background-color: #111827; }
+.dark .dropdown-menu { background-color: #1f2937; color: #e5e7eb; }
+.dark .dropdown-menu a:hover { background-color: #374151; }
+
+/* KONTROL UKURAN TEKS */
+.font-size-control {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4b5563;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+    font-size: 16px;
+    line-height: 1;
+}
+.font-size-control:hover {
+    background-color: #6b7280;
+    transform: scale(1.1);
+}
+.font-size-control:active {
+    transform: scale(0.95);
+}
+#reset-font {
+    font-size: 14px;
+}
+
+/* TOGGLE SWITCH DARK MODE */
+.toggle-checkbox:checked { right: 0; border-color: #68d391; }
+.toggle-checkbox:checked + .toggle-label { background-color: #68d391; }
+
+/* EFEK HOVER BANNER */
+.banner-slide {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+.banner-slide .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.8);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s ease;
+}
+.banner-slide:hover .overlay {
+  opacity: 1;
+}
+.banner-slide .overlay button {
+  background-color: #1e3a8a;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+.banner-slide .overlay button:hover {
+  background-color: #2563eb;
+  transform: scale(1.05);
+}
+
+/* POPUP BANNER */
+#bannerPopup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+#bannerPopup .popup-content {
+  background: white;
+  color: black;
+  padding: 2rem;
+  max-width: 600px;
+  width: 90%;
+  border-radius: 1rem;
+  position: relative;
+  animation: popupFade 0.3s ease;
+}
+#bannerPopup .popup-content h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+#bannerPopup .popup-content p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+#bannerPopup .close-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.2s;
+}
+#bannerPopup .close-btn:hover {
+  color: #e11d48;
+}
+
+@keyframes popupFade {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* === GRADASI BACKGROUND LAYANAN KAMI === */
+#layanan-kami-section {
+    background-image: url('../img/bg-fix-putih.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+}
+#layanan-kami-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* Gradasi di 4 sisi: atas, bawah, kiri, kanan */
+    background: 
+        linear-gradient(to top,    rgb(241, 245, 249) 0%, transparent 20%),
+        linear-gradient(to bottom, rgb(241, 245, 249) 0%, transparent 20%),
+        linear-gradient(to left,   rgb(241, 245, 249) 0%, transparent 25%),
+        linear-gradient(to right,  rgb(241, 245, 249) 0%, transparent 25%);
+    z-index: 5;
+}
+/* Style untuk heading di dalam section layanan */
+#layanan-kami-section h2 {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+}

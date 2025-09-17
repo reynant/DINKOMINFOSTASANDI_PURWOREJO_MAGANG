@@ -281,14 +281,21 @@
     </div>
   </main>
 
-<button id="accessibility-button" class="bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" aria-label="Buka Menu Aksesibilitas">
-    <svg xmlns="http://www.w3.org/2000/svg" 
-      class="h-7 w-7" 
-      viewBox="0 0 1025 1024" 
-      fill="currentColor">
-  <path d="m1006 875l-63 64q-1 0-1 .5t-1 1.5l-1.5 1l-2.5 1q-4 4-7 5q-18 12-40.5 10.5T851 941L678 767H384q-26 0-45-18.5T320 704V384q0-27 19-45.5t45.5-18.5t45 18.5T448 384v256h249q7-1 16 1q4 0 7 1q7 2 9 3q12 5 22 15l145 145l20-20q19-19 45.5-19t45 19t18.5 45.5t-19 44.5zM384 256q-53 0-90-37.5T257 128t37-90.5T384 0t90.5 37.5T512 128t-37.5 90.5T384 256zm146 593l3 3q19-18 45.5-18t45 18.5t18.5 45t-18 45.5q-10 10-26 15q-74 50-161.5 62t-173-16T113 911T20 760.5t-16-173T66 426q5-16 15-26q19-19 45.5-19t45 19t18.5 45.5t-18 45.5l3 3q-53 74-45.5 167t74 159.5t159.5 74T530 849z"/>
-</svg>
+<button id="accessibility-button" 
+    class="fixed right-6 top-1/2 -translate-y-1/2 
+           bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg 
+           flex items-center justify-center 
+           hover:bg-blue-700 hover:scale-110 
+           transition-all 
+           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" 
+    aria-label="Buka Menu Aksesibilitas">
 
+  <svg xmlns="http://www.w3.org/2000/svg" 
+       class="h-7 w-7" 
+       viewBox="0 0 1025 1024" 
+       fill="currentColor">
+    <path d="m1006 875l-63 64q-1 0-1 .5t-1 1.5l-1.5 1l-2.5 1q-4 4-7 5q-18 12-40.5 10.5T851 941L678 767H384q-26 0-45-18.5T320 704V384q0-27 19-45.5t45.5-18.5t45 18.5T448 384v256h249q7-1 16 1q4 0 7 1q7 2 9 3q12 5 22 15l145 145l20-20q19-19 45.5-19t45 19t18.5 45.5t-19 44.5zM384 256q-53 0-90-37.5T257 128t37-90.5T384 0t90.5 37.5T512 128t-37.5 90.5T384 256zm146 593l3 3q19-18 45.5-18t45 18.5t18.5 45t-18 45.5q-10 10-26 15q-74 50-161.5 62t-173-16T113 911T20 760.5t-16-173T66 426q5-16 15-26q19-19 45.5-19t45 19t18.5 45.5t-18 45.5l3 3q-53 74-45.5 167t74 159.5t159.5 74T530 849z"/>
+  </svg>
 </button>
 
 <div id="accessibility-sidebar" class="accessibility-sidebar p-4">
@@ -388,7 +395,7 @@
     </div>
 </footer>
 
-<button id="kanalAduanButton" class="fixed bottom-5 right-5 z-50 w-14 h-14 bg-teal-500 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-teal-600 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all duration-300" aria-label="Buka Kanal Aduan">
+<button id="kanalAduanButton" class="fixed bottom-5 left-5 z-50 w-14 h-14 bg-teal-500 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-teal-600 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all duration-300" aria-label="Buka Kanal Aduan">
   <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
 </button>
 
@@ -523,5 +530,43 @@
 
 </script>
 <script src="{{ url_for('static', filename='js/text.js') }}"></script>
+
+<!-- Tombol Go To Top -->
+<button id="goToTopButton" 
+    class="fixed right-5 bottom-20 z-50 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center 
+           hover:bg-blue-700 hover:scale-110 transition-all duration-700 opacity-0 translate-y-12
+           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" 
+    aria-label="Ke Atas" title="Ke Atas">
+
+    <svg xmlns="http://www.w3.org/2000/svg" 
+         class="h-7 w-7" fill="none" stroke="currentColor" 
+         viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+    </svg>
+</button>
+
+<script>
+const goToTopButton = document.getElementById('goToTopButton');
+
+goToTopButton.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 100) {
+        goToTopButton.classList.add("opacity-100", "translate-y-0");
+        goToTopButton.classList.remove("opacity-0", "translate-y-12");
+    } else {
+        goToTopButton.classList.remove("opacity-100", "translate-y-0");
+        goToTopButton.classList.add("opacity-0", "translate-y-12");
+    }
+});
+
+window.addEventListener('load', () => {
+    goToTopButton.classList.remove("opacity-100", "translate-y-0");
+    goToTopButton.classList.add("opacity-0", "translate-y-12");
+});
+</script>
+
 </body>
 </html>

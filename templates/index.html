@@ -61,6 +61,11 @@
                 <button type="submit" class="px-6 bg-blue-700 hover:bg-teal-500 text-white font-semibold rounded-r-full">Cari</button>
             </form>
         </div>
+        <a href="#konten-utama" id="scroll-down-btn" class="absolute bottom-4 z-20 text-white animate-bounce">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+        </a>
     </div>
 </header>
     <br>
@@ -826,6 +831,25 @@ window.addEventListener('DOMContentLoaded', () => {
     accessibilityButton.addEventListener('click', toggleSidebar);
     closeAccessibilitySidebar.addEventListener('click', toggleSidebar);
     backdrop.addEventListener('click', toggleSidebar);
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const scrollBtn = document.getElementById('scroll-down-btn');
+    if (scrollBtn) {
+        scrollBtn.addEventListener('click', function(e) {
+            e.preventDefault(); // Mencegah perilaku default dari anchor link
+
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    }
+});
 </script>
 
 <script src="{{ url_for('static', filename='js/baca-suara.js') }}"></script>

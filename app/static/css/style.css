@@ -432,3 +432,7 @@ body {
 @keyframes move-right-to-left { from { transform: translateX(100vw); } to { transform: translateX(-100%); } }
 @keyframes move-left-to-right { from { transform: translateX(-100%); } to { transform: translateX(100vw); } }
 @keyframes seamless-scroll { from { transform: translateX(0%); } to { transform: translateX(-50%); } }
+
+html {
+  scroll-behavior: smooth;
+}

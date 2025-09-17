@@ -31,21 +31,38 @@
 </style>
 <body class="bg-gray-100 text-gray-800 selection:bg-teal-300 selection:text-white">
 
-    <header id="main-header" class="relative flex flex-col items-center justify-center w-full h-72 md:h-80 pt-12 pb-12 text-white bg-gradient-to-r from-blue-800 via-teal-600 to-blue-900 animated-gradient">
+<header id="main-header" class="relative flex flex-col items-center w-full h-screen text-white overflow-hidden">
+<div class="animated-header-background">
+    <img src="static/img/back-asli2.png" class="anim-bg">
+    <div class="anim-objek-diam"></div>
+
+    <img src="static/img/prameks.png" class="anim-objek prameks">
+    
+    <img src="static/img/transkanan.png" class="anim-objek kendaraan jalur-depan trans-kanan">
+    <img src="static/img/angkot1-kanan.png" class="anim-objek kendaraan jalur-depan angkot1-kanan">
+    <img src="static/img/angkot3-kanan.png" class="anim-objek kendaraan jalur-depan angkot3-kanan">
+
+    <img src="static/img/transkiri.png" class="anim-objek kendaraan jalur-belakang trans-kiri">
+    <img src="static/img/angkot1-kiri.png" class="anim-objek kendaraan jalur-belakang angkot1-kiri">
+    <img src="static/img/angkot4-kiri.png" class="anim-objek kendaraan jalur-belakang angkot4-kiri">
+</div>
+
+    <div class="relative z-10 flex flex-col items-center justify-start w-full h-full pt-12">
         <div class="flex items-center gap-4 text-center mb-6">
-            <img src="static/img/logo kabupaten pwr.png" alt="Logo Kabupaten Purworejo" class="w-14 h-auto object-contain" onerror="this.style.display='none'" />
-            <div>
-                <h1 class="text-xl md:text-2xl font-bold tracking-wide uppercase">Dinas Kominfo Purworejo</h1>
-                <p class="text-xs md:text-sm opacity-80">Statistik dan Persandian Kabupaten Purworejo</p>
-            </div>
-        </div>
-        <div class="w-full max-w-2xl px-4 z-20">
-            <form role="search" action="{{ url_for('public.search') }}" method="get" class="relative flex">
-                <input id="search-input" type="search" name="q" placeholder="Cari berita, layanan, atau informasi publik..." class="flex-grow py-4 px-6 text-md text-gray-900 rounded-l-full border-2 border-gray-300 focus:outline-none focus:border-teal-500 shadow-md" required />
-                <button type="submit" class="px-6 bg-blue-700 hover:bg-teal-500 text-white font-semibold rounded-r-full">Cari</button>
-            </form>
-        </div>
-    </header>
+            <img src="static/img/logo kabupaten pwr.png" alt="Logo Kabupaten Purworejo" class="w-14 h-auto object-contain" onerror="this.style.display='none'" />
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold tracking-wide uppercase" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Dinas Kominfo Purworejo</h1>
+                <p class="text-xs md:text-sm opacity-80" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Statistik dan Persandian Kabupaten Purworejo</p>
+            </div>
+        </div>
+        <div class="w-full max-w-2xl px-4">
+            <form role="search" action="{{ url_for('public.search') }}" method="get" class="relative flex">
+                <input id="search-input" type="search" name="q" placeholder="Cari berita, layanan, atau informasi publik..." class="flex-grow py-4 px-6 text-md text-gray-900 rounded-l-full border-2 border-gray-300 focus:outline-none focus:border-teal-500 shadow-md" required />
+                <button type="submit" class="px-6 bg-blue-700 hover:bg-teal-500 text-white font-semibold rounded-r-full">Cari</button>
+            </form>
+        </div>
+    </div>
+</header>
     <br>
     <nav id="main-nav" class="sticky top-0 z-50 w-full transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

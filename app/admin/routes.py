@@ -964,10 +964,6 @@ def tambah_berita():
         flash('Anda tidak memiliki izin untuk mempublikasikan berita.', 'danger')
         return redirect(url_for('admin.berita'))
 
-    # Lanjutkan proses penambahan berita
-    flash("Berita berhasil ditambahkan!", "success")
-    return redirect(url_for('admin.berita'))
-
     # Upload gambar
     gambar = None
     if 'gambar' in request.files:

@@ -270,19 +270,23 @@
     </section>
 </main>
 
-<button id="weather-button" 
-    class="fixed right-6 bg-orange-500 text-white w-14 h-14 rounded-full shadow-lg 
-           flex items-center justify-center 
-           hover:bg-orange-600 hover:scale-110 
-           transition-all 
-           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500" 
-    aria-label="Buka Prakiraan Cuaca"
-    style="bottom: 150px; z-index: 1000;">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
-        <path d="M16 8V6.5A2.5 2.5 0 1 0 13.5 4H12"/>
-    </svg>
-</button>
+<!-- Container untuk tombol kanan tengah -->
+<div class="fixed right-6 top-1/2 -translate-y-1/2 flex flex-col space-y-4 z-50">
+    <!-- Tombol Weather -->
+    <button id="weather-button" 
+        class="bg-orange-500 text-white w-14 h-14 rounded-full shadow-lg 
+               flex items-center justify-center 
+               hover:bg-orange-600 hover:scale-110 
+               transition-all 
+               focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500" 
+        aria-label="Buka Prakiraan Cuaca">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+            <path d="M16 8V6.5A2.5 2.5 0 1 0 13.5 4H12"/>
+        </svg>
+    </button>
+
+<
 
 <div id="weather-sidebar" class="weather-sidebar p-4">
     <div class="flex justify-between items-center mb-4">
@@ -296,16 +300,17 @@
     </div>
 </div>
 
-<button id="accessibility-button" 
-    class="fixed right-6 bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg 
-           flex items-center justify-center 
-           hover:bg-blue-700 hover:scale-110 
-           transition-all 
-           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" 
-    aria-label="Buka Menu Aksesibilitas"
-    style="bottom: 80px; z-index: 1000;">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 1025 1024" fill="currentColor"><path d="m1006 875l-63 64q-1 0-1 .5t-1 1.5l-1.5 1l-2.5 1q-4 4-7 5q-18 12-40.5 10.5T851 941L678 767H384q-26 0-45-18.5T320 704V384q0-27 19-45.5t45.5-18.5t45 18.5T448 384v256h249q7-1 16 1q4 0 7 1q7 2 9 3q12 5 22 15l145 145l20-20q19-19 45.5-19t45 19t18.5 45.5t-19 44.5zM384 256q-53 0-90-37.5T257 128t37-90.5T384 0t90.5 37.5T512 128t-37.5 90.5T384 256zm146 593l3 3q19-18 45.5-18t45 18.5t18.5 45t-18 45.5q-10 10-26 15q-74 50-161.5 62t-173-16T113 911T20 760.5t-16-173T66 426q5-16 15-26q19-19 45.5-19t45 19t18.5 45.5t-18 45.5l3 3q-53 74-45.5 167t74 159.5t159.5 74T530 849z"/></svg>
-</button>
+<!-- Tombol Aksesibilitas -->
+    <button id="accessibility-button" 
+        class="bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg 
+               flex items-center justify-center 
+               hover:bg-blue-700 hover:scale-110 
+               transition-all 
+               focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" 
+        aria-label="Buka Menu Aksesibilitas">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 1025 1024" fill="currentColor"><path d="m1006 875l-63 64q-1 0-1 .5t-1 1.5l-1.5 1l-2.5 1q-4 4-7 5q-18 12-40.5 10.5T851 941L678 767H384q-26 0-45-18.5T320 704V384q0-27 19-45.5t45.5-18.5t45 18.5T448 384v256h249q7-1 16 1q4 0 7 1q7 2 9 3q12 5 22 15l145 145l20-20q19-19 45.5-19t45 19t18.5 45.5t-19 44.5zM384 256q-53 0-90-37.5T257 128t37-90.5T384 0t90.5 37.5T512 128t-37.5 90.5T384 256zm146 593l3 3q19-18 45.5-18t45 18.5t18.5 45t-18 45.5q-10 10-26 15q-74 50-161.5 62t-173-16T113 911T20 760.5t-16-173T66 426q5-16 15-26q19-19 45.5-19t45 19t18.5 45.5t-18 45.5l3 3q-53 74-45.5 167t74 159.5t159.5 74T530 849z"/></svg>
+    </button>
+</div>
 
 <div id="accessibility-sidebar" class="accessibility-sidebar p-4">
     <div class="flex justify-between items-center mb-6">

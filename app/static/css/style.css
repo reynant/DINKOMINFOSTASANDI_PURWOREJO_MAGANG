@@ -1,22 +1,15 @@
+/* --- [START] KODE CSS LENGKAP --- */
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   transition: background-color 0.3s, color 0.3s;
 }
-.animated-gradient {
-  background-size: 200% 200%;
-  animation: gradient-animation 10s ease infinite;
-}
-@keyframes gradient-animation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
+
+/* === Dropdown Menu === */
 .dropdown-menu {
   transition: opacity 0.2s ease, transform 0.2s ease;
   opacity: 0;
@@ -25,22 +18,26 @@ body {
   max-height: 320px;
   overflow-y: auto;
 }
+
 .group:hover .dropdown-menu {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
 }
+
 .dropdown-menu::-webkit-scrollbar {
   width: 5px;
 }
+
 .dropdown-menu::-webkit-scrollbar-thumb {
   background-color: #14b8a6;
 }
+
 .dropdown-menu::-webkit-scrollbar-track {
   background-color: #f1f5f9;
 }
 
-/* Hamburger menu styles */
+/* === Hamburger Menu (Mobile) === */
 .mobile-menu-button {
   display: none;
   position: fixed;
@@ -54,10 +51,12 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
+
 .mobile-menu-button:hover {
   background-color: #2563eb;
   transform: scale(1.05);
 }
+
 .mobile-menu {
   position: fixed;
   top: 0;
@@ -70,10 +69,12 @@ body {
   transition: left 1s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 999;
 }
+
 .mobile-menu.active {
   left: 0;
 }
 
+/* === Media Query untuk Tampilan Mobile === */
 @media (max-width: 1024px) {
   .flex-1.flex.flex-wrap.items-center.justify-center {
     display: none;
@@ -150,11 +151,14 @@ body {
   }
 }
 
-/* === CSS UNTUK FITUR AKSESIBILITAS & MODE MALAM === */
-.accessibility-sidebar {
+/* === Panel Samping (Sidebar) dan Backdrop === */
+
+/* [MODIFIKASI] Menggabungkan gaya untuk semua panel samping */
+.accessibility-sidebar,
+.weather-sidebar {
   position: fixed;
   top: 0;
-  right: -300px;
+  right: -300px; /* Sembunyi di kanan (default) */
   width: 280px;
   height: 100%;
   background-color: #1f2937;
@@ -163,9 +167,19 @@ body {
   transition: right 0.3s ease-in-out;
   box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
 }
-.accessibility-sidebar.open {
-  right: 0;
+
+/* [BARU] Atur lebar khusus untuk panel cuaca agar widget pas */
+.weather-sidebar {
+    width: 420px;
+    right: -450px; /* Sesuaikan posisi sembunyi dengan lebar baru */
 }
+
+/* [MODIFIKASI] Status 'open' untuk semua panel samping */
+.accessibility-sidebar.open,
+.weather-sidebar.open {
+  right: 0; /* Munculkan panel */
+}
+
 .backdrop {
   position: fixed;
   inset: 0;
@@ -175,11 +189,14 @@ body {
   pointer-events: none;
   transition: opacity 0.3s ease-in-out;
 }
+
 .backdrop.active {
   opacity: 1;
   pointer-events: auto;
 }
 
+
+/* === Tombol Melayang (Floating Buttons) === */
 #accessibility-button {
   position: fixed;
   bottom: 80px;
@@ -187,7 +204,17 @@ body {
   z-index: 1000;
 }
 
-/* Dark Mode Styles */
+/* [BARU] Posisi untuk Tombol Cuaca */
+/* (Styling lainnya menggunakan Tailwind CSS di HTML) */
+#weather-button {
+    position: fixed;
+    bottom: 150px; /* Letakkan di atas tombol disabilitas */
+    right: 20px;
+    z-index: 1000;
+}
+
+
+/* === Dark Mode Styles === */
 .dark body {
   background-color: #111827;
   color: #d1d5db;
@@ -238,7 +265,7 @@ body {
   background-color: #374151;
 }
 
-/* CSS UNTUK KONTROL UKURAN TEKS */
+/* === Kontrol Aksesibilitas di Panel === */
 .font-size-control {
   width: 28px;
   height: 28px;
@@ -265,8 +292,6 @@ body {
 #reset-font {
   font-size: 14px;
 }
-
-/* Toggle Switch Dark Mode */
 .toggle-checkbox:checked {
   right: 0;
   border-color: #68d391;
@@ -275,7 +300,7 @@ body {
   background-color: #68d391;
 }
 
-/* Efek hover banner */
+/* === Efek Banner dan Popup === */
 .banner-slide {
   position: relative;
   cursor: pointer;
@@ -306,8 +331,6 @@ body {
   background-color: #2563eb;
   transform: scale(1.05);
 }
-
-/* Popup */
 #bannerPopup {
   position: fixed;
   inset: 0;
@@ -360,21 +383,16 @@ body {
   }
 }
 
-/* === [FINAL] CSS ANIMASI HEADER - Solusi Gerak Bolak-Balik Halus === */
-
-/* PANEL KONTROL ANIMASI */
+/* === Animasi Header === */
 :root {
-  /* -- Icon Terfix (Latar Tengah) -- */
   --icon-height: 70%;
   --icon-duration: 30s;
 
-  /* -- Prameks -- */
   --prameks-height: 55px;
   --prameks-bottom: 90px;
   --prameks-duration: 6s;
   --prameks-delay: 0s;
-  
-  /* -- Kendaraan Bergerak ke Kiri (JALUR DEPAN) -- */
+
   --trans-kanan-height: 51px;
   --trans-kanan-bottom: 10px;
   --trans-kanan-duration: 8s;
@@ -390,7 +408,6 @@ body {
   --angkot3-kanan-duration: 12s;
   --angkot3-kanan-delay: 0s;
 
-  /* -- Kendaraan Bergerak ke Kanan (JALUR BELAKANG) -- */
   --trans-kiri-height: 48px;
   --trans-kiri-bottom: 35px;
   --trans-kiri-duration: 8s;
@@ -400,25 +417,20 @@ body {
   --angkot1-kiri-bottom: 35px;
   --angkot1-kiri-duration: 10s;
   --angkot1-kiri-delay: 0s;
-
+  
   --angkot4-kiri-height: 35px;
   --angkot4-kiri-bottom: 35px;
   --angkot4-kiri-duration: 12s;
   --angkot4-kiri-delay: 0s;
 }
-
-/* --- Mulai Aturan Styling --- */
 .animated-header-background { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
 .anim-bg { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
-
 .anim-objek-diam {
   position: absolute; bottom: 0; left: 0; height: var(--icon-height); width: 200%; z-index: 10;
   background-image: url('../img/icon-terfix.png'); background-repeat: repeat-x; background-position: bottom;
   background-size: auto var(--icon-height);
-  /* Dibuat bolak-balik & lebih halus untuk efek slide terus menerus */
   animation: seamless-scroll var(--icon-duration) ease-in-out infinite alternate;
 }
-
 .anim-objek { position: absolute; animation-iteration-count: infinite; animation-timing-function: linear; }
 .prameks { height: var(--prameks-height); bottom: var(--prameks-bottom); z-index: 9; animation: move-right-to-left var(--prameks-duration) linear var(--prameks-delay) infinite; }
 .jalur-belakang { z-index: 11; }
@@ -433,6 +445,4 @@ body {
 @keyframes move-left-to-right { from { transform: translateX(-100%); } to { transform: translateX(100vw); } }
 @keyframes seamless-scroll { from { transform: translateX(0%); } to { transform: translateX(-50%); } }
 
-html {
-  scroll-behavior: smooth;
-}
+/* === [AKHIR] KODE CSS LENGKAP --- */

@@ -153,12 +153,11 @@ body {
 
 /* === Panel Samping (Sidebar) dan Backdrop === */
 
-/* [MODIFIKASI] Menggabungkan gaya untuk semua panel samping */
-.accessibility-sidebar,
-.weather-sidebar {
+/* Gaya untuk panel aksesibilitas (tetap gelap) */
+.accessibility-sidebar {
   position: fixed;
   top: 0;
-  right: -300px; /* Sembunyi di kanan (default) */
+  right: -300px;
   width: 280px;
   height: 100%;
   background-color: #1f2937;
@@ -168,16 +167,38 @@ body {
   box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
 }
 
-/* [BARU] Atur lebar khusus untuk panel cuaca agar widget pas */
+/* [PERUBAHAN DI SINI] Gaya untuk panel cuaca diubah menjadi abu-abu terang */
 .weather-sidebar {
-    width: 420px;
-    right: -450px; /* Sesuaikan posisi sembunyi dengan lebar baru */
+  position: fixed;
+  top: 0;
+  right: -450px;
+  width: 420px;
+  max-width: 90vw;
+  height: 100%;
+  /* Latar belakang diubah menjadi abu-abu terang */
+  background-color: #f1f5f9; 
+  /* Warna teks diubah menjadi lebih gelap agar kontras */
+  color: #1e293b;
+  z-index: 1050;
+  transition: right 0.3s ease-in-out;
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
 }
 
-/* [MODIFIKASI] Status 'open' untuk semua panel samping */
+/* Atur warna spesifik untuk elemen di dalam panel cuaca */
+.weather-sidebar #close-weather-sidebar {
+    color: #1e293b;
+}
+.weather-sidebar #tanggal-hari-ini {
+    color: #475569;
+}
+.weather-sidebar h3 {
+    color: #1e293b;
+}
+
+/* Status 'open' untuk memunculkan panel */
 .accessibility-sidebar.open,
 .weather-sidebar.open {
-  right: 0; /* Munculkan panel */
+  right: 0;
 }
 
 .backdrop {
@@ -197,18 +218,21 @@ body {
 
 
 /* === Tombol Melayang (Floating Buttons) === */
+#goToTopButton {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
 #accessibility-button {
   position: fixed;
-  bottom: 80px;
+  bottom: 90px;
   right: 20px;
   z-index: 1000;
 }
-
-/* [BARU] Posisi untuk Tombol Cuaca */
-/* (Styling lainnya menggunakan Tailwind CSS di HTML) */
 #weather-button {
     position: fixed;
-    bottom: 150px; /* Letakkan di atas tombol disabilitas */
+    bottom: 160px;
     right: 20px;
     z-index: 1000;
 }
@@ -387,37 +411,30 @@ body {
 :root {
   --icon-height: 70%;
   --icon-duration: 30s;
-
   --prameks-height: 55px;
   --prameks-bottom: 90px;
   --prameks-duration: 6s;
   --prameks-delay: 0s;
-
   --trans-kanan-height: 51px;
   --trans-kanan-bottom: 10px;
   --trans-kanan-duration: 8s;
   --trans-kanan-delay: 0s;
-
   --angkot1-kanan-height: 37px;
   --angkot1-kanan-bottom: 10px;
   --angkot1-kanan-duration: 10s;
   --angkot1-kanan-delay: 0s;
-
   --angkot3-kanan-height: 37px;
   --angkot3-kanan-bottom: 10px;
   --angkot3-kanan-duration: 12s;
   --angkot3-kanan-delay: 0s;
-
   --trans-kiri-height: 48px;
   --trans-kiri-bottom: 35px;
   --trans-kiri-duration: 8s;
   --trans-kiri-delay: 0s;
-
   --angkot1-kiri-height: 35px;
   --angkot1-kiri-bottom: 35px;
   --angkot1-kiri-duration: 10s;
   --angkot1-kiri-delay: 0s;
-  
   --angkot4-kiri-height: 35px;
   --angkot4-kiri-bottom: 35px;
   --angkot4-kiri-duration: 12s;

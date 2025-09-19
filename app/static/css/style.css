@@ -37,6 +37,11 @@ body {
   background-color: #f1f5f9;
 }
 
+/* Beri jarak antara header dan navbar */
+#main-header {
+    margin-bottom: 2rem; /* Sesuaikan nilainya sesuai kebutuhan */
+}
+
 /* === Hamburger Menu (Mobile) === */
 .mobile-menu-button {
   display: none;
@@ -154,17 +159,20 @@ body {
 /* === Panel Samping (Sidebar) dan Backdrop === */
 
 /* Gaya untuk panel aksesibilitas (tetap gelap) */
-.accessibility-sidebar {
-  position: fixed;
-  top: 0;
-  right: -300px;
-  width: 280px;
-  height: 100%;
-  background-color: #1f2937;
-  color: white;
-  z-index: 1050;
-  transition: right 0.3s ease-in-out;
-  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
+/* Mode default (putih) untuk sidebar aksesibilitas */
+#accessibility-sidebar {
+    background-color: #ffffff;
+    color: #111827; /* gray-900 */
+}
+
+#accessibility-sidebar h3,
+#accessibility-sidebar button,
+#accessibility-sidebar label {
+    color: #111827;
+}
+
+#accessibility-sidebar .hover\:bg-gray-700:hover {
+    background-color: #f3f4f6 !important; /* gray-100 */
 }
 
 /* [PERUBAHAN DI SINI] Gaya untuk panel cuaca diubah menjadi abu-abu terang */
@@ -287,6 +295,66 @@ body {
 }
 .dark .dropdown-menu a:hover {
   background-color: #374151;
+}
+/* Mode malam untuk sidebar cuaca */
+.dark #weather-sidebar {
+    background-color: #1f2937; /* gray-800 */
+    color: #f9fafb; /* gray-50 */
+}
+
+.dark #weather-sidebar .bg-white {
+    background-color: #374151 !important; /* gray-700 */
+    color: #f9fafb !important;
+}
+/* Mode malam untuk isi cuaca (iframe dan teks) */
+.dark #weather-sidebar .text-white-500,
+.dark #weather-sidebar .text-white-400,
+.dark #weather-sidebar .text-white-800,
+.dark #weather-sidebar a {
+    color: #f9fafb !important; /* gray-50 */
+}
+
+.dark #weather-sidebar .text-gray-300 {
+    color: #d1d5db !important; /* gray-300 */
+}
+
+.dark #weather-sidebar h3,
+.dark #weather-sidebar p,
+.dark #weather-sidebar a {
+    color: #f9fafb !important;
+}
+
+/* Mode malam untuk sidebar aksesibilitas */
+.dark #accessibility-sidebar {
+    background-color: #1f2937; /* gray-800 */
+    color: #f9fafb; /* gray-50 */
+}
+
+.dark #accessibility-sidebar h3,
+.dark #accessibility-sidebar button,
+.dark #accessibility-sidebar label {
+    color: #f9fafb !important;
+}
+
+.dark #accessibility-sidebar .hover\:bg-gray-700:hover {
+    background-color: #4b5563 !important; /* gray-600 */
+}
+/* Warna tombol X sidebar cuaca saat mode malam */
+.dark #close-weather-sidebar {
+  color: #ffffff !important;
+}
+.dark #layanan-kami-section {
+  background-image: url("static/img/bg-dark.jpg") !important;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+}
+
+.dark #layanan-kami-section::before {
+  background: linear-gradient(to top, rgba(17, 24, 39, 0.8) 0%, transparent 20%),
+              linear-gradient(to bottom, rgba(17, 24, 39, 0.8) 0%, transparent 20%),
+              linear-gradient(to left, rgba(17, 24, 39, 0.8) 0%, transparent 25%),
+              linear-gradient(to right, rgba(17, 24, 39, 0.8) 0%, transparent 25%);
 }
 
 /* === Kontrol Aksesibilitas di Panel === */

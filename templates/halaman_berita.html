@@ -315,8 +315,7 @@
 </div>
 
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12">
-  <h2 class="text-3xl font-bold text-blue-800 mb-4">Halaman Berita</h2>
-  <p class="text-gray-600 leading-relaxed">Tinggal Diisi Konten.</p>
+
 </main>
 
 <script>
@@ -436,66 +435,69 @@
 </body>
 </html>
 
-
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8">
-
-  <!-- Konten Utama -->
+ <!-- KONTEN UTAMA -->
   <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 my-12">
     <h1 class="text-3xl md:text-4xl font-bold text-blue-900 mb-10 text-center">Berita Terkini</h1>
 
+    <!-- Menggunakan 'berita_list' sesuai dengan yang dikirim dari Python -->
     {% if berita_list %}
-  <div class="space-y-10">
-    {% for berita in berita_list %}
+    <div class="space-y-10">
+      {% for berita in berita_list %}
       <div class="bg-white rounded-xl shadow-md overflow-hidden">
-        <!-- Foto Berita -->
+        
+        <!-- Menampilkan gambar dari kolom 'gambar' -->
         {% if berita.gambar %}
-          <img src="{{ url_for('static', filename= berita.gambar | replace('C:\\Users\\LENOVO\\OneDrive\\Documents\\Kerja Praktek\\Code\\DINKOMINFOSTASANDI_PURWOREJO_MAGANG\\app\\static\\', '') ) }}" 
+          <img src="{{ url_for('static', filename=berita.gambar) }}" 
                alt="{{ berita.judul }}" 
                class="w-full max-h-96 object-cover">
         {% endif %}
 
+        <div class="p-6">
+          
+          <!-- Menampilkan judul dari kolom 'judul' -->
+          <h2 class="text-2xl font-semibold text-blue-800 mb-2">
+            <a href="{{ url_for('public.detail_berita', id=berita.id) }}" class="hover:underline">
+              {{ berita.judul }}
+            </a>
+          </h2>
 
-            <div class="p-6">
-              <!-- Judul -->
-              <h2 class="text-2xl font-semibold text-blue-800 mb-2">
-                <a href="{{ url_for('public.detail_berita', id=berita.id) }}" class="hover:underline">
-                  {{ berita.judul }}
-                </a>
-              </h2>
+          <!-- Menampilkan sub_judul jika ada -->
+          {% if berita.sub_judul %}
+            <p class="text-lg text-gray-600 mb-3">{{ berita.sub_judul }}</p>
+          {% endif %}
 
-              <!-- Sub Judul -->
-              {% if berita.sub_judul %}
-                <p class="text-lg text-gray-600 mb-3">{{ berita.sub_judul }}</p>
-              {% endif %}
+          <!-- PERBAIKAN LOGIKA TANGGAL DAN JAM -->
+          <p class="text-sm text-gray-500 mb-4">
+            Dipublikasikan pada
+            <!-- Cek apakah kolom 'tanggal' ada isinya -->
+            {% if berita.tanggal %}
+              <!-- Format 'tanggal' (tipe DATE) hanya sebagai tanggal -->
+              {{ berita.tanggal.strftime('%d %B %Y') }}
+              <!-- Tampilkan 'jam' (tipe TIME) secara terpisah -->
+              pukul {{ berita.jam }}
+            {% else %}
+              (Tanggal tidak tersedia)
+            {% endif %}
+          </p>
+          
+          <!-- Menampilkan isi berita dari kolom 'isi_berita' -->
+          <p class="text-gray-700 leading-relaxed mb-4">
+            {{ (berita.isi_berita or '')[:250] }}...
+          </p>
 
-              <!-- Info Tambahan -->
-              <p class="text-sm text-gray-500 mb-4">
-                Dipublikasikan pada 
-                {% if berita.waktu_posting %}
-                  {{ berita.waktu_posting.strftime('%d %B %Y %H:%M') }}
-                {% else %}
-                  (Tanggal tidak tersedia)
-                {% endif %}
-              </p>
-
-              <!-- Isi ringkas -->
-              <p class="text-gray-700 leading-relaxed mb-4">
-                {{ (berita.isi_berita or '')[:250] }}...
-              </p>
-
-              <a href="{{ url_for('public.detail_berita', id=berita.id) }}" class="inline-block px-4 py-2 bg-blue-700 text-white rounded-full hover:bg-teal-600 transition">
-                Baca Selengkapnya
-              </a>
-            </div>
-          </div>
-        {% endfor %}
+          <a href="{{ url_for('public.detail_berita', id=berita.id) }}" class="inline-block px-4 py-2 bg-blue-700 text-white rounded-full hover:bg-teal-600 transition">
+            Baca Selengkapnya
+          </a>
+        </div>
       </div>
+      {% endfor %}
+    </div>
     {% else %}
       <p class="text-gray-600 text-center">Belum ada berita dipublikasikan.</p>
     {% endif %}
   </main>
 
-    </main>
+  
 
  <!-- ===== FOOTER DESAIN BARU DIMULAI DI SINI ===== -->
     <footer class="bg-blue-900 text-blue-200 relative pt-20">

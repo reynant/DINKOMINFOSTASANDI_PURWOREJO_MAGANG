@@ -2040,47 +2040,55 @@ def hapus_galeri_berita_foto(id):
     flash('Foto gallery berhasil dihapus', 'success')
     return redirect(url_for('admin.galeri_berita_foto'))
 
-# ---------------- HALAMAN BERITA ----------------
-
+# ---------------- HALAMAN BERITA (NAMA FUNGSI DIPERBAIKI) ----------------
 
 # Route tampil daftar berita
-
-
-@admin_bp.route('/halaman_berita')
-@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
-def halaman_berita():
+@admin_bp.route('/halaman_berita') 
+@role_required(['Admin', 'Editor'])
+def halaman_berita(): 
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute('SELECT * FROM halaman_berita ORDER BY Id DESC')
-    berita = cursor.fetchall()
+    # Tetap mengambil dari tabel 'berita' yang benar
+    cursor.execute('''
+        SELECT b.*, u.nama_lengkap as penulis 
+        FROM berita b 
+        JOIN users u ON b.id_user = u.id 
+        ORDER BY b.id DESC
+    ''')
+    berita_list = cursor.fetchall()
     cursor.close()
     conn.close()
-    return render_template('admin/halaman_berita.html', berita=berita)
+    # Mengirim ke template 'admin/berita.html'
+    return render_template('admin/berita.html', berita_list=berita_list)
 
 # Route tambah berita
-
-
 @admin_bp.route('/tambah_halaman_berita', methods=['POST'])
-@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
+@role_required(['Admin', 'Editor'])
 def tambah_halaman_berita():
-    if not os.path.exists('static/uploads'):
-        os.makedirs('static/uploads')
+    if not os.path.exists('app/static/uploads'):
+        os.makedirs('app/static/uploads')
 
     judul = request.form['judul']
-    isi = request.form['isi']
-    foto = request.files.get('foto')
+    isi_berita = request.form['isi_berita']
+    gambar = request.files.get('gambar')
+    id_user = session.get('user_id')
 
-    foto_path = ''
-    if foto and foto.filename:
-        filename = secure_filename(foto.filename)
-        foto_path = f"uploads/{filename}"
-        foto.save(os.path.join('static', foto_path))
+    if not judul or not isi_berita or not id_user:
+        flash('Judul, Isi Berita, dan User harus diisi.', 'danger')
+        return redirect(url_for('admin.halaman_berita'))
+
+    gambar_path = ''
+    if gambar and gambar.filename:
+        filename = secure_filename(gambar.filename)
+        gambar_path = f"uploads/{filename}"
+        gambar.save(os.path.join('app/static', gambar_path))
 
     conn = get_db()
     cursor = conn.cursor()
+    # Tetap menyimpan ke tabel 'berita'
     cursor.execute(
-        'INSERT INTO halaman_berita (Judul, Isi, Foto, Tanggal) VALUES (%s, %s, %s, NOW())',
-        (judul, isi, foto_path)
+        'INSERT INTO berita (judul, isi_berita, gambar, tanggal, jam, id_user, hari) VALUES (%s, %s, %s, CURDATE(), CURTIME(), %s, %s)',
+        (judul, isi_berita, gambar_path, id_user, 'Senin') # Hari bisa dibuat dinamis nanti
     )
     conn.commit()
     cursor.close()
@@ -2090,33 +2098,32 @@ def tambah_halaman_berita():
     return redirect(url_for('admin.halaman_berita'))
 
 # Route edit berita
-
-
 @admin_bp.route('/edit_halaman_berita/<int:id>', methods=['POST'])
-@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
+@role_required(['Admin', 'Editor'])
 def edit_halaman_berita(id):
     judul = request.form['judul']
-    isi = request.form['isi']
-    foto = request.files.get('foto')
+    isi_berita = request.form['isi_berita']
+    gambar = request.files.get('gambar')
 
     conn = get_db()
     cursor = conn.cursor()
 
-    if foto and foto.filename:
-        if not os.path.exists('static/uploads'):
-            os.makedirs('static/uploads')
-        filename = secure_filename(foto.filename)
-        foto_path = f"uploads/{filename}"
-        foto.save(os.path.join('static', foto_path))
+    if gambar and gambar.filename:
+        if not os.path.exists('app/static/uploads'):
+            os.makedirs('app/static/uploads')
+        filename = secure_filename(gambar.filename)
+        gambar_path = f"uploads/{filename}"
+        gambar.save(os.path.join('app/static', gambar_path))
 
+        # Tetap update tabel 'berita'
         cursor.execute(
-            'UPDATE halaman_berita SET Judul=%s, Isi=%s, Foto=%s WHERE Id=%s',
-            (judul, isi, foto_path, id)
+            'UPDATE berita SET judul=%s, isi_berita=%s, gambar=%s WHERE id=%s',
+            (judul, isi_berita, gambar_path, id)
         )
     else:
         cursor.execute(
-            'UPDATE halaman_berita SET Judul=%s, Isi=%s WHERE Id=%s',
-            (judul, isi, id)
+            'UPDATE berita SET judul=%s, isi_berita=%s WHERE id=%s',
+            (judul, isi_berita, id)
         )
 
     conn.commit()
@@ -2127,21 +2134,20 @@ def edit_halaman_berita(id):
     return redirect(url_for('admin.halaman_berita'))
 
 # Route hapus berita
-
-
 @admin_bp.route('/hapus_halaman_berita/<int:id>', methods=['POST'])
-@role_required(['Admin', 'Editor'])  # Kategori dipegang Admin & Editor
+@role_required(['Admin', 'Editor'])
 def hapus_halaman_berita(id):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
 
-    cursor.execute('SELECT Foto FROM halaman_berita WHERE Id=%s', (id,))
+    # Tetap mengambil dari tabel 'berita'
+    cursor.execute('SELECT gambar FROM berita WHERE id=%s', (id,))
     result = cursor.fetchone()
 
-    if result and result['Foto'] and os.path.exists(os.path.join('static', result['Foto'])):
-        os.remove(os.path.join('static', result['Foto']))
+    if result and result['gambar'] and os.path.exists(os.path.join('app/static', result['gambar'])):
+        os.remove(os.path.join('app/static', result['gambar']))
 
-    cursor.execute('DELETE FROM halaman_berita WHERE Id=%s', (id,))
+    cursor.execute('DELETE FROM berita WHERE id=%s', (id,))
     conn.commit()
     cursor.close()
     conn.close()

@@ -82,6 +82,7 @@
                       src="{{ url_for('static', filename='uploads/' ~ berita.gambar) }}"
                       width="80"
                       class="img-thumbnail"
+                      alt="{{ berita.judul }}"
                     />
                     {% else %}
                     <span class="text-muted">Tidak ada</span>
@@ -89,11 +90,15 @@
                   </td>
                   <td>{{ berita.judul }}</td>
                   <td>
-                    {% if berita.status %} {{ berita.status }} {% elif
-                    berita.status_berita %} {{ berita.status_berita }} {% else
-                    %}
-                    <span class="text-muted">Published</span>
+                    <!-- ================= PERBAIKAN LOGIKA STATUS DIMULAI DI SINI ================= -->
+                    {% if berita.status and berita.status|trim|lower == 'published' %}
+                    <span class="badge bg-success">Published</span>
+                    {% elif berita.status and berita.status|trim|lower == 'draft' %}
+                    <span class="badge bg-secondary">Draft</span>
+                    {% else %}
+                    <span class="badge bg-warning text-dark">Lainnya</span>
                     {% endif %}
+                    <!-- ================= PERBAIKAN LOGIKA STATUS SELESAI DI SINI ================= -->
                   </td>
                   <td>
                     <button
@@ -110,7 +115,7 @@
                       data-tag="{{ berita.tag }}"
                       data-tanggal="{{ berita.tanggal }}"
                       data-waktu="{{ berita.waktu_posting }}"
-                      data-status="{{ berita.status or berita.status_berita }}"
+                      data-status="{{ berita.status }}"
                       data-bs-toggle="modal"
                       data-bs-target="#modalEdit"
                       onclick="setEditData(this)"
@@ -347,7 +352,7 @@
                 <label>Status</label>
                 <select id="edit-status" name="status" class="form-select">
                   <option value="Draft">Draft</option>
-                  <option value="Publish">Publish</option>
+                  <option value="Published">Published</option>
                 </select>
               </div>
             </div>
@@ -384,8 +389,14 @@
           btn.getAttribute("data-tanggal");
         document.getElementById("edit-waktu").value =
           btn.getAttribute("data-waktu");
-        document.getElementById("edit-status").value =
-          btn.getAttribute("data-status");
+        
+        // ================= PERBAIKAN JAVASCRIPT DIMULAI DI SINI =================
+        const statusValue = btn.getAttribute("data-status");
+        if (statusValue) {
+            // Menghapus spasi ekstra sebelum mengatur nilai dropdown
+            document.getElementById("edit-status").value = statusValue.trim();
+        }
+        // ================= PERBAIKAN JAVASCRIPT SELESAI DI SINI =================
       }
 
       // 🔎 Fungsi search
@@ -411,3 +422,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
+

@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dinas Kominfo Purworejo</title>
     
-    <!-- External CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     
-    <!-- Custom CSS -->
     <style>
         /* CSS Tambahan Anda */
         #layanan-kami-section {
@@ -25,9 +23,9 @@
             position: absolute;
             inset: 0;
             background: linear-gradient(to top, rgb(241, 245, 249) 0%, transparent 20%),
-                      linear-gradient(to bottom, rgb(241, 245, 249) 0%, transparent 20%),
-                      linear-gradient(to left, rgb(241, 245, 249) 0%, transparent 25%),
-                      linear-gradient(to right, rgb(241, 245, 249) 0%, transparent 25%);
+                        linear-gradient(to bottom, rgb(241, 245, 249) 0%, transparent 20%),
+                        linear-gradient(to left, rgb(241, 245, 249) 0%, transparent 25%),
+                        linear-gradient(to right, rgb(241, 245, 249) 0%, transparent 25%);
             z-index: 5;
         }
         
@@ -63,41 +61,8 @@
             display: block;
         }
         
-        #goToTopButton {
+        #goToTopButton, #kanalAduanButton {
             z-index: 999;
-        }
-        
-        #kanalAduanButton {
-            z-index: 999;
-        }
-        
-        /* Perbaikan untuk mobile menu */
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            left: -100%;
-            width: 80%;
-            max-width: 300px;
-            height: 100%;
-            background-color: white;
-            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
-            z-index: 1001;
-            transition: left 0.3s ease;
-            overflow-y: auto;
-        }
-        
-        .mobile-menu.active {
-            left: 0;
-        }
-        
-        .mobile-menu .dropdown-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-        
-        .mobile-menu .dropdown-content.active {
-            max-height: 500px;
         }
         
         /* Perbaikan untuk banner popup */
@@ -123,15 +88,85 @@
             position: relative;
         }
         
-        /* Perbaikan untuk popup kanal aduan */
         #popupKanalAduan {
             z-index: 1002;
         }
+
+        /* ▼▼▼ CSS UNTUK MOBILE MENU DARI VISI-MISI.HTML ▼▼▼ */
+        .mobile-menu-button { display: none; }
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 300px;
+            height: 100%;
+            background-color: #1e293b; /* Warna gelap agar kontras */
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+            transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1100; /* Pastikan z-index lebih tinggi dari backdrop */
+        }
+        .mobile-menu.active {
+            left: 0;
+        }
+        @media (max-width: 1024px) {
+            .flex-1.flex.flex-wrap.items-center.justify-center { display: none; }
+            #nav-search-container { display: none; }
+            #main-nav ul { border: none; box-shadow: none; }
+            #main-nav ul.flex { background-color: transparent; border-radius: 0; }
+            .mobile-menu-button { 
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                color: white; /* Pastikan ikon hamburger terlihat */
+            }
+            .mobile-menu { box-shadow: 2px 0 8px rgba(0,0,0,0.1); }
+            .mobile-menu .close-button {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                color: white;
+                padding: 0.5rem;
+                cursor: pointer;
+                transition: transform 0.3s ease;
+            }
+            .mobile-menu .close-button:hover { transform: rotate(90deg); }
+            .mobile-menu ul { margin-top: 3rem; }
+            .mobile-menu ul li { display: block; width: 100%; }
+            .mobile-menu li a {
+                display: block;
+                width: 100%;
+                padding: 0.75rem 1rem;
+                color: white;
+                font-size: 1rem;
+                transition: all 0.3s ease;
+                border-radius: 0.5rem;
+            }
+            .mobile-menu li a:hover {
+                background: rgba(59, 130, 246, 0.5);
+                padding-left: 1.5rem;
+            }
+            .mobile-menu .dropdown-content {
+                display: none;
+                margin-left: 1rem;
+                margin-top: 0.5rem;
+                border-left: 2px solid rgba(59, 130, 246, 0.5);
+            }
+            .mobile-menu .dropdown-content.active {
+                display: block;
+                animation: slideDown 0.3s ease;
+            }
+            @keyframes slideDown {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        }
+        /* ▲▲▲ SELESAI CSS MOBILE MENU ▲▲▲ */
+
     </style>
 </head>
 
 <body class="bg-gray-100 text-gray-800 selection:bg-teal-300 selection:text-white">
-    <!-- Header Section -->
     <header id="main-header" class="relative flex flex-col items-center w-full h-screen text-white overflow-hidden">
         <div class="animated-header-background">
             <img src="static/img/back-asli2.png" class="anim-bg">
@@ -178,7 +213,6 @@
 
     <br>
 
-    <!-- Navigation -->
     <nav id="main-nav" class="sticky top-0 z-50 w-full transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ul class="flex items-center justify-between gap-4 px-2 sm:px-4 py-2 bg-blue-600 rounded-2xl shadow-md">
@@ -265,70 +299,52 @@
         </div>
     </nav>
 
-    <!-- Mobile Menu -->
     <div class="mobile-menu">
         <button class="close-button" aria-label="Close menu">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
-        
         <div class="p-3">
-            <input type="text" id="menu-search" placeholder="Cari menu..." class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+          <input type="text" id="menu-search" placeholder="Cari menu..." class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-700 text-white placeholder-gray-400">
         </div>
-        
         <ul id="menu-list">
-            <li><a href="index.html">Beranda</a></li>
-            <li>
-                <a href="#" class="dropdown-trigger flex items-center justify-between">
-                    Profil 
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </a>
-                <ul class="dropdown-content">
-                    <li><a href="visi-dan-misi.html">Visi dan Misi</a></li>
-                    <li><a href="struktur-organisasi.html">Struktur Organisasi</a></li>
-                    <li><a href="profil-pejabat.html">Profil Pejabat</a></li>
-                    <li><a href="sekretariat.html">Sekretariat</a></li>
-                    <li><a href="bidangIKP.html">Bidang IKP</a></li>
-                    <li><a href="bidangTISP.html">Bidang TISP</a></li>
-                    <li><a href="bidangPPLKC.html">Bidang PPLKC</a></li>
-                </ul>
-            </li>
-            <li><a href="news.html">News</a></li>
-            <li>
-                <a href="#" class="dropdown-trigger flex items-center justify-between">
-                    Video 
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </a>
-                <ul class="dropdown-content">
-                    <li><a href="podkesdjo.html">PODKESDJO</a></li>
-                    <li><a href="gendis.html">GENDIS BROTO</a></li>
-                    <li><a href="ngobras.html">NGOBRAS DPRD</a></li>
-                    <li><a href="cvp.html">CVP</a></li>
-                    <li><a href="wisata.html">WISATA</a></li>
-                    <li><a href="rolasan.html">ROLASAN</a></li>
-                    <li><a href="gendhing.html">GENDHING SETU LEGI</a></li>
-                    <li><a href="cangkir.html">CANGKIR KOPI</a></li>
-                    <li><a href="kominfogoes.html">KOMINFO GOES TO THE RADIO</a></li>
-                </ul>
-            </li>
-            <li><a href="laporan-isu-hoaks.html">Isu Hoaks</a></li>
-            <li><a href="download.html">Download</a></li>
-            <li><a href="agenda.html">Agenda</a></li>
-            <li><a href="layanan-skpd.html">Layanan</a></li>
-            <li><a href="kebijakan.html">Kebijakan</a></li>
-            <li><a href="skm.html">SKM</a></li>
-            <li><a href="hubungi-kami.html" class="bg-teal-600">Hubungi Kami</a></li>
+          <li><a href="index.html">Beranda</a></li>
+          <li>
+            <a href="#" class="dropdown-trigger flex items-center justify-between">Profil <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></a>
+            <ul class="dropdown-content">
+              <li><a href="visi-dan-misi.html">Visi dan Misi</a></li>
+              <li><a href="struktur-organisasi.html">Struktur Organisasi</a></li>
+              <li><a href="profil-pejabat.html">Profil Pejabat</a></li>
+              <li><a href="sekretariat.html">Sekretariat</a></li>
+              <li><a href="bidangIKP.html">Bidang IKP</a></li>
+              <li><a href="bidangTISP.html">Bidang TISP</a></li>
+              <li><a href="bidangPPLKC.html">Bidang PPLKC</a></li>
+            </ul>
+          </li>
+          <li><a href="halaman_berita.html">News</a></li>
+          <li>
+            <a href="#" class="dropdown-trigger flex items-center justify-between">Video <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></a>
+            <ul class="dropdown-content">
+              <li><a href="podkesdjo.html">PODKESDJO</a></li>
+              <li><a href="gendis.html">GENDIS BROTO</a></li>
+              <li><a href="ngobras.html">NGOBRAS DPRD</a></li>
+              <li><a href="cvp.html">CVP</a></li>
+              <li><a href="wisata.html">WISATA</a></li>
+              <li><a href="rolasan.html">ROLASAN</a></li>
+              <li><a href="gendhing.html">GENDHING SETU LEGI</a></li>
+              <li><a href="cangkir.html">CANGKIR KOPI</a></li>
+              <li><a href="kominfogoes.html">KOMINFO GOES TO THE RADIO</a></li>
+            </ul>
+          </li>
+          <li><a href="laporan-isu-hoaks.html">Isu Hoaks</a></li>
+          <li><a href="download.html">Download</a></li>
+          <li><a href="agenda.html">Agenda</a></li>
+          <li><a href="layanan-skpd.html">Layanan</a></li>
+          <li><a href="kebijakan.html">Kebijakan</a></li>
+          <li><a href="skm.html">SKM</a></li>
+          <li><a href="hubungi-kami.html">Hubungi Kami</a></li>
         </ul>
     </div>
-
-    <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8" id="konten-utama">
-        <!-- Banner Carousel Section -->
         <section class="relative w-full py-28 bg-gray-900 overflow-hidden">
             <div class="absolute inset-0 z-0">
                 <img src="https://picsum.photos/1920/700?random=300" alt="Background Banner" class="w-full h-full object-cover opacity-40">
@@ -389,7 +405,6 @@
 
         <div class="h-12"></div>
 
-        <!-- Layanan Kami Section -->
         <section id="layanan-kami-section" class="py-16 relative">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"> 
                 <h2 class="text-2xl font-bold mb-8 text-white text-center" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.6);">
@@ -398,7 +413,6 @@
                 
                 <div class="relative overflow-hidden">
                     <div id="layananCarousel" class="flex transition-transform duration-500 ease-in-out">
-                        <!-- Layanan 1 -->
                         <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
                             <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
                                 <div class="overflow-hidden">
@@ -411,7 +425,6 @@
                             </a>
                         </div>
                         
-                        <!-- Layanan 2 -->
                         <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
                             <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
                                 <div class="overflow-hidden">
@@ -424,7 +437,6 @@
                             </a>
                         </div>
                         
-                        <!-- Layanan 3 -->
                         <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
                             <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
                                 <div class="overflow-hidden">
@@ -437,7 +449,6 @@
                             </a>
                         </div>
                         
-                        <!-- Layanan 4 -->
                         <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
                             <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
                                 <div class="overflow-hidden">
@@ -450,7 +461,6 @@
                             </a>
                         </div>
                         
-                        <!-- Layanan 5 -->
                         <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
                             <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
                                 <div class="overflow-hidden">
@@ -463,7 +473,6 @@
                             </a>
                         </div>
                         
-                        <!-- Layanan 6 -->
                         <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
                             <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
                                 <div class="overflow-hidden">
@@ -476,7 +485,6 @@
                             </a>
                         </div>
                         
-                        <!-- Layanan 7 -->
                         <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
                             <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
                                 <div class="overflow-hidden">
@@ -489,7 +497,6 @@
                             </a>
                         </div>
                         
-                        <!-- Layanan 8 -->
                         <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
                             <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
                                 <div class="overflow-hidden">
@@ -502,7 +509,6 @@
                             </a>
                         </div>
                         
-                        <!-- Layanan 9 -->
                         <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
                             <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
                                 <div class="overflow-hidden">
@@ -515,7 +521,6 @@
                             </a>
                         </div>
                         
-                        <!-- Layanan 10 -->
                         <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
                             <a href="layanan-skpd.html" class="group block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
                                 <div class="overflow-hidden">
@@ -528,7 +533,6 @@
                             </a>
                         </div>
                         
-                        <!-- Selengkapnya -->
                         <div class="flex-shrink-0 min-w-full sm:min-w-[50%] lg:min-w-[25%] p-2">
                             <a href="layanan-skpd.html" class="block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition h-full">
                                 <div class="overflow-hidden">
@@ -542,7 +546,6 @@
                         </div>
                     </div>
                     
-                    <!-- Navigation Buttons -->
                     <button id="prevLayananBtn" class="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-700/50 text-white px-3 py-2 sm:px-5 sm:py-4 rounded-r-xl text-3xl sm:text-5xl hover:bg-gray-900 z-10">
                         ‹
                     </button>
@@ -553,7 +556,6 @@
             </div>
         </section>
 
-        <!-- Pengumuman Section -->
         <section aria-labelledby="pengumuman-heading" class="mb-14">
             <h2 id="pengumuman-heading" class="text-xl font-semibold mb-4 text-center">PENGUMUMAN</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -568,7 +570,6 @@
             </div>
         </section>
 
-        <!-- Berita Section -->
         <section aria-labelledby="berita-heading" class="mb-14">
             <h2 id="berita-heading" class="text-2xl font-bold mb-10 text-center tracking-wide">BERITA</h2>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
@@ -593,38 +594,34 @@
             </div>
         </section>
     </main>
-
-    <!-- Container untuk tombol kanan tengah -->
+    
     <div class="fixed right-6 top-1/2 -translate-y-1/2 flex flex-col space-y-4 z-50">
-        <!-- Tombol Weather -->
         <button id="weather-button" 
-            class="bg-orange-500 text-white w-14 h-14 rounded-full shadow-lg 
-                   flex items-center justify-center 
-                   hover:bg-orange-600 hover:scale-110 
-                   transition-all 
-                   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500" 
-            aria-label="Buka Prakiraan Cuaca">
+                class="bg-orange-500 text-white w-14 h-14 rounded-full shadow-lg 
+                       flex items-center justify-center 
+                       hover:bg-orange-600 hover:scale-110 
+                       transition-all 
+                       focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500" 
+                aria-label="Buka Prakiraan Cuaca">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
                 <path d="M16 8V6.5A2.5 2.5 0 1 0 13.5 4H12"/>
             </svg>
         </button>
 
-        <!-- Tombol Aksesibilitas -->
         <button id="accessibility-button" 
-            class="bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg 
-                   flex items-center justify-center 
-                   hover:bg-blue-700 hover:scale-110 
-                   transition-all 
-                   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" 
-            aria-label="Buka Menu Aksesibilitas">
+                class="bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg 
+                       flex items-center justify-center 
+                       hover:bg-blue-700 hover:scale-110 
+                       transition-all 
+                       focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" 
+                aria-label="Buka Menu Aksesibilitas">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 1025 1024" fill="currentColor">
                 <path d="m1006 875l-63 64q-1 0-1 .5t-1 1.5l-1.5 1l-2.5 1q-4 4-7 5q-18 12-40.5 10.5T851 941L678 767H384q-26 0-45-18.5T320 704V384q0-27 19-45.5t45.5-18.5t45 18.5T448 384v256h249q7-1 16 1q4 0 7 1q7 2 9 3q12 5 22 15l145 145l20-20q19-19 45.5-19t45 19t18.5 45.5t-19 44.5zM384 256q-53 0-90-37.5T257 128t37-90.5T384 0t90.5 37.5T512 128t-37.5 90.5T384 256zm146 593l3 3q19-18 45.5-18t45 18.5t18.5 45t-18 45.5q-10 10-26 15q-74 50-161.5 62t-173-16T113 911T20 760.5t-16-173T66 426q5-16 15-26q19-19 45.5-19t45 19t18.5 45.5t-18 45.5l3 3q-53 74-45.5 167t74 159.5t159.5 74T530 849z"/>
             </svg>
         </button>
     </div>
 
-    <!-- Weather Sidebar -->
     <div id="weather-sidebar" class="weather-sidebar p-4">
         <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg font-bold">Prakiraan Cuaca Purworejo</h3>
@@ -637,7 +634,6 @@
         </div>
     </div>
 
-    <!-- Accessibility Sidebar -->
     <div id="accessibility-sidebar" class="accessibility-sidebar p-4">
         <div class="flex justify-between items-center mb-6">
             <h3 class="text-lg font-bold">Menu Aksesibilitas</h3>
@@ -667,33 +663,28 @@
         </ul>
     </div>
 
-    <!-- Backdrop for sidebars -->
     <div id="backdrop" class="backdrop"></div>
     
-    <!-- Banner Popup -->
     <div id="bannerPopup">
         <div class="popup-content">
-            <span class="close-btn">&times;</span>
+            <span class="close-btn">×</span>
             <h2 id="popupTitle"></h2>
             <p id="popupDesc"></p>
         </div>
     </div>
     
-    <!-- Go to Top Button -->
     <button id="goToTopButton" class="fixed right-5 bottom-20 z-50 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all duration-700 opacity-0 translate-y-12" aria-label="Ke Atas" title="Ke Atas">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
         </svg>
     </button>
     
-    <!-- Kanal Aduan Button -->
     <button id="kanalAduanButton" class="fixed bottom-5 left-5 z-50 w-14 h-14 bg-teal-500 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-teal-600 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all duration-300" aria-label="Buka Kanal Aduan">
         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
         </svg>
     </button>
     
-    <!-- Kanal Aduan Popup -->
     <div id="popupKanalAduan" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 transition-opacity duration-300">
         <div id="popupContent" class="bg-white w-full max-w-md p-6 rounded-xl shadow-2xl relative transform transition-all duration-300 scale-95 opacity-0">
             <button id="tutupPopup" class="absolute top-3 right-4 text-gray-400 hover:text-blue-600 text-3xl font-bold">×</button>
@@ -706,7 +697,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="bg-blue-900 text-blue-200 relative pt-20">
         <div class="absolute top-0 left-0 w-full overflow-hidden leading-[0] -mt-1">
             <svg class="relative block w-full h-[60px] md:h-[80px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
@@ -793,12 +783,10 @@
         </div>
     </footer>
 
-    <!-- External Scripts -->
     <script src="{{ url_for('static', filename='js/baca-suara.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
     <script src="{{ url_for('static', filename='js/text.js') }}"></script>
 
-    <!-- Internal Script -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Menampilkan Tanggal Hari Ini
@@ -821,7 +809,7 @@
         const mobileMenuButton = document.querySelector('.mobile-menu-button');
         const mobileMenuCloseButton = document.querySelector('.mobile-menu .close-button');
         const mobileMenu = document.querySelector('.mobile-menu');
-        const dropdownTriggers = document.querySelectorAll('.dropdown-trigger');
+        const dropdownTriggers = document.querySelectorAll('.mobile-menu .dropdown-trigger'); // Target dropdown di dalam mobile menu
         const menuSearchInput = document.getElementById("menu-search");
 
         const aduanButton = document.getElementById('kanalAduanButton');
@@ -841,51 +829,19 @@
         const scrollBtn = document.getElementById('scroll-down-btn');
         const goToTopButton = document.getElementById('goToTopButton');
         const copyrightYear = document.getElementById('copyright-year');
-        // Tambahkan class 'dark' ke sidebar saat mode malam aktif
-function applyDarkModeToSidebars() {
-    const isDark = document.body.classList.contains('dark');
-    const weatherSidebar = document.getElementById('weather-sidebar');
-    const accessibilitySidebar = document.getElementById('accessibility-sidebar');
 
-    if (isDark) {
-        weatherSidebar.classList.add('dark');
-        accessibilitySidebar.classList.add('dark');
-    } else {
-        weatherSidebar.classList.remove('dark');
-        accessibilitySidebar.classList.remove('dark');
-    }
-}
+        // Fungsi untuk mode malam di sidebar
+        function applyDarkModeToSidebars() {
+            const isDark = document.body.classList.contains('dark');
+            if (weatherSidebar) weatherSidebar.classList.toggle('dark', isDark);
+            if (accessibilitySidebar) accessibilitySidebar.classList.toggle('dark', isDark);
+        }
+        document.addEventListener('DOMContentLoaded', applyDarkModeToSidebars);
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        if(darkModeToggle) darkModeToggle.addEventListener('change', applyDarkModeToSidebars);
+        
 
-// Panggil saat halaman dimuat dan saat toggle mode malam
-document.addEventListener('DOMContentLoaded', applyDarkModeToSidebars);
-document.getElementById('dark-mode-toggle')?.addEventListener('change', applyDarkModeToSidebars);
-
-        // 10. Tutup sidebar cuaca saat tombol X diklik
-const closeWeatherBtn = document.getElementById('close-weather-sidebar');
-if (closeWeatherBtn) {
-    closeWeatherBtn.addEventListener('click', () => {
-        const weatherSidebar = document.getElementById('weather-sidebar');
-        weatherSidebar.classList.remove('open');
-    });
-}
-
-        // 9. Tutup sidebar cuaca saat klik di luar
-        document.addEventListener('click', function (e) {
-        const weatherSidebar = document.getElementById('weather-sidebar');
-        const weatherButton = document.getElementById('weather-button');
-
-    // Jika sidebar terbuka dan klik di luar sidebar DAN bukan di tombol cuaca
-    if (
-        weatherSidebar.classList.contains('open') &&
-        !weatherSidebar.contains(e.target) &&
-        e.target !== weatherButton &&
-        !weatherButton.contains(e.target)
-    ) {
-        weatherSidebar.classList.remove('open');
-    }
-});
-
-        // 1. Carousel Banner
+        // Carousel Banner
         const bannerWrapper = document.getElementById('bannerCarousel');
         if (bannerWrapper) {
             const bannerSlides = bannerWrapper.getElementsByClassName('banner-slide');
@@ -903,10 +859,11 @@ if (closeWeatherBtn) {
                     updateBannerCarousel();
                     resetBannerAuto();
                 });
-                bannerIndicators.appendChild(dot);
+                if(bannerIndicators) bannerIndicators.appendChild(dot);
             }
 
             function updateBannerCarousel() {
+                if (!bannerSlides.length || !bannerIndicators) return;
                 for (let i = 0; i < bannerSlides.length; i++) {
                     bannerSlides[i].classList.remove('scale-125', 'opacity-100', 'z-10');
                     bannerSlides[i].classList.add('scale-75', 'opacity-60');
@@ -939,7 +896,7 @@ if (closeWeatherBtn) {
             window.addEventListener('resize', updateBannerCarousel);
         }
         
-        // 2. Carousel Layanan
+        // Carousel Layanan
         const layananCarousel = document.getElementById("layananCarousel");
         if(layananCarousel) {
             const totalLayananItems = layananCarousel.children.length;
@@ -987,7 +944,7 @@ if (closeWeatherBtn) {
             window.addEventListener('resize', setupLayananCarousel);
         }
 
-        // 3. Menu Navigasi & Pencarian di Desktop
+        // Menu Navigasi & Pencarian di Desktop
         if (header && navbar && navSearchContainer && searchInputWrapper) {
             const scrollThreshold = header.offsetHeight / 2;
             window.addEventListener('scroll', () => {
@@ -1011,7 +968,7 @@ if (closeWeatherBtn) {
                 if (isHidden) {
                     searchInputWrapper.classList.remove('opacity-0', '-translate-x-4', 'pointer-events-none');
                     searchInputWrapper.classList.add('opacity-100', 'translate-x-0');
-                    searchInputField.focus();
+                    if (searchInputField) searchInputField.focus();
                 } else {
                     searchInputWrapper.classList.add('opacity-0', '-translate-x-4', 'pointer-events-none');
                     searchInputWrapper.classList.remove('opacity-100', 'translate-x-0');
@@ -1019,19 +976,24 @@ if (closeWeatherBtn) {
             });
         }
 
-        // 4. Menu Mobile (Hamburger)
+        // Menu Mobile (Hamburger)
         if (mobileMenuButton && mobileMenu) {
             mobileMenuButton.addEventListener('click', () => {
                 mobileMenu.classList.add('active');
+                backdrop.classList.add('active'); // Tampilkan backdrop
                 document.body.style.overflow = 'hidden';
             });
         }
-        if (mobileMenuCloseButton && mobileMenu) {
-            mobileMenuCloseButton.addEventListener('click', () => {
-                mobileMenu.classList.remove('active');
-                document.body.style.overflow = '';
-            });
+        function closeMobileMenu() {
+            if (mobileMenu) mobileMenu.classList.remove('active');
+            if (backdrop) backdrop.classList.remove('active'); // Sembunyikan backdrop
+            document.body.style.overflow = '';
         }
+        if (mobileMenuCloseButton) {
+            mobileMenuCloseButton.addEventListener('click', closeMobileMenu);
+        }
+
+        // Dropdown di dalam menu mobile
         if (dropdownTriggers.length > 0) {
             dropdownTriggers.forEach(trigger => {
                 trigger.addEventListener('click', (e) => {
@@ -1043,27 +1005,23 @@ if (closeWeatherBtn) {
                 });
             });
         }
+
         if (menuSearchInput) {
             menuSearchInput.addEventListener("keyup", function(e) {
                 let filter = this.value.toLowerCase();
-                let menuItems = document.querySelectorAll("#menu-list li");
-                let firstMatch = null;
+                let menuItems = document.querySelectorAll("#menu-list > li"); // Target li langsung di bawah menu-list
                 menuItems.forEach(item => {
-                    let text = item.innerText.toLowerCase();
+                    let text = item.textContent.toLowerCase();
                     if (text.includes(filter)) {
                         item.style.display = "";
-                        if (!firstMatch) firstMatch = item.querySelector("a");
                     } else {
                         item.style.display = "none";
                     }
                 });
-                if (e.key === "Enter" && firstMatch) {
-                    window.location.href = firstMatch.href;
-                }
             });
         }
 
-        // 5. Popup Kanal Aduan & Banner
+        // Popup Kanal Aduan & Banner
         const openPopup = (popupEl, contentEl) => {
             if (!popupEl) return;
             popupEl.style.display = 'flex';
@@ -1104,38 +1062,31 @@ if (closeWeatherBtn) {
             });
         }
 
-        // 6. Panel Samping (Sidebar) Aksesibilitas & Cuaca
+        // Panel Samping (Sidebar) Aksesibilitas & Cuaca
         const closeAllSidebars = () => {
             if(accessibilitySidebar) accessibilitySidebar.classList.remove('open');
             if(weatherSidebar) weatherSidebar.classList.remove('open');
+            if(mobileMenu) mobileMenu.classList.remove('active'); // Tutup juga mobile menu
             if(backdrop) backdrop.classList.remove('active');
+            document.body.style.overflow = '';
         };
         
-        const toggleAccessibilitySidebar = () => {
-            const isOpen = accessibilitySidebar.classList.contains('open');
+        const toggleSidebar = (sidebar) => {
+            const isOpen = sidebar.classList.contains('open');
             closeAllSidebars();
-            if (!isOpen) {
-                accessibilitySidebar.classList.add('open');
-                backdrop.classList.add('active');
+            if(!isOpen) {
+                sidebar.classList.add('open');
+                if(backdrop) backdrop.classList.add('active');
             }
         };
         
-        const toggleWeatherSidebar = () => {
-            const isOpen = weatherSidebar.classList.contains('open');
-            closeAllSidebars();
-            if (!isOpen) {
-                weatherSidebar.classList.add('open');
-                backdrop.classList.add('active');
-            }
-        };
-        
-        if (accessibilityButton) accessibilityButton.addEventListener('click', toggleAccessibilitySidebar);
-        if (closeAccessibilitySidebar) closeAccessibilitySidebar.addEventListener('click', toggleAccessibilitySidebar);
-        if (weatherButton) weatherButton.addEventListener('click', toggleWeatherSidebar);
-        if (closeWeatherSidebar) closeWeatherSidebar.addEventListener('click', toggleWeatherSidebar);
+        if (accessibilityButton) accessibilityButton.addEventListener('click', () => toggleSidebar(accessibilitySidebar));
+        if (closeAccessibilitySidebar) closeAccessibilitySidebar.addEventListener('click', closeAllSidebars);
+        if (weatherButton) weatherButton.addEventListener('click', () => toggleSidebar(weatherSidebar));
+        if (closeWeatherSidebar) closeWeatherSidebar.addEventListener('click', closeAllSidebars);
         if (backdrop) backdrop.addEventListener('click', closeAllSidebars);
 
-        // 7. Tombol Scroll & Go To Top
+        // Tombol Scroll & Go To Top
         if (scrollBtn) {
             scrollBtn.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -1160,7 +1111,7 @@ if (closeWeatherBtn) {
             });
         }
         
-        // 8. Inisialisasi Lainnya
+        // Inisialisasi Lainnya
         if (copyrightYear) {
             copyrightYear.textContent = new Date().getFullYear();
         }

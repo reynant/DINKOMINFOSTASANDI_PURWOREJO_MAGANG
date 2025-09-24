@@ -90,7 +90,6 @@
                   </td>
                   <td>{{ berita.judul }}</td>
                   <td>
-                    <!-- ================= PERBAIKAN LOGIKA STATUS DIMULAI DI SINI ================= -->
                     {% if berita.status and berita.status|trim|lower == 'published' %}
                     <span class="badge bg-success">Published</span>
                     {% elif berita.status and berita.status|trim|lower == 'draft' %}
@@ -98,7 +97,6 @@
                     {% else %}
                     <span class="badge bg-warning text-dark">Lainnya</span>
                     {% endif %}
-                    <!-- ================= PERBAIKAN LOGIKA STATUS SELESAI DI SINI ================= -->
                   </td>
                   <td>
                     <button
@@ -200,10 +198,25 @@
                   required
                 ></textarea>
               </div>
+              <!-- ================= PERUBAHAN INPUT MENJADI SELECT DIMULAI DI SINI (TAMBAH) ================= -->
               <div class="col-md-6">
-                <label>Tag</label>
-                <input type="text" name="tag" class="form-control" />
+                <label for="tag-tambah">Tag</label>
+                <select id="tag-tambah" name="tag" class="form-select">
+                    <option value="">-- Pilih Tag --</option>
+                    <option value="KIM">KIM</option>
+                    <option value="KEGIATAN">KEGIATAN</option>
+                    <option value="MOAP">MOAP</option>
+                    <option value="SOSIAL">SOSIAL</option>
+                    <option value="REKRUTMEN">REKRUTMEN</option>
+                    <option value="SPBE">SPBE</option>
+                    <option value="PIP">PIP</option>
+                    <option value="PPID">PPID</option>
+                    <option value="HOAKS">HOAKS</option>
+                    <option value="BUDAYA">BUDAYA</option>
+                    <option value="SMART CITY">SMART CITY</option>
+                </select>
               </div>
+              <!-- ================= PERUBAHAN INPUT MENJADI SELECT SELESAI DI SINI (TAMBAH) ================= -->
               <div class="col-md-3">
                 <label>Tanggal</label>
                 <input
@@ -317,15 +330,25 @@
                   required
                 ></textarea>
               </div>
+              <!-- ================= PERUBAHAN INPUT MENJADI SELECT DIMULAI DI SINI (EDIT) ================= -->
               <div class="col-md-6">
-                <label>Tag</label>
-                <input
-                  type="text"
-                  id="edit-tag"
-                  name="tag"
-                  class="form-control"
-                />
+                <label for="edit-tag">Tag</label>
+                <select id="edit-tag" name="tag" class="form-select">
+                    <option value="">-- Pilih Tag --</option>
+                    <option value="KIM">KIM</option>
+                    <option value="KEGIATAN">KEGIATAN</option>
+                    <option value="MOAP">MOAP</option>
+                    <option value="SOSIAL">SOSIAL</option>
+                    <option value="REKRUTMEN">REKRUTMEN</option>
+                    <option value="SPBE">SPBE</option>
+                    <option value="PIP">PIP</option>
+                    <option value="PPID">PPID</option>
+                    <option value="HOAKS">HOAKS</option>
+                    <option value="BUDAYA">BUDAYA</option>
+                    <option value="SMART CITY">SMART CITY</option>
+                </select>
               </div>
+              <!-- ================= PERUBAHAN INPUT MENJADI SELECT SELESAI DI SINI (EDIT) ================= -->
               <div class="col-md-3">
                 <label>Tanggal</label>
                 <input
@@ -390,13 +413,10 @@
         document.getElementById("edit-waktu").value =
           btn.getAttribute("data-waktu");
         
-        // ================= PERBAIKAN JAVASCRIPT DIMULAI DI SINI =================
         const statusValue = btn.getAttribute("data-status");
         if (statusValue) {
-            // Menghapus spasi ekstra sebelum mengatur nilai dropdown
             document.getElementById("edit-status").value = statusValue.trim();
         }
-        // ================= PERBAIKAN JAVASCRIPT SELESAI DI SINI =================
       }
 
       // 🔎 Fungsi search

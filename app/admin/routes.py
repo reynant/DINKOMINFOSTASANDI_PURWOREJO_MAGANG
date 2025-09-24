@@ -2040,32 +2040,53 @@ def hapus_galeri_berita_foto(id):
     flash('Foto gallery berhasil dihapus', 'success')
     return redirect(url_for('admin.galeri_berita_foto'))
 
-# ---------------- HALAMAN BERITA (DIPERBAIKI) ----------------
-import os, time
-from werkzeug.utils import secure_filename
-
-# path absolut → selalu ke app/static/uploads
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))  # folder app/
-UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
-
-
-# Route tampil daftar berita
-@admin_bp.route('/halaman_berita') 
+# ======================================================================
+# ========= HALAMAN BERITA =========
+# ======================================================================
+@admin_bp.route('/halaman_berita')
 @role_required(['Admin', 'Editor'])
-def halaman_berita(): 
+def halaman_berita():
+    # 1. Ambil tag yang dipilih dari parameter URL
+    selected_tag = request.args.get('tag')
+
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute('''
-        SELECT b.*, u.nama_lengkap as penulis 
-        FROM berita b 
-        JOIN users u ON b.id_user = u.id 
-        ORDER BY b.id DESC
-    ''')
+
+    # 2. Ambil semua tag unik dari database untuk membuat tombol filter
+    cursor.execute("""
+        SELECT DISTINCT tag FROM berita WHERE tag IS NOT NULL AND tag != '' ORDER BY tag
+    """)
+    tags_list = cursor.fetchall()
+
+    # 3. Siapkan query dasar dan parameter
+    # PERBAIKAN: Mengganti 'b.id_user' menjadi 'b.id_penulis' agar sesuai dengan database.
+    query = '''
+        SELECT b.*, u.nama_lengkap as penulis
+        FROM berita b
+        JOIN users u ON b.id_penulis = u.id
+    '''
+    params = []
+
+    # 4. Jika ada tag yang dipilih, tambahkan kondisi WHERE
+    if selected_tag:
+        query += 'WHERE b.tag = %s '
+        params.append(selected_tag)
+
+    # 5. Tambahkan urutan
+    query += 'ORDER BY b.id DESC'
+
+    # 6. Eksekusi query utama
+    cursor.execute(query, tuple(params))
     berita_list = cursor.fetchall()
+
     cursor.close()
     conn.close()
-    return render_template('admin/berita.html', berita_list=berita_list)
 
+    # 7. Kirim semua data yang diperlukan ke template
+    return render_template('admin/berita.html',
+                           berita_list=berita_list,
+                           tags_list=tags_list,
+                           selected_tag=selected_tag)
 
 # Route tambah berita
 @admin_bp.route('/tambah_halaman_berita', methods=['POST'])
@@ -2076,6 +2097,7 @@ def tambah_halaman_berita():
 
     judul = request.form['judul']
     isi_berita = request.form['isi_berita']
+    tag = request.form.get('tag')
     gambar = request.files.get('gambar')
     id_user = session.get('user_id')
 
@@ -2085,16 +2107,16 @@ def tambah_halaman_berita():
 
     filename = None
     if gambar and gambar.filename:
-        # nama unik biar tidak ketimpa
         filename = f"{int(time.time())}_{secure_filename(gambar.filename)}"
         gambar.save(os.path.join(UPLOAD_FOLDER, filename))
 
     conn = get_db()
     cursor = conn.cursor()
+    # PERBAIKAN: Mengganti kolom 'id_user' menjadi 'id_penulis' di query INSERT.
     cursor.execute(
-        'INSERT INTO berita (judul, isi_berita, gambar, tanggal, jam, id_user, hari) '
-        'VALUES (%s, %s, %s, CURDATE(), CURTIME(), %s, %s)',
-        (judul, isi_berita, filename, id_user, 'Senin')
+        'INSERT INTO berita (judul, isi_berita, tag, gambar, tanggal, jam, id_penulis, hari) '
+        'VALUES (%s, %s, %s, %s, CURDATE(), CURTIME(), %s, %s)',
+        (judul, isi_berita, tag, filename, id_user, 'Senin') # Anda mungkin ingin hari dinamis
     )
     conn.commit()
     cursor.close()
@@ -2108,11 +2130,9 @@ def tambah_halaman_berita():
 @admin_bp.route('/edit_halaman_berita/<int:id>', methods=['POST'])
 @role_required(['Admin', 'Editor'])
 def edit_halaman_berita(id):
-    if not os.path.exists(UPLOAD_FOLDER):
-        os.makedirs(UPLOAD_FOLDER)
-
     judul = request.form['judul']
     isi_berita = request.form['isi_berita']
+    tag = request.form.get('tag')
     gambar = request.files.get('gambar')
 
     conn = get_db()
@@ -2121,15 +2141,14 @@ def edit_halaman_berita(id):
     if gambar and gambar.filename:
         filename = f"{int(time.time())}_{secure_filename(gambar.filename)}"
         gambar.save(os.path.join(UPLOAD_FOLDER, filename))
-
         cursor.execute(
-            'UPDATE berita SET judul=%s, isi_berita=%s, gambar=%s WHERE id=%s',
-            (judul, isi_berita, filename, id)
+            'UPDATE berita SET judul=%s, isi_berita=%s, tag=%s, gambar=%s WHERE id=%s',
+            (judul, isi_berita, tag, filename, id)
         )
     else:
         cursor.execute(
-            'UPDATE berita SET judul=%s, isi_berita=%s WHERE id=%s',
-            (judul, isi_berita, id)
+            'UPDATE berita SET judul=%s, isi_berita=%s, tag=%s WHERE id=%s',
+            (judul, isi_berita, tag, id)
         )
 
     conn.commit()
@@ -2140,7 +2159,7 @@ def edit_halaman_berita(id):
     return redirect(url_for('admin.halaman_berita'))
 
 
-# Route hapus berita
+# Route hapus berita (TIDAK PERLU DIUBAH)
 @admin_bp.route('/hapus_halaman_berita/<int:id>', methods=['POST'])
 @role_required(['Admin', 'Editor'])
 def hapus_halaman_berita(id):
@@ -2162,7 +2181,6 @@ def hapus_halaman_berita(id):
 
     flash('Berita berhasil dihapus', 'success')
     return redirect(url_for('admin.halaman_berita'))
-
 
 # ---------------- MENU WEBSITE --------------
 # --
@@ -2252,3 +2270,4 @@ def hapus_menu(id):
 
     flash('Menu berhasil dihapus!', 'success')
     return redirect(url_for('admin.menu_website'))
+

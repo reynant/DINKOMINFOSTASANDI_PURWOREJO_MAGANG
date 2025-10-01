@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, abort, request, redirect, url_for
 from jinja2 import TemplateNotFound
 from app.db import get_db   # ✅ tambahkan ini
+import mysql.connector  # ✅ tambahkan ini
 # Blueprint dengan template_folder yang benar
 # Pastikan path ini benar sesuai dengan struktur folder Anda
 public_bp = Blueprint('public', __name__, template_folder='../../templates')
@@ -93,10 +94,30 @@ def search():
 @public_bp.route('/')
 @public_bp.route('/index.html')
 def index():
-    try:
-        return render_template('index.html', title='Beranda')
-    except TemplateNotFound:
-        abort(404)
+    """Menampilkan halaman utama (dasbor publik) dengan berita terbaru."""
+    conn = get_db()
+    latest_news = []
+    if conn:
+        try:
+            cursor = conn.cursor(dictionary=True)
+            # Mengambil 3 berita terbaru yang statusnya 'Publish'
+            cursor.execute("""
+                SELECT id_berita as id, judul, sub_judul, isi_berita, gambar, tanggal 
+                FROM berita 
+                WHERE status = 'Publish' 
+                ORDER BY tanggal DESC, id_berita DESC 
+                LIMIT 3
+            """)
+            latest_news = cursor.fetchall()
+        except mysql.connector.Error as err:
+            print(f"Database error in index route: {err}")
+        finally:
+            cursor.close()
+            conn.close()
+            
+    # Kirim data berita ke template index.html
+    return render_template('index.html', berita_list=latest_news)
+
 
 
 @public_bp.route('/about')

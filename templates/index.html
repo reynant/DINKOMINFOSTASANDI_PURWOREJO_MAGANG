@@ -571,28 +571,66 @@
         </section>
 
         <section aria-labelledby="berita-heading" class="mb-14">
-            <h2 id="berita-heading" class="text-2xl font-bold mb-10 text-center tracking-wide">BERITA</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
-                <article class="group relative shadow-md rounded-xl overflow-hidden border border-gray-200 bg-white">
-                    <div class="overflow-hidden">
-                        <img src="static/img/Survei Indeks Kepuasan Masyarakat (IKM).jpg" alt="Poster Survei IKM" class="w-full h-48 object-cover"/>
-                    </div>
-                    <div class="p-4">
-                        <p class="text-xs text-gray-500 mb-2">21 Juli 2025</p>
-                        <h3 class="text-base font-semibold">Survei Indeks Kepuasan Masyarakat (IKM) Dinkominfostasandi Kabupaten Purworejo</h3>
-                    </div>
-                </article>
-                <article class="group relative shadow-md rounded-xl overflow-hidden border border-gray-200 bg-white">
-                    <div class="overflow-hidden">
-                        <img src="static/img/gangguan.jpg" alt="Pekerja memperbaiki jaringan" class="w-full h-48 object-cover"/>
-                    </div>
-                    <div class="p-4">
-                        <p class="text-xs text-gray-500 mb-2">10 Juni 2025</p>
-                        <h3 class="text-base font-semibold">Gangguan Jaringan di Kompleks Kantor Bupati Purworejo Berhasil Diatasi</h3>
-                    </div>
-                </article>
+    <h2 id="berita-heading" class="text-2xl font-bold mb-10 text-center tracking-wide">BERITA TERKINI</h2>
+    
+    {% if berita_list %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for berita in berita_list %}
+        <article class="group relative shadow-md rounded-xl overflow-hidden border border-gray-200 bg-white flex flex-col hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            
+            <a href="{{ url_for('public.detail_berita', id=berita.id_berita) }}" class="block">
+                {% if berita.gambar %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ berita.gambar) }}"
+                         alt="{{ berita.judul }}"
+                         class="w-full h-56 object-cover">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/no-image.png') }}"
+                         alt="Tidak ada gambar"
+                         class="w-full h-56 object-cover">
+                {% endif %}
+            </a>
+            
+            <div class="p-6 flex-grow flex flex-col">
+                <div class="flex-grow">
+                    <h3 class="text-lg font-semibold text-blue-800 mb-2">
+                        <a href="{{ url_for('public.detail_berita', id=berita.id_berita) }}" class="hover:underline">
+                            {{ berita.judul }}
+                        </a>
+                    </h3>
+
+                    <p class="text-sm text-gray-500 mb-4">
+                        {% if berita.tanggal %}
+                            {{ berita.tanggal.strftime('%d %B %Y') }}
+                        {% endif %}
+                    </p>
+
+                    <p class="text-gray-700 leading-relaxed">
+                        {{ (berita.isi or '') | striptags | truncate(120) }}
+                    </p>
+                </div>
+
+                <div class="mt-4">
+                    <a href="{{ url_for('public.detail_berita', id=berita.id_berita) }}" 
+                       class="inline-block px-4 py-2 bg-blue-700 text-white text-sm font-medium rounded-full hover:bg-teal-600 transition-colors">
+                        Baca Selengkapnya
+                    </a>
+                </div>
             </div>
-        </section>
+        </article>
+        {% endfor %}
+    </div>
+    
+    <div class="text-center mt-10">
+        <a href="{{ url_for('public.halaman_berita') }}" class="px-6 py-3 bg-gray-200 text-gray-800 font-semibold rounded-full hover:bg-gray-300 transition">
+            Lihat Semua Berita &rarr;
+        </a>
+    </div>
+
+    {% else %}
+    <p class="text-gray-600 text-center">Belum ada berita yang dipublikasikan.</p>
+    {% endif %}
+</section>
+
     </main>
     
     <div class="fixed right-6 top-1/2 -translate-y-1/2 flex flex-col space-y-4 z-50">

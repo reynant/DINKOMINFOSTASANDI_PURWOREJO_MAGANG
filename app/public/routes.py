@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, abort, request, redirect, url_for
+from flask import Blueprint, render_template, abort, request, redirect, url_for, g
 from jinja2 import TemplateNotFound
 from app.db import get_db   # ✅ tambahkan ini
 import mysql.connector  # ✅ tambahkan ini
+import random # Tambahkan impor ini untuk simulasi
 # Blueprint dengan template_folder yang benar
 # Pastikan path ini benar sesuai dengan struktur folder Anda
 public_bp = Blueprint('public', __name__, template_folder='../../templates')
@@ -118,7 +119,58 @@ def index():
     # Kirim data berita ke template index.html
     return render_template('index.html', berita_list=latest_news)
 
+# Fungsi untuk menutup koneksi database
+@public_bp.teardown_request
+def teardown_db(exception):
+    db = g.pop('db', None)
+    if db is not None:
+        db.close()
 
+# === [BARU] FUNGSI UNTUK MENGHITUNG SETIAP KUNJUNGAN ===
+@public_bp.before_app_request
+def before_request_func():
+    """Jalankan sebelum setiap request untuk menambah total page views."""
+    conn = get_db()
+    try:
+        cursor = conn.cursor()
+        # Tambah 1 setiap kali ada request/kunjungan halaman
+        cursor.execute("UPDATE site_stats SET stat_value = stat_value + 1 WHERE stat_key = 'total_page_views'")
+        conn.commit()
+        cursor.close()
+    except mysql.connector.Error as err:
+        # Abaikan error jika tabel belum ada atau masalah koneksi sementara
+        print(f"Error updating page views: {err}")
+
+
+# === [BARU] CONTEXT PROCESSOR UNTUK MENGAMBIL STATISTIK PENGUNJUNG ===
+@public_bp.context_processor
+def inject_visitor_stats():
+    """Menyediakan data statistik pengunjung ke semua template."""
+    conn = get_db()
+    stats = {
+        'online': random.randint(5, 25), # Simulasi pengunjung online
+        'today': 0, # Placeholder, memerlukan tabel logging
+        'last_7_days': 0, # Placeholder, memerlukan tabel logging
+        'total_visitors': 0, # Placeholder, memerlukan cookie tracking
+        'total_page_views': 0
+    }
+    try:
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT stat_value FROM site_stats WHERE stat_key = 'total_page_views'")
+        result = cursor.fetchone()
+        if result:
+            stats['total_page_views'] = result['stat_value']
+        
+        # Logika untuk metrik lain yang lebih kompleks bisa ditambahkan di sini
+        # Contoh (memerlukan tabel 'page_views' dengan timestamp):
+        # cursor.execute("SELECT COUNT(*) as count FROM page_views WHERE DATE(view_timestamp) = CURDATE()")
+        # stats['today'] = cursor.fetchone()['count']
+
+        cursor.close()
+    except mysql.connector.Error as err:
+        print(f"Error fetching visitor stats: {err}")
+        
+    return dict(visitor_stats=stats)
 
 @public_bp.route('/about')
 @public_bp.route('/about.html')

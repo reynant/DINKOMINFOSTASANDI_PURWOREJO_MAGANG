@@ -1,10 +1,9 @@
 from flask import Blueprint, render_template, abort, request, redirect, url_for, g
 from jinja2 import TemplateNotFound
-from app.db import get_db   # ✅ tambahkan ini
-import mysql.connector  # ✅ tambahkan ini
-import random # Tambahkan impor ini untuk simulasi
-# Blueprint dengan template_folder yang benar
-# Pastikan path ini benar sesuai dengan struktur folder Anda
+from app.db import get_db
+import mysql.connector
+import random
+
 public_bp = Blueprint('public', __name__, template_folder='../../templates')
 
 
@@ -25,7 +24,7 @@ searchable_pages = [
     {'endpoint': 'public.bidang_tisp', 'title': 'Bidang TISP', 'keywords': 'tisp telematika informatika statistik persandian'},
     {'endpoint': 'public.bidang_pplkc', 'title': 'Bidang PPLKC', 'keywords': 'pplkc pengelolaan pengaduan layanan'},
     {'endpoint': 'public.profil_pejabat', 'title': 'Profil Pejabat', 'keywords': 'pejabat pimpinan kepala dinas'},
-    {'endpoint': 'public.news', 'title': 'Berita', 'keywords': 'news berita artikel informasi terkini'},
+    {'endpoint': 'public.halaman_berita', 'title': 'Berita', 'keywords': 'news berita artikel informasi terkini'},
     {'endpoint': 'public.galeri', 'title': 'Galeri', 'keywords': 'galeri foto video dokumentasi'},
     {'endpoint': 'public.foto', 'title': 'Galeri Foto', 'keywords': 'foto gambar album'},
     {'endpoint': 'public.video', 'title': 'Galeri Video', 'keywords': 'video klip rekaman'},
@@ -54,15 +53,15 @@ searchable_pages = [
     {'endpoint': 'public.sosial', 'title': 'sosial', 'keywords': 'sosial sosial media'},
     {'endpoint': 'public.rekrutmen', 'title': 'rekrutmen', 'keywords': 'rekrutmen lowongan kerja'},
     {'endpoint': 'public.kim', 'title': 'kim', 'keywords': 'kim kelompok informasi masyarakat'},
-    {'endpoint': 'public.budaya', 'title': 'budaya', 'keywords': 'budaya seni tradisi heritage '},   
+    {'endpoint': 'public.budaya', 'title': 'budaya', 'keywords': 'budaya seni tradisi heritage '},
     {'endpoint': 'public.moap', 'title': 'moap', 'keywords': 'moap podcast audio'},
     {'endpoint': 'public.kebijakan', 'title': 'kebijakan', 'keywords': 'kebijakan aturan regulasi'},
     {'endpoint': 'public.skm', 'title': 'skm', 'keywords': 'skm survei kepuasan masyarakat'},
     {'endpoint': 'public.pip', 'title': 'pip', 'keywords': 'pip pelayanan informasi publik'},
     {'endpoint': 'public.halaman_berita', 'title': 'Halaman Berita', 'keywords': 'berita artikel informasi terkini'},
 
-]    
-    
+]
+
 # =============================================================================
 
 
@@ -101,12 +100,12 @@ def index():
     if conn:
         try:
             cursor = conn.cursor(dictionary=True)
-            # Mengambil 3 berita terbaru yang statusnya 'Publish'
+            # Mengambil 3 berita terbaru yang statusnya 'Published'
             cursor.execute("""
-                SELECT id_berita as id, judul, sub_judul, isi_berita, gambar, tanggal 
-                FROM berita 
-                WHERE status = 'Publish' 
-                ORDER BY tanggal DESC, id_berita DESC 
+                SELECT id_berita as id, judul, sub_judul, isi_berita, gambar, tanggal
+                FROM berita
+                WHERE status = 'Published'
+                ORDER BY tanggal DESC, id_berita DESC
                 LIMIT 3
             """)
             latest_news = cursor.fetchall()
@@ -115,7 +114,7 @@ def index():
         finally:
             cursor.close()
             conn.close()
-            
+
     # Kirim data berita ke template index.html
     return render_template('index.html', berita_list=latest_news)
 
@@ -160,7 +159,7 @@ def inject_visitor_stats():
         result = cursor.fetchone()
         if result:
             stats['total_page_views'] = result['stat_value']
-        
+
         # Logika untuk metrik lain yang lebih kompleks bisa ditambahkan di sini
         # Contoh (memerlukan tabel 'page_views' dengan timestamp):
         # cursor.execute("SELECT COUNT(*) as count FROM page_views WHERE DATE(view_timestamp) = CURDATE()")
@@ -169,7 +168,7 @@ def inject_visitor_stats():
         cursor.close()
     except mysql.connector.Error as err:
         print(f"Error fetching visitor stats: {err}")
-        
+
     return dict(visitor_stats=stats)
 
 @public_bp.route('/about')
@@ -293,14 +292,7 @@ def kebijakan_umum():
 
 # KONTEN
 
-@public_bp.route('/halaman_berita')
-@public_bp.route('/halaman_berita.html')
-def news():
-    try:
-        return render_template('halaman_berita.html', title='news')
-    except TemplateNotFound:
-        abort(404)
-
+# HAPUS FUNGSI news() DARI SINI
 
 @public_bp.route('/galeri')
 @public_bp.route('/galeri.html')

@@ -182,7 +182,7 @@
         </button>
 
         <div class="flex-1 flex flex-wrap items-center justify-center gap-x-1 md:gap-x-2">
-          <li><a href="index.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Beranda</a></li>
+          <li><a href="{{ url_for('public.index') }}" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Beranda</a></li>
           <li class="relative group">
             <a href="#" class="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">
               <span>Profil</span>
@@ -259,7 +259,7 @@
       <input type="text" id="menu-search" placeholder="Cari menu..." class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
     </div>
     <ul id="menu-list">
-      <li><a href="index.html">Beranda</a></li>
+      <li><a href="{{ url_for('public.index') }}">Beranda</a></li>
       <li>
         <a href="#" class="dropdown-trigger flex items-center justify-between">
           Profil
@@ -315,7 +315,6 @@
     {% for berita in berita_list %}
     <div class="bg-white rounded-xl shadow-md overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
       
-      <!-- Gambar Berita -->
       {% if berita.gambar %}
         <a href="{{ url_for('public.detail_berita', id=berita.id) }}" class="block">
           <img src="{{ url_for('static', filename='uploads/' ~ berita.gambar) }}"
@@ -323,13 +322,11 @@
                class="w-full h-56 object-cover">
         </a>
       {% else %}
-        <!-- Fallback kalau tidak ada gambar -->
         <img src="{{ url_for('static', filename='img/no-image.png') }}"
              alt="No Image"
              class="w-full h-56 object-cover">
       {% endif %}
       
-      <!-- Konten Berita -->
       <div class="p-6 flex-grow flex flex-col">
         <div class="flex-grow">
           <h2 class="text-xl font-semibold text-blue-800 mb-2">

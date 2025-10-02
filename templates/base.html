@@ -149,49 +149,49 @@
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
         <div class="flex-1 flex flex-wrap items-center justify-center gap-x-1 md:gap-x-2">
-            <li><a href="index.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Beranda</a></li>
+             <li><a href="{{ url_for('public.index') }}" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Beranda</a></li>
             <li class="relative group">
                 <a href="#" class="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">
                     <span>Profil</span>
                     <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </a>
                 <ul class="absolute top-full left-0 z-50 bg-white border border-gray-200 shadow-lg w-64 text-gray-700 dropdown-menu rounded-lg">
-                    <li><a href="visi-dan-misi.html" class="block px-4 py-2 text-sm hover:bg-teal-50">Visi dan Misi</a></li>
-                    <li><a href="struktur-organisasi.html" class="block px-4 py-2 text-sm hover:bg-teal-50">Struktur Organisasi</a></li>
-                    <li><a href="profil-pejabat.html" class="block px-4 py-2 text-sm hover:bg-teal-50">Profil Pejabat</a></li>
-                    <li><hr class="border-gray-200"></li>
-                    <li><p class="px-4 pt-2 pb-1 text-xs font-bold text-gray-400 uppercase">Tugas Pokok & Fungsi</p></li>
-                    <li><a href="sekretariat.html" class="block px-6 py-2 text-sm hover:bg-teal-50">Sekretariat</a></li>
-                    <li><a href="bidangIKP.html" class="block px-6 py-2 text-sm hover:bg-teal-50">Bidang IKP</a></li>
-                    <li><a href="bidangTISP.html" class="block px-6 py-2 text-sm hover:bg-teal-50">Bidang TISP</a></li>
-                    <li><a href="bidangPPLKC.html" class="block px-6 py-2 text-sm hover:bg-teal-50">Bidang PPLKC</a></li>
+                  <li><a href="{{ url_for('public.visi_misi') }}" class="block px-4 py-2 text-sm hover:bg-teal-50">Visi dan Misi</a></li>
+                  <li><a href="{{ url_for('public.struktur_organisasi') }}" class="block px-4 py-2 text-sm hover:bg-teal-50">Struktur Organisasi</a></li>
+                  <li><a href="{{ url_for('public.profil_pejabat') }}" class="block px-4 py-2 text-sm hover:bg-teal-50">Profil Pejabat</a></li>
+                  <li><hr class="border-gray-200"></li>
+                  <li><p class="px-4 pt-2 pb-1 text-xs font-bold text-gray-400 uppercase">Tugas Pokok & Fungsi</p></li>
+                  <li><a href="{{ url_for('public.sekretariat') }}" class="block px-6 py-2 text-sm hover:bg-teal-50">Sekretariat</a></li>
+                  <li><a href="{{ url_for('public.bidang_ikp') }}" class="block px-6 py-2 text-sm hover:bg-teal-50">Bidang IKP</a></li>
+                  <li><a href="{{ url_for('public.bidang_tisp') }}" class="block px-6 py-2 text-sm hover:bg-teal-50">Bidang TISP</a></li>
+                  <li><a href="{{ url_for('public.bidang_pplkc') }}" class="block px-6 py-2 text-sm hover:bg-teal-50">Bidang PPLKC</a></li>
                 </ul>
             </li>
-            <li><a href="halaman_berita.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">News</a></li>
+            <li><a href="{{ url_for('public.halaman_berita') }}" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">News</a></li>
             <li class="relative group">
                 <a href="#" class="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">
                     <span>Video</span>
                     <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </a>
                 <ul class="absolute top-full left-0 z-50 bg-white border border-gray-200 shadow-lg w-56 text-gray-700 dropdown-menu rounded-lg">
-                    <li><a href="podkesdjo.html" class="block px-4 py-2 text-sm hover:bg-teal-50">PODKESDJO</a></li>
-                    <li><a href="gendis.html" class="block px-4 py-2 text-sm hover:bg-teal-50">GENDIS BROTO</a></li>
-                    <li><a href="ngobras.html" class="block px-4 py-2 text-sm hover:bg-teal-50">NGOBRAS DPRD</a></li>
-                    <li><a href="cvp.html" class="block px-4 py-2 text-sm hover:bg-teal-50">CVP</a></li>
-                    <li><a href="wisata.html" class="block px-4 py-2 text-sm hover:bg-teal-50">WISATA</a></li>
-                    <li><a href="rolasan.html" class="block px-4 py-2 text-sm hover:bg-teal-50">ROLASAN</a></li>
-                    <li><a href="gendhing.html" class="block px-4 py-2 text-sm hover:bg-teal-50">GENDHING SETU LEGI</a></li>
-                    <li><a href="cangkir.html" class="block px-4 py-2 text-sm hover:bg-teal-50">CANGKIR KOPI</a></li>
-                    <li><a href="kominfogoes.html" class="block px-4 py-2 text-sm hover:bg-teal-50">KOMINFO GOES TO THE RADIO</a></li>
+                    <li><a href="{{ url_for('public.podkesdjo') }}" class="block px-4 py-2 text-sm hover:bg-teal-50">PODKESDJO</a></li>
+                    <li><a href="{{ url_for('public.gendis') }}"class="block px-4 py-2 text-sm hover:bg-teal-50">GENDIS BROTO</a></li>
+                    <li><a href="{{ url_for('public.ngobras') }}" class="block px-4 py-2 text-sm hover:bg-teal-50">NGOBRAS DPRD</a></li>
+                    <li><a href="{{ url_for('public.cvp') }}" class="block px-4 py-2 text-sm hover:bg-teal-50">CVP</a></li>
+                    <li><a href="{{ url_for('public.wisata') }}" class="block px-4 py-2 text-sm hover:bg-teal-50">WISATA</a></li>
+                    <li><a href="{{ url_for('public.rolasan') }}" class="block px-4 py-2 text-sm hover:bg-teal-50">ROLASAN</a></li>
+                    <li><a href="{{ url_for('public.gendhing') }}" class="block px-4 py-2 text-sm hover:bg-teal-50">GENDHING SETU LEGI</a></li>
+                    <li><a href="{{ url_for('public.caangkir') }}" class="block px-4 py-2 text-sm hover:bg-teal-50">CANGKIR KOPI</a></li>
+                    <li><a href="{{ url_for('public.kominfogoes') }}" class="block px-4 py-2 text-sm hover:bg-teal-50">KOMINFO GOES TO THE RADIO</a></li>
                 </ul>
             </li>
-            <li><a href="laporan-isu-hoaks.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Isu Hoaks</a></li>
-            <li><a href="download.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Download</a></li>
-            <li><a href="agenda.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Agenda</a></li>
-            <li><a href="layanan-skpd.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Layanan</a></li>
-            <li><a href="kebijakan.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Kebijakan</a></li>
-            <li><a href="skm.html" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">SKM</a></li>
-            <li><a href="hubungi-kami.html" class="block px-4 py-2 text-sm font-semibold text-white bg-teal-500 hover:bg-teal-600 rounded-full transition-colors duration-300">Hubungi Kami</a></li>
+            <li><a href="{{ url_for('public.laporan_hoaks') }}"class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Isu Hoaks</a></li>
+            <li><a href="{{ url_for('public.download') }}" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Download</a></li>
+            <li><a href="{{ url_for('public.agenda') }}"  class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Agenda</a></li>
+            <li><a href="{{ url_for('public.layananskpd') }}" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Layanan</a></li>
+            <li><a href="{{ url_for('public.kebijakan') }}" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">Kebijakan</a></li>
+            <li><a href="{{ url_for('public.skm') }}" class="block px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 rounded-full">SKM</a></li>
+            <li><a href="{{ url_for('public.hubungi_kami') }}" class="block px-4 py-2 text-sm font-semibold text-white bg-teal-500 hover:bg-teal-600 rounded-full transition-colors duration-300">Hubungi Kami</a></li>
         </div>
         <div id="nav-search-container" class="flex-shrink-0 flex items-center transition-opacity duration-300 opacity-0 pointer-events-none">
           <div class="relative flex items-center">
@@ -224,37 +224,39 @@
       <li>
         <a href="#" class="dropdown-trigger flex items-center justify-between">Profil <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></a>
         <ul class="dropdown-content">
-          <li><a href="visi-dan-misi.html">Visi dan Misi</a></li>
-          <li><a href="struktur-organisasi.html">Struktur Organisasi</a></li>
-          <li><a href="profil-pejabat.html">Profil Pejabat</a></li>
-          <li><a href="sekretariat.html">Sekretariat</a></li>
-          <li><a href="bidangIKP.html">Bidang IKP</a></li>
-          <li><a href="bidangTISP.html">Bidang TISP</a></li>
-          <li><a href="bidangPPLKC.html">Bidang PPLKC</a></li>
+           <li><a href="{{ url_for('public.visi_misi') }}">Visi dan Misi</a></li>
+            <li><a href="{{ url_for('public.struktur_organisasi') }}">Struktur Organisasi</a></li>
+            <li><a href="{{ url_for('public.profil_pejabat') }}">Profil Pejabat</a></li>
+            <li><a href="{{ url_for('public.sekretariat') }}">Sekretariat</a></li>
+            <li><a href="{{ url_for('public.bidang_ikp') }}">Bidang IKP</a></li>
+            <li><a href="{{ url_for('public.bidang_tisp') }}">Bidang TISP</a></li>
+            <li><a href="{{ url_for('public.bidang_pplkc') }}">Bidang PPLKC</a></li>
         </ul>
       </li>
       <li><a href="halaman_berita.html">News</a></li>
       <li>
         <a href="#" class="dropdown-trigger flex items-center justify-between">Video <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></a>
         <ul class="dropdown-content">
-          <li><a href="podkesdjo.html">PODKESDJO</a></li>
-          <li><a href="gendis.html">GENDIS BROTO</a></li>
-          <li><a href="ngobras.html">NGOBRAS DPRD</a></li>
-          <li><a href="cvp.html">CVP</a></li>
-          <li><a href="wisata.html">WISATA</a></li>
-          <li><a href="rolasan.html">ROLASAN</a></li>
-          <li><a href="gendhing.html">GENDHING SETU LEGI</a></li>
-          <li><a href="cangkir.html">CANGKIR KOPI</a></li>
-          <li><a href="kominfogoes.html">KOMINFO GOES TO THE RADIO</a></li>
+          <li><a href="{{ url_for('public.podkesdjo') }}">PODKESDJO</a></li>
+          <li><a href="{{ url_for('public.gendis') }}">GENDIS BROTO</a></li>
+          <li><a href="{{ url_for('public.ngobras') }}">NGOBRAS DPRD</a></li>
+          <li><a href="{{ url_for('public.cvp') }}">CVP</a></li>
+          <li><a href="{{ url_for('public.wisata') }}">WISATA</a></li>
+          <li><a href="{{ url_for('public.rolasan') }}">ROLASAN</a></li>
+          <li><a href="{{ url_for('public.gendhing') }}">GENDHING SETU LEGI</a></li>
+          <li><a href="{{ url_for('public.caangkir') }}">CANGKIR KOPI</a></li>
+          <li><a href="{{ url_for('public.kominfogoes') }}">KOMINFO GOES TO THE RADIO</a></li>
+            </ul>
         </ul>
       </li>
-      <li><a href="laporan-isu-hoaks.html">Isu Hoaks</a></li>
-      <li><a href="download.html">Download</a></li>
-      <li><a href="agenda.html">Agenda</a></li>
-      <li><a href="layanan-skpd.html">Layanan</a></li>
-      <li><a href="kebijakan.html">Kebijakan</a></li>
-      <li><a href="skm.html">SKM</a></li>
-      <li><a href="hubungi-kami.html" class="bg-teal-600">Hubungi Kami</a></li>
+        <li><a href="{{ url_for('public.laporan_hoaks') }}">Isu Hoaks</a></li>
+        <li><a href="{{ url_for('public.download') }}">Download</a></li>
+        <li><a href="{{ url_for('public.agenda') }}">Agenda</a></li>
+        <li><a href="{{ url_for('public.layananskpd') }}">Layanan</a></li>
+        <li><a href="{{ url_for('public.kebijakan') }}">Kebijakan</a></li>
+        <li><a href="{{ url_for('public.skm') }}">SKM</a></li>
+        <li><a href="{{ url_for('public.hubungi_kami') }}" class="bg-teal-600">Hubungi Kami</a></li>
+    </ul>
     </ul>
   </div>
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8" id="konten-utama"></main>

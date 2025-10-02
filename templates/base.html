@@ -7,122 +7,170 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    body { font-family: "Poppins", sans-serif; transition: background-color 0.3s, color 0.3s; }
-    .animated-gradient { background-size: 200% 200%; animation: gradient-animation 10s ease infinite; }
-    @keyframes gradient-animation { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
-    .dropdown-menu { transition:opacity .2s ease,transform .2s ease; opacity:0; transform:translateY(10px); pointer-events:none; max-height:320px; overflow-y:auto; }
-    .group:hover .dropdown-menu { opacity:1; transform:translateY(0); pointer-events:auto; }
-    .dropdown-menu::-webkit-scrollbar { width:5px; }
-    .dropdown-menu::-webkit-scrollbar-thumb { background-color:#14b8a6; }
-    .dropdown-menu::-webkit-scrollbar-track { background-color:#f1f5f9; }
+   
+      /* Perbaikan untuk tombol-tombol */
+      .weather-sidebar,
+      .accessibility-sidebar {
+        position: fixed;
+        top: 0;
+        right: -400px;
+        width: 350px;
+        height: 100%;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        z-index: 1001;
+        transition: right 0.3s ease;
+        overflow-y: auto;
+      }
 
-    /* Hamburger menu styles */
-    .mobile-menu-button { display: none; position: fixed; top: 1rem; left: 1rem; z-index: 1000; padding: 0.75rem; background-color: #1d4ed8; color: white; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.3s ease; }
-    .mobile-menu-button:hover { background-color: #2563eb; transform: scale(1.05); }
-    .mobile-menu { position: fixed; top: 0; left: -100%; width: 300px; height: 100%; background-color: #1e293b; padding: 2rem 1.5rem; overflow-y: auto; transition: left 1s cubic-bezier(0.4, 0, 0.2, 1); z-index: 999; }
-    .mobile-menu.active { left: 0; }
+      .weather-sidebar.open,
+      .accessibility-sidebar.open {
+        right: 0;
+      }
 
-    @media (max-width: 1024px) {
-      .flex-1.flex.flex-wrap.items-center.justify-center { display: none; }
-      #nav-search-container { display: none; }
-      #main-nav ul { border: none; box-shadow: none; }
-      #main-nav ul.flex { background-color: transparent; border-radius: 0; }
-      .mobile-menu-button { display: flex; align-items: center; justify-content: center; }
-      .mobile-menu { box-shadow: 2px 0 8px rgba(0,0,0,0.1); }
-      .mobile-menu .close-button { position: absolute; top: 1rem; right: 1rem; color: white; padding: 0.5rem; cursor: pointer; transition: transform 0.3s ease; }
-      .mobile-menu .close-button:hover { transform: rotate(90deg); }
-      .mobile-menu ul { margin-top: 3rem; }
-      .mobile-menu ul li { display: block; width: 100%; }
-      .mobile-menu li a { display: block; width: 100%; padding: 0.75rem 1rem; color: white; font-size: 1rem; transition: all 0.3s ease; }
-      .mobile-menu li a:hover { background: rgba(59, 130, 246, 0.5); padding-left: 1.5rem; }
-      .mobile-menu .dropdown-content { display: none; margin-left: 1rem; margin-top: 0.5rem; border-left: 2px solid rgba(59, 130, 246, 0.5); }
-      .mobile-menu .dropdown-content.active { display: block; animation: slideDown 0.3s ease; }
-      @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-    }
-    
-    /* === CSS UNTUK FITUR AKSESIBILITAS & MODE MALAM === */
-    /* ▼▼▼ PERUBAHAN CSS DIMULAI DI SINI ▼▼▼ */
-    .accessibility-sidebar { 
-      position: fixed; 
-      top: 0; 
-      right: -300px; 
-      width: 280px; 
-      height: 100%; 
-      background-color: #1f2937; 
-      color: white; 
-      z-index: 1050; 
-      transition: right 0.3s ease-in-out; 
-      box-shadow: -4px 0 15px rgba(0,0,0,0.2);
-      overflow-y: auto; /* Tambahkan ini agar bisa scroll jika kontennya panjang */
-    }
+      .backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        display: none;
+      }
 
-    /* Style untuk scrollbar agar terlihat modern dan sesuai tema */
-    .accessibility-sidebar::-webkit-scrollbar {
-      width: 8px; /* Lebar scrollbar */
-    }
-    .accessibility-sidebar::-webkit-scrollbar-track {
-      background: #1f2937; /* Warna latar belakang track, sama seperti sidebar */
-    }
-    .accessibility-sidebar::-webkit-scrollbar-thumb {
-      background-color: #4b5563; /* Warna handle scrollbar */
-      border-radius: 10px; /* Membuat handle membulat */
-      border: 2px solid #1f2937; /* Memberi sedikit spasi di sekitar handle */
-    }
-    .accessibility-sidebar::-webkit-scrollbar-thumb:hover {
-      background-color: #6b7280; /* Warna handle saat disorot */
-    }
-    /* ▲▲▲ PERUBAHAN CSS SELESAI DI SINI ▲▲▲ */
-    
-    .accessibility-sidebar.open { right: 0; }
-    .backdrop { position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); z-index: 1040; opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in-out; }
-    .backdrop.active { opacity: 1; pointer-events: auto; }
-    
-    /* Tombol utama aksesibilitas */
-    #accessibility-button { position: fixed; bottom: 80px; right: 20px; z-index: 1000; }
-    
-    /* Dark Mode Styles */
-    .dark body { background-color: #111827; color: #d1d5db; }
-    .dark #main-header { background-image: none; background-color: #1f2937; }
-    .dark #main-nav ul { background-color: #374151; }
-    .dark #main-nav a:hover { background-color: #4b5563; }
-    .dark .mobile-menu { background-color: #111827; }
-    .dark .bg-white { background-color: #1f2937; }
-    .dark .text-gray-800 { color: #f9fafb; }
-    .dark .text-gray-700 { color: #e5e7eb; }
-    .dark .text-gray-600 { color: #9ca3af; }
-    .dark .border-gray-200 { border-color: #4b5563; }
-    .dark .selection\:bg-teal-300::selection { background-color: #5eead4; color: #1f2937; }
-    .dark footer { background-color: #111827; }
-    .dark .prose { color: #d1d5db; }
-    .dark .prose h3 { color: #93c5fd; }
+      .backdrop.active {
+        display: block;
+      }
 
-    /* CSS UNTUK KONTROL UKURAN TEKS */
-    .font-size-control {
-        width: 28px;
-        height: 28px;
-        display: flex;
-        align-items: center;
+      #goToTopButton,
+      #kanalAduanButton {
+        z-index: 999;
+      }
+
+      /* Perbaikan untuk banner popup */
+      #bannerPopup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: none;
         justify-content: center;
-        background-color: #4b5563;
-        color: white;
-        border: none;
-        border-radius: 50%;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.2s, transform 0.2s;
-        font-size: 16px;
-        line-height: 1;
-    }
-    .font-size-control:hover {
-        background-color: #6b7280;
-        transform: scale(1.1);
-    }
-    .font-size-control:active {
-        transform: scale(0.95);
-    }
-    #reset-font {
-        font-size: 14px;
-    }
+        align-items: center;
+        z-index: 1002;
+      }
+
+      #bannerPopup .popup-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 500px;
+        width: 90%;
+        position: relative;
+      }
+
+      #popupKanalAduan {
+        z-index: 1002;
+      }
+
+      /* ▼▼▼ CSS UNTUK MOBILE MENU DARI VISI-MISI.HTML ▼▼▼ */
+      .mobile-menu-button {
+        display: none;
+      }
+      .mobile-menu {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 300px;
+        height: 100%;
+        background-color: #1e293b; /* Warna gelap agar kontras */
+        padding: 2rem 1.5rem;
+        overflow-y: auto;
+        transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1100; /* Pastikan z-index lebih tinggi dari backdrop */
+      }
+      .mobile-menu.active {
+        left: 0;
+      }
+      @media (max-width: 1024px) {
+        .flex-1.flex.flex-wrap.items-center.justify-center {
+          display: none;
+        }
+        #nav-search-container {
+          display: none;
+        }
+        #main-nav ul {
+          border: none;
+          box-shadow: none;
+        }
+        #main-nav ul.flex {
+          background-color: transparent;
+          border-radius: 0;
+        }
+        .mobile-menu-button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white; /* Pastikan ikon hamburger terlihat */
+        }
+        .mobile-menu {
+          box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        }
+        .mobile-menu .close-button {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          color: white;
+          padding: 0.5rem;
+          cursor: pointer;
+          transition: transform 0.3s ease;
+        }
+        .mobile-menu .close-button:hover {
+          transform: rotate(90deg);
+        }
+        .mobile-menu ul {
+          margin-top: 3rem;
+        }
+        .mobile-menu ul li {
+          display: block;
+          width: 100%;
+        }
+        .mobile-menu li a {
+          display: block;
+          width: 100%;
+          padding: 0.75rem 1rem;
+          color: white;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+          border-radius: 0.5rem;
+        }
+        .mobile-menu li a:hover {
+          background: rgba(59, 130, 246, 0.5);
+          padding-left: 1.5rem;
+        }
+        .mobile-menu .dropdown-content {
+          display: none;
+          margin-left: 1rem;
+          margin-top: 0.5rem;
+          border-left: 2px solid rgba(59, 130, 246, 0.5);
+        }
+        .mobile-menu .dropdown-content.active {
+          display: block;
+          animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      }
+      /* ▲▲▲ SELESAI CSS MOBILE MENU ▲▲▲ */
   </style>
 </head>
 <body class="bg-gray-100 text-gray-800 selection:bg-teal-300 selection:text-white">
@@ -262,64 +310,272 @@
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8" id="konten-utama"></main>
   {% block content %}{% endblock %}
 </main>
-<button id="accessibility-button" 
-    class="fixed right-6 top-1/2 -translate-y-1/2 
-           bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg 
-           flex items-center justify-center 
-           hover:bg-blue-700 hover:scale-110 
-           transition-all 
-           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" 
-    aria-label="Buka Menu Aksesibilitas">
+<div
+      class="fixed right-6 top-1/2 -translate-y-1/2 flex flex-col space-y-4 z-50"
+    >
+      <button
+        id="weather-button"
+        class="bg-orange-500 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:bg-orange-600 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+        aria-label="Buka Prakiraan Cuaca"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-7 w-7"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
+          <path d="M16 8V6.5A2.5 2.5 0 1 0 13.5 4H12" />
+        </svg>
+      </button>
 
-  <svg xmlns="http://www.w3.org/2000/svg" 
-       class="h-7 w-7" 
-       viewBox="0 0 1025 1024" 
-       fill="currentColor">
-    <path d="m1006 875l-63 64q-1 0-1 .5t-1 1.5l-1.5 1l-2.5 1q-4 4-7 5q-18 12-40.5 10.5T851 941L678 767H384q-26 0-45-18.5T320 704V384q0-27 19-45.5t45.5-18.5t45 18.5T448 384v256h249q7-1 16 1q4 0 7 1q7 2 9 3q12 5 22 15l145 145l20-20q19-19 45.5-19t45 19t18.5 45.5t-19 44.5zM384 256q-53 0-90-37.5T257 128t37-90.5T384 0t90.5 37.5T512 128t-37.5 90.5T384 256zm146 593l3 3q19-18 45.5-18t45 18.5t18.5 45t-18 45.5q-10 10-26 15q-74 50-161.5 62t-173-16T113 911T20 760.5t-16-173T66 426q5-16 15-26q19-19 45.5-19t45 19t18.5 45.5t-18 45.5l3 3q-53 74-45.5 167t74 159.5t159.5 74T530 849z"/>
-  </svg>
-</button>
-
-
-<div id="accessibility-sidebar" class="accessibility-sidebar p-4">
-    <div class="flex justify-between items-center mb-6">
-        <h3 class="text-lg font-bold">Menu Aksesibilitas</h3>
-        <button id="close-accessibility-sidebar" aria-label="Tutup Menu Aksesibilitas">×</button>
+      <button
+        id="accessibility-button"
+        class="bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        aria-label="Buka Menu Aksesibilitas"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-7 w-7"
+          viewBox="0 0 1025 1024"
+          fill="currentColor"
+        >
+          <path
+            d="m1006 875l-63 64q-1 0-1 .5t-1 1.5l-1.5 1l-2.5 1q-4 4-7 5q-18 12-40.5 10.5T851 941L678 767H384q-26 0-45-18.5T320 704V384q0-27 19-45.5t45.5-18.5t45 18.5T448 384v256h249q7-1 16 1q4 0 7 1q7 2 9 3q12 5 22 15l145 145l20-20q19-19 45.5-19t45 19t18.5 45.5t-19 44.5zM384 256q-53 0-90-37.5T257 128t37-90.5T384 0t90.5 37.5T512 128t-37.5 90.5T384 256zm146 593l3 3q19-18 45.5-18t45 18.5t18.5 45t-18 45.5q-10 10-26 15q-74 50-161.5 62t-173-16T113 911T20 760.5t-16-173T66 426q5-16 15-26q19-19 45.5-19t45 19t18.5 45.5t-18 45.5l3 3q-53 74-45.5 167t74 159.5t159.5 74T530 849z"
+          />
+        </svg>
+      </button>
     </div>
-    <ul class="space-y-3">
+
+    <div id="weather-sidebar" class="weather-sidebar p-4">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold">Prakiraan Cuaca Purworejo</h3>
+        <button
+          id="close-weather-sidebar"
+          class="absolute top-2 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold z-10"
+          aria-label="Tutup Panel Cuaca"
+        >
+          ×
+        </button>
+      </div>
+      <p
+        id="tanggal-hari-ini"
+        class="text-center text-base font-semibold text-gray-300 mb-2"
+      ></p>
+      <iframe
+        src="https://www.meteoblue.com/en/weather/widget/daily/purworejo_indonesia_1630326?geoloc=fixed&days=4&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&precipunit=MILLIMETER&coloured=coloured&pictoicon=1&maxtemperature=1&mintemperature=1&windspeed=1&winddirection=1&uvindex=1&humidity=1&precipitation=1&precipitationprobability=1&spot=1&pressure=1&autowidth=0"
+        frameborder="0"
+        scrolling="NO"
+        allowtransparency="true"
+        sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
+        style="width: 100%; height: 420px"
+      ></iframe>
+      <div class="text-center mt-2">
+        <a
+          href="https://www.meteoblue.com/en/weather/week/purworejo_indonesia_1630326?utm_source=weather_widget&utm_medium=linkus&utm_content=daily&utm_campaign=Weather%2BWidget"
+          target="_blank"
+          rel="noopener"
+          class="text-xs text-gray-400 hover:text-white"
+          >sumber: meteoblue</a
+        >
+      </div>
+    </div>
+
+    <div id="accessibility-sidebar" class="accessibility-sidebar p-4">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-lg font-bold">Menu Aksesibilitas</h3>
+        <button
+          id="close-accessibility-sidebar"
+          class="text-2xl font-bold"
+          aria-label="Tutup Menu Aksesibilitas"
+        >
+          ×
+        </button>
+      </div>
+      <ul class="space-y-3">
         <li>
-            <button id="tombol-baca-suara" class="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
-                <span>🔊</span>
-                <span>Baca Halaman</span>
-            </button>
+          <button
+            id="tombol-baca-suara"
+            class="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors"
+          >
+            <span>🔊</span><span>Baca Halaman</span>
+          </button>
         </li>
         <li>
-            <div class="w-full flex items-center justify-between gap-3 p-3 rounded-lg">
-                <label for="dark-mode-toggle" class="flex items-center gap-3 cursor-pointer">
-                    <span>🌙</span>
-                    <span>Mode Malam</span>
-                </label>
-                <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-                    <input type="checkbox" name="dark-mode-toggle" id="dark-mode-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
-                    <label for="dark-mode-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
-                </div>
+          <div
+            class="w-full flex items-center justify-between gap-3 p-3 rounded-lg"
+          >
+            <label
+              for="dark-mode-toggle"
+              class="flex items-center gap-3 cursor-pointer"
+              ><span>🌙</span><span>Mode Malam</span></label
+            >
+            <div
+              class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in"
+            >
+              <input
+                type="checkbox"
+                name="dark-mode-toggle"
+                id="dark-mode-toggle"
+                class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+              />
+              <label
+                for="dark-mode-toggle"
+                class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
+              ></label>
             </div>
+          </div>
         </li>
         <li>
-            <div class="w-full flex items-center justify-between gap-2 p-3 rounded-lg">
-                <span class="flex items-center gap-3">
-                    <span>📝</span>
-                    <span>Ukuran Teks</span>
-                </span>
-                <div class="flex items-center gap-1">
-                    <button id="decrease-font" class="font-size-control" aria-label="Perkecil Teks">-</button>
-                    <button id="reset-font" class="font-size-control" aria-label="Reset Ukuran Teks">A</button>
-                    <button id="increase-font" class="font-size-control" aria-label="Perbesar Teks">+</button>
-                </div>
+          <div
+            class="w-full flex items-center justify-between gap-2 p-3 rounded-lg"
+          >
+            <span class="flex items-center gap-3"
+              ><span>📝</span><span>Ukuran Teks</span></span
+            >
+            <div class="flex items-center gap-1">
+              <button
+                id="decrease-font"
+                class="font-size-control"
+                aria-label="Perkecil Teks"
+              >
+                -
+              </button>
+              <button
+                id="reset-font"
+                class="font-size-control"
+                aria-label="Reset Ukuran Teks"
+              >
+                A
+              </button>
+              <button
+                id="increase-font"
+                class="font-size-control"
+                aria-label="Perbesar Teks"
+              >
+                +
+              </button>
             </div>
+          </div>
         </li>
+      </ul>
+    </div>
+
+    <div id="backdrop" class="backdrop"></div>
+
+    <div id="bannerPopup">
+      <div class="popup-content">
+        <span class="close-btn">×</span>
+        <h2 id="popupTitle"></h2>
+        <p id="popupDesc"></p>
+      </div>
+    </div>
+
+    <button
+      id="goToTopButton"
+      class="fixed right-5 bottom-20 z-50 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all duration-700 opacity-0 translate-y-12"
+      aria-label="Ke Atas"
+      title="Ke Atas"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-7 w-7"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 15l7-7 7 7"
+        />
+      </svg>
+    </button>
+
+    <button
+      id="kanalAduanButton"
+      class="fixed bottom-5 left-5 z-50 w-14 h-14 bg-teal-500 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-teal-600 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all duration-300"
+      aria-label="Buka Kanal Aduan"
+    >
+      <svg
+        class="w-7 h-7"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+        ></path>
+      </svg>
+    </button>
+
+    <div
+      id="popupKanalAduan"
+      class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 transition-opacity duration-300"
+    >
+      <div
+        id="popupContent"
+        class="bg-white w-full max-w-md p-6 rounded-xl shadow-2xl relative transform transition-all duration-300 scale-95 opacity-0"
+      >
+        <button
+          id="tutupPopup"
+          class="absolute top-3 right-4 text-gray-400 hover:text-blue-600 text-3xl font-bold"
+        >
+          ×
+        </button>
+        <h2 class="text-xl font-bold text-blue-800 mb-5">Kanal Aduan Resmi</h2>
+        <ul class="space-y-4 text-sm font-medium">
+          <li>
+            <a
+              href="https://aduanv2.purworejokab.go.id/pengaduan/"
+              target="_blank"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
+              ><img
+                src="static/img/aduanporjo.png"
+                alt="AduanPorjo"
+                class="w-6 h-6"
+              /><span>AduanPorjo</span></a
+            >
+          </li>
+          <li>
+            <a
+              href="https://www.lapor.go.id/"
+              target="_blank"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
+              ><img
+                src="static/img/lapor.png"
+                alt="Lapor SPAN"
+                class="w-6 h-6"
+              /><span>Lapor SPAN</span></a
+            >
+          </li>
+          <li>
+            <a
+              href="https://api.whatsapp.com/send/?phone=6282140273000"
+              target="_blank"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
+              ><svg
+                class="w-6 h-6 text-green-500"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.487 5.235 3.487 8.413 0 6.557-5.338 11.892-11.894 11.892-1.99 0-3.903-.52-5.586-1.457l-6.354 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.267.655 4.398 1.803 6.12l-1.149 4.204 4.352-1.14z"
+                /></svg
+              ><span>WhatsApp</span></a
+            >
+          </li>
         </ul>
-</div>
-<div id="backdrop" class="backdrop"></div>
+      </div>
+    </div>
 
 <footer class="bg-blue-900 text-blue-200 relative pt-20">
   <div

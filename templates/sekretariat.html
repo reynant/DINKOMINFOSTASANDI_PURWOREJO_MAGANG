@@ -923,193 +923,243 @@
     <div id="backdrop" class="backdrop"></div>
 
     <footer class="bg-blue-900 text-blue-200 relative pt-20">
+  <div
+    class="absolute top-0 left-0 w-full overflow-hidden leading-[0] -mt-1"
+  >
+    <svg
+      class="relative block w-full h-[60px] md:h-[80px]"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 1200 120"
+      preserveAspectRatio="none"
+    >
+      <path
+        d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31.74,904.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+        class="fill-current text-gray-100"
+      ></path>
+    </svg>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 py-12">
+    <div class="mb-10 p-6 bg-black bg-opacity-20 rounded-xl">
+      <h3 class="text-lg font-semibold text-white mb-4 text-center">
+        PENGUNJUNG
+      </h3>
       <div
-        class="absolute top-0 left-0 w-full overflow-hidden leading-[0] -mt-1"
+        class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center text-sm"
       >
-        <svg
-          class="relative block w-full h-[60px] md:h-[80px]"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31.74,904.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-            class="fill-current text-gray-100"
-          ></path>
-        </svg>
-      </div>
-      <div class="max-w-7xl mx-auto px-6 py-12">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          <div class="md:col-span-2 lg:col-span-1">
-            <h3 class="text-lg font-semibold text-white mb-4">
-              Dinas Kominfo Purworejo
-            </h3>
-            <p class="text-sm leading-relaxed">
-              Menyediakan informasi publik yang akurat, transparan, dan mudah
-              diakses untuk mendukung terwujudnya masyarakat informatif dan
-              pemerintahan yang baik.
-            </p>
+        <div>
+          <div class="font-bold text-xl text-teal-300">
+            {{ visitor_stats.online }}
           </div>
-          <div>
-            <h3 class="text-lg font-semibold text-white mb-4">
-              Tautan Terkait
-            </h3>
-            <ul class="space-y-2 text-sm">
-              <li>
-                <a
-                  href="ppid.html"
-                  class="hover:text-teal-300 transition-colors"
-                  >PPID</a
-                >
-              </li>
-              <li>
-                <a
-                  href="smart-city.html"
-                  class="hover:text-teal-300 transition-colors"
-                  >Smart City</a
-                >
-              </li>
-              <li>
-                <a
-                  href="spbe.html"
-                  class="hover:text-teal-300 transition-colors"
-                  >SPBE</a
-                >
-              </li>
-              <li>
-                <a
-                  href="https://purworejokab.go.id"
-                  target="_blank"
-                  class="hover:text-teal-300 transition-colors"
-                  >Website Kabupaten</a
-                >
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold text-white mb-4">Hubungi Kami</h3>
-            <ul class="space-y-3 text-sm">
-              <li class="flex items-start gap-3">
-                <svg
-                  class="w-5 h-5 mt-0.5 text-teal-400 flex-shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  ></path>
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  ></path>
-                </svg>
-                <a
-                  href="http://googleusercontent.com/maps/google.com/0"
-                  target="_blank"
-                  class="hover:text-teal-300 transition-colors"
-                  >Jln. Proklamasi no.2 Purworejo</a
-                >
-              </li>
-              <li class="flex items-center gap-3">
-                <svg
-                  class="w-5 h-5 text-teal-400 flex-shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                  ></path>
-                </svg>
-                <a
-                  href="tel:0275321493"
-                  class="hover:text-teal-300 transition-colors"
-                  >(0275) 321493</a
-                >
-              </li>
-              <li class="flex items-center gap-3">
-                <svg
-                  class="w-5 h-5 text-teal-400 flex-shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  ></path>
-                </svg>
-                <a
-                  href="mailto:dinkominfo@purworejokab.go.id"
-                  class="hover:text-teal-300 transition-colors"
-                  >dinkominfo@purworejokab.go.id</a
-                >
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold text-white mb-4">Media Sosial</h3>
-            <div class="flex gap-4">
-              <a
-                href="https://www.instagram.com/kominfo_purworejo"
-                target="_blank"
-                class="text-blue-200 hover:text-teal-300 transition-colors"
-                ><span class="sr-only">Instagram</span
-                ><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163zm0 1.802c-3.116 0-3.472.012-4.696.068-2.622.12-3.844 1.34-3.962 3.962-.056 1.224-.067 1.578-.067 4.696s.011 3.472.067 4.696c.118 2.623 1.34 3.844 3.962 3.962 1.224.056 1.58.068 4.696.068s3.472-.012 4.696-.068c2.622-.12 3.844-1.34 3.962-3.962.056-1.224.067-1.578.067-4.696s-.011-3.472-.067-4.696c-.118-2.623-1.34-3.844-3.962-3.962C15.472 3.977 15.116 3.965 12 3.965zm0 3.225c-2.402 0-4.35 1.948-4.35 4.35s1.948 4.35 4.35 4.35 4.35-1.948 4.35-4.35-1.948-4.35-4.35-4.35zm0 7.098c-1.518 0-2.748-1.23-2.748-2.748s1.23-2.748 2.748-2.748 2.748 1.23 2.748 2.748-1.23 2.748-2.748 2.748zm4.908-7.73c-.598 0-1.08.482-1.08 1.08s.482 1.08 1.08 1.08 1.08-.482 1.08-1.08-.482-1.08-1.08-1.08z"
-                  /></svg
-              ></a>
-              <a
-                href="https://www.facebook.com/dinkominfopwr"
-                target="_blank"
-                class="text-blue-200 hover:text-teal-300 transition-colors"
-                ><span class="sr-only">Facebook</span
-                ><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"
-                  /></svg
-              ></a>
-              <a
-                href="https://www.youtube.com/@DINKOMINFOPURWOREJO"
-                target="_blank"
-                class="text-blue-200 hover:text-teal-300 transition-colors"
-                ><span class="sr-only">YouTube</span
-                ><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"
-                  /></svg
-              ></a>
-              <a
-                href="https://twitter.com/dinkominfopwr"
-                target="_blank"
-                class="text-blue-200 hover:text-teal-300 transition-colors"
-                ><span class="sr-only">X/Twitter</span
-                ><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
-                  /></svg
-              ></a>
-            </div>
-          </div>
+          <div class="text-blue-300">Online</div>
         </div>
-        <div class="text-center text-sm border-t border-blue-800 pt-6 mt-10">
-          © <span id="copyright-year">2025</span> Dinas Komunikasi, Informatika,
-          Statistik dan Persandian Kabupaten Purworejo.
+        <div>
+          <div class="font-bold text-xl text-teal-300">
+            {{ visitor_stats.today }}
+          </div>
+          <div class="text-blue-300">Hari Ini</div>
+        </div>
+        <div>
+          <div class="font-bold text-xl text-teal-300">
+            {{ visitor_stats.last_7_days }}
+          </div>
+          <div class="text-blue-300">7 Hari Terakhir</div>
+        </div>
+        <div>
+          <div class="font-bold text-xl text-teal-300">
+            {{ visitor_stats.total_visitors }}
+          </div>
+          <div class="text-blue-300">Total Pengunjung</div>
+        </div>
+        <div class="col-span-2 md:col-span-1">
+          <div class="font-bold text-xl text-teal-300">
+            {{ '{:,.0f}'.format(visitor_stats.total_page_views).replace(',',
+            '.') }}
+          </div>
+          <div class="text-blue-300">Total Kunjungan</div>
         </div>
       </div>
-    </footer>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div class="md:col-span-2 lg:col-span-1">
+        <h3 class="text-lg font-semibold text-white mb-4">
+          Dinas Kominfo Purworejo
+        </h3>
+        
+        <!-- Peta 360 Derajat dengan ukuran lebih kecil -->
+        <div class="mt-4">
+          <div class="relative w-full h-40 md:h-48 rounded-lg overflow-hidden shadow-lg">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!4v1725950037755!6m8!1m7!1s81oQpQg9FkC-Tr7cLC0cqg!2m2!1d-7.714048639989243!2d110.0082869165761!3f212.58144655818256!4f-5.559073642289391!5f0.7820865974627469" 
+              width="100%" 
+              height="100%" 
+              style="border:0;" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade"
+              class="absolute inset-0 w-full h-full"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold text-white mb-4">
+          Tautan Terkait
+        </h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a
+              href="{{ url_for('public.ppid') }}"
+              class="hover:text-teal-300 transition-colors"
+              >PPID</a
+            >
+          </li>
+          <li>
+            <a
+              href="{{ url_for('public.smart_city') }}"
+              class="hover:text-teal-300 transition-colors"
+              >Smart City</a
+            >
+          </li>
+          <li>
+            <a
+              href="{{ url_for('public.spbe') }}"
+              class="hover:text-teal-300 transition-colors"
+              >SPBE</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://purworejokab.go.id"
+              target="_blank"
+              class="hover:text-teal-300 transition-colors"
+              >Website Kabupaten</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold text-white mb-4">Hubungi Kami</h3>
+        <ul class="space-y-3 text-sm">
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-5 h-5 mt-0.5 text-teal-400 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+              ></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+              ></path>
+            </svg>
+            <a href="#" class="hover:text-teal-300 transition-colors"
+              >Jln. Proklamasi no.2 Purworejo</a
+            >
+          </li>
+          <li class="flex items-center gap-3">
+            <svg
+              class="w-5 h-5 text-teal-400 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+              ></path>
+            </svg>
+            <a
+              href="tel:0275321493"
+              class="hover:text-teal-300 transition-colors"
+              >(0275) 321493</a
+            >
+          </li>
+          <li class="flex items-center gap-3">
+            <svg
+              class="w-5 h-5 text-teal-400 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              ></path>
+            </svg>
+            <a
+              href="mailto:dinkominfo@purworejokab.go.id"
+              class="hover:text-teal-300 transition-colors"
+              >dinkominfo@purworejokab.go.id</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold text-white mb-4">Media Sosial</h3>
+        <div class="flex gap-4">
+          <a
+            href="#"
+            class="text-blue-200 hover:text-teal-300 transition-colors"
+            ><span class="sr-only">Instagram</span
+            ><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163zm0 1.802c-3.116 0-3.472.012-4.696.068-2.622.12-3.844 1.34-3.962 3.962-.056 1.224-.067 1.578-.067 4.696s.011 3.472.067 4.696c.118 2.623 1.34 3.844 3.962 3.962 1.224.056 1.58.068 4.696.068s3.472-.012 4.696-.068c2.622-.12 3.844-1.34 3.962-3.962.056-1.224.067-1.578.067-4.696s-.011-3.472-.067-4.696c-.118-2.623-1.34-3.844-3.962-3.962C15.472 3.977 15.116 3.965 12 3.965zm0 3.225c-2.402 0-4.35 1.948-4.35 4.35s1.948 4.35 4.35 4.35 4.35-1.948 4.35-4.35-1.948-4.35-4.35-4.35zm0 7.098c-1.518 0-2.748-1.23-2.748-2.748s1.23-2.748 2.748-2.748 2.748 1.23 2.748 2.748-1.23 2.748-2.748 2.748zm4.908-7.73c-.598 0-1.08.482-1.08 1.08s.482 1.08 1.08 1.08 1.08-.482 1.08-1.08-.482-1.08-1.08-1.08z"
+              /></svg
+          ></a>
+          <a
+            href="#"
+            class="text-blue-200 hover:text-teal-300 transition-colors"
+            ><span class="sr-only">Facebook</span
+            ><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"
+              /></svg
+          ></a>
+          <a
+            href="#"
+            class="text-blue-200 hover:text-teal-300 transition-colors"
+            ><span class="sr-only">YouTube</span
+            ><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"
+              /></svg
+          ></a>
+          <a
+            href="#"
+            class="text-blue-200 hover:text-teal-300 transition-colors"
+            ><span class="sr-only">X/Twitter</span
+            ><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+              /></svg
+          ></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center text-sm border-t border-blue-800 pt-6 mt-10">
+      © <span id="copyright-year">2025</span> Dinas Komunikasi, Informatika,
+      Statistik dan Persandian Kabupaten Purworejo.
+    </div>
+  </div>
+</footer>
 
     <button
       id="kanalAduanButton"

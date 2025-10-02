@@ -293,11 +293,11 @@ def kebijakan_umum():
 
 # KONTEN
 
-@public_bp.route('/news')
-@public_bp.route('/news.html')
+@public_bp.route('/halaman_berita')
+@public_bp.route('/halaman_berita.html')
 def news():
     try:
-        return render_template('news.html', title='news')
+        return render_template('halaman_berita.html', title='news')
     except TemplateNotFound:
         abort(404)
 

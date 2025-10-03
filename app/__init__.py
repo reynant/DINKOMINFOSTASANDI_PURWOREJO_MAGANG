@@ -1,23 +1,15 @@
+# app/__init__.py
 import os
 import datetime
 from flask import Flask
-from .db import close_db   # 🔥 tambahkan ini
-
+from .db import close_db
+from .config import Config  # <-- Impor kelas Config
 
 def create_app():
     app = Flask(__name__)
-    app.secret_key = 'your-secret-key-here'
+    app.config.from_object(Config)  # <-- Muat konfigurasi dari objek
 
-    # Konfigurasi DB
-    app.config['SECRET_KEY'] = 'ganti-dengan-kunci-rahasia-yang-kuat'
-    app.config['MYSQL_HOST'] = 'localhost'
-    app.config['MYSQL_USER'] = 'root'
-    app.config['MYSQL_PASSWORD'] = ''
-    # 🔥 pakai DB yang benar
-    app.config['MYSQL_DB'] = 'db_dinkominfostasandi_dummy'
-    app.config['UPLOAD_FOLDER'] = os.path.join(
-        app.root_path, 'static', 'uploads')
-
+    # Pastikan direktori UPLOAD_FOLDER ada
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
         os.makedirs(app.config['UPLOAD_FOLDER'])
 
